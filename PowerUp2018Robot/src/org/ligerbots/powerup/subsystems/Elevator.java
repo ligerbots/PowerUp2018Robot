@@ -47,10 +47,10 @@ public class Elevator extends Subsystem {
       elevatorMaster.setNeutralMode(NeutralMode.Brake);
       elevatorSlave.setNeutralMode(NeutralMode.Brake);
       
-      elevatorController = new PIDController(P, I, D, elevatorMaster.getPosition(), output -> pidOutput = output);
+     // elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0), output -> pidOutput = output);
     }
     public void setSpeed(double requestedSpeed) {
-      elevatorMaster.set(ControlMode.Speed, requestedSpeed);
+   //   elevatorMaster.set(ControlMode.Speed, requestedSpeed);
     }
     public void goUp() {
       setSpeed(defaultSpeed);
@@ -60,7 +60,7 @@ public class Elevator extends Subsystem {
       setSpeed(-defaultSpeed);
     }
     public void holdPosition() {
-      elevatorController.setSetPoint(elevatorMaster.getPosition());
+//      elevatorController.setSetPoint(elevatorMaster.getPosition());
     }
     public void enablePIDControl() {
       
