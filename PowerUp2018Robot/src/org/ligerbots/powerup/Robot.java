@@ -7,6 +7,7 @@
 
 package org.ligerbots.powerup;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
+import org.ligerbots.powerup.subsystems.Elevator;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +32,7 @@ public class Robot extends TimedRobot {
 	public static DriveTrain driveTrain;
 	public static OI oi;
 	public static DriveCommand driveCommand;
+	public static Elevator elevator;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -40,11 +43,13 @@ public class Robot extends TimedRobot {
 		oi = new OI();
 		driveTrain = new DriveTrain();
 		driveCommand = new DriveCommand();
+		elevator = new Elevator();
 	//	m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		CameraServer.getInstance().startAutomaticCapture();
 	}
-
+	
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
 	 * You can use it to reset any subsystem information you want to clear when
