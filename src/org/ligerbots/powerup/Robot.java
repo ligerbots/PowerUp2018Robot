@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.commands.DriveCommand;
+import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
 
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   public static OI oi;
   public static DriveCommand driveCommand;
   public static Elevator elevator;
+  public static ElevatorCommand elevatorCommand;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,6 +45,7 @@ public class Robot extends TimedRobot {
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     elevator = new Elevator();
+    elevatorCommand = new ElevatorCommand();
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
