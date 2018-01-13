@@ -56,4 +56,12 @@ public class OI {
     public double getTurn() {
       return xbox.getX(GenericHID.Hand.kRight);
     }
+    
+    public double getElevatorUp() {
+      return xbox.getTriggerAxis(GenericHID.Hand.kRight);
+    }
+    
+    public double getElevatorDown() {
+      return xbox.getTriggerAxis(GenericHID.Hand.kLeft);
+    }
 }
