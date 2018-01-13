@@ -31,13 +31,13 @@ public class Elevator extends Subsystem {
     TalonID elevatorMasterTalon;
     TalonID elevatorSlaveTalon;
     SpeedControllerGroup speedController;
-    PIDController ElevatorController;
+    PIDController elevatorController;
     double P = 0.05;
     double I = 0.05;
     double D = 0.05;
-    double requestedRPM=0.0;//When the elevator is not moving, the 775s should stay in place (maintain 0 RPM)
+    double requestedPosition = 0.0;//When the elevator is not moving, the 775s should stay in place (maintain 0 RPM)
     double pidOutput;
-    double defaultRPM = 10.0;//How fast it should go when it is moved up or down
+    double defaultSpeed = 0.05;//How fast it should go when it is moved up or down
     public Elevator() {
       
       elevatorMaster = new TalonSRX(RobotMap.CT_ELEVATOR_1);
@@ -47,26 +47,23 @@ public class Elevator extends Subsystem {
       elevatorMaster.setNeutralMode(NeutralMode.Brake);
       elevatorSlave.setNeutralMode(NeutralMode.Brake);
       
-    //  elevatorController = new PIDController(P, I, D, encoder, output -> pidOutput = output);
+      elevatorController = new PIDController(P, I, D, elevatorMaster.getPosition(), output -> pidOutput = output);
     }
-    public void setRPM(double requestedRPM) {
-      this.requestedRPM = requestedRPM;
+    public void setSpeed(double requestedSpeed) {
+      elevatorMaster.set(ControlMode.Speed, requestedSpeed);
     }
     public void goUp() {
-      setRPM(defaultRPM);
+      setSpeed(defaultSpeed);
       
     }
     public void goDown() {
-      setRPM(-defaultRPM);
+      setSpeed(-defaultSpeed);
     }
     public void holdPosition() {
-      setRPM(0.0);
+      elevatorController.setSetPoint(elevatorMaster.getPosition());
     }
-    public void setElevatorPosition(ElevatorPosition position) {
-      switch (position) {
-        case UP:
-          setRPM(defaultRPM);
-      }
+    public void enablePIDControl() {
+      
     }
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
