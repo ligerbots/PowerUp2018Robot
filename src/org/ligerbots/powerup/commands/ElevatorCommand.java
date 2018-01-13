@@ -15,7 +15,7 @@ public class ElevatorCommand extends Command {
   Elevator elevator;
   OI oi;
 
-  public ElevatorCommand(ElevatorPosition position) {
+  public ElevatorCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     oi = Robot.oi;
@@ -30,8 +30,8 @@ public class ElevatorCommand extends Command {
 
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
-        if (!(oi.getElevatorUp() > 0 && oi.getElevatorDown() > 0)) {
- //         Elevator.set
+        if (!(oi.getElevatorUp() != 0 && oi.getElevatorDown() != 0)) {
+          elevator.setSpeed(oi.getElevatorUp() - oi.getElevatorDown());
         }
     }
 
