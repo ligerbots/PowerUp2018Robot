@@ -24,18 +24,16 @@ public class Elevator extends Subsystem {
 
   TalonSRX elevatorMaster;
   TalonSRX elevatorSlave;
-  TalonID elevatorMasterTalon;
-  TalonID elevatorSlaveTalon;
   SpeedControllerGroup speedController;
   PIDController elevatorController;
   double P = 0.05;
   double I = 0.05;
   double D = 0.05;
+  double tolerance = 0.05;
   double requestedPosition = 0.0;// When the elevator is not moving, the 775s should stay in place
                                  // (maintain 0 RPM)
   double pidOutput;
   double defaultSpeed = 0.05;// How fast it should go when it is moved up or down
-
   public Elevator() {
 
     elevatorMaster = new TalonSRX(RobotMap.CT_ELEVATOR_1);
@@ -53,10 +51,15 @@ public class Elevator extends Subsystem {
   public void setSpeed(double requestedSpeed) {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
   }
-
+  public void setPosition(double requestedPosition) {
+    elevatorMaster.set(ControlMode.Position, requestedPosition);
+  }
+  public void setRequestedPosition(double requestedPosition) {
+    this.requestedPosition = requestedPosition;
+    elevatorController.setSetpoint(requestedPosition);
+  }
   public void goUp() {
     setSpeed(defaultSpeed);
-
   }
 
   public void goDown() {
@@ -64,11 +67,20 @@ public class Elevator extends Subsystem {
   }
 
   public void holdPosition() {
-    // elevatorController.setSetPoint(elevatorMaster.getPosition());
+    setRequestedPosition(elevatorMaster.getSelectedSensorPosition(0));
   }
 
-  public void enablePIDControl() {
-
+  public void initializePIDControl() {
+    elevatorController.enable();
+    elevatorController.setInputRange(-10.0, 10.0);
+    elevatorController.setOutputRange(-10.0,10.0);
+    elevatorController.setAbsoluteTolerance(tolerance);
+    //elevatorController.setToleranceBuffer(1);
+    elevatorController.setContinuous(true);
+    elevatorController.setSetpoint(0.0);
+  }
+  public double getPIDOutput() {
+    return pidOutput;
   }
 
   public void initDefaultCommand() {
