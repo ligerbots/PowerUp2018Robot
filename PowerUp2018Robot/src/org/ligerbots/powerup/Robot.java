@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.ligerbots.powerup.commands.ExampleCommand;
-import org.ligerbots.powerup.subsystems.ExampleSubsystem;
+import org.ligerbots.powerup.commands.DriveCommand;
+import org.ligerbots.powerup.subsystems.DriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,12 +23,13 @@ import org.ligerbots.powerup.subsystems.ExampleSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-	public static final ExampleSubsystem kExampleSubsystem
-			= new ExampleSubsystem();
-	public static OI m_oi;
-
+  
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	
+	public static DriveTrain driveTrain;
+	public static OI oi;
+	public static DriveCommand driveCommand;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -36,8 +37,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		m_oi = new OI();
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
+		oi = new OI();
+		driveTrain = new DriveTrain();
+		driveCommand = new DriveCommand();
+	//	m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 	}
