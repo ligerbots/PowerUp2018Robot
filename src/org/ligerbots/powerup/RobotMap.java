@@ -29,5 +29,8 @@ public class RobotMap {
   public static final int CT_RIGHT_2 = 4;
   public static final int CT_ELEVATOR_1 = 5;
   public static final int CT_ELEVATOR_2 = 6;
+  
+  public static final double GEARING_FACTOR = 1d / 6d;
+  public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
 
 }

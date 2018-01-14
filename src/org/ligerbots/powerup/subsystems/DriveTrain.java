@@ -24,7 +24,6 @@ public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   TalonSRX leftMaster;
-  boolean navxOn = false;
   TalonSRX leftSlave;
   TalonSRX rightMaster;
   TalonSRX rightSlave;
@@ -36,6 +35,10 @@ public class DriveTrain extends Subsystem {
   double limitedStrafe = 0;
   TalonID[] talons;
 
+  public enum DriveSide {
+    LEFT,
+    RIGHT
+  }
   AHRS navx;
 
   public class TalonID {
@@ -121,16 +124,13 @@ public class DriveTrain extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-
-  public boolean getNavXOn() {
-    return navxOn;
-  }
-
-  public void toggleNavXControl() {
-    if (navxOn) {
-      navxOn = false;
-    } else {
-      navxOn = true;
+  
+  public double getEncoderDistance (DriveSide driveSide) {
+    if (driveSide == DriveSide.LEFT) {
+      return leftMaster.getSelectedSensorPosition(0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
+    }
+    else {
+      return rightMaster.getSelectedSensorPosition(0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
 
