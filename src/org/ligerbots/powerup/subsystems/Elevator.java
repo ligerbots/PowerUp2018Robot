@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -35,6 +36,25 @@ public class Elevator extends Subsystem {
                                  // (maintain 0 RPM)
   double pidOutput;
   double defaultSpeed = 0.05;// How fast it should go when it is moved up or down
+  
+  /*class EncoderPID implements PIDSource {
+    
+    public double pidGet() {
+       return elevatorMaster.getSelectedSensorPosition(0);
+     }
+
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+      // TODO Auto-generated method stub
+      return null;
+    }
+  }*/
   public Elevator() {
 
     elevatorMaster = new TalonSRX(RobotMap.CT_ELEVATOR_1);
@@ -44,7 +64,6 @@ public class Elevator extends Subsystem {
         new SpeedControllerGroup((SpeedController) elevatorMaster, (SpeedController) elevatorSlave);
     elevatorMaster.setNeutralMode(NeutralMode.Brake);
     elevatorSlave.setNeutralMode(NeutralMode.Brake);
-
    //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
   }

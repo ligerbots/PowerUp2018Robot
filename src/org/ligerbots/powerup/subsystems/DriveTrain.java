@@ -61,6 +61,8 @@ public class DriveTrain extends Subsystem {
     leftSlave = new TalonSRX(RobotMap.CT_LEFT_2);
     rightMaster = new TalonSRX(RobotMap.CT_RIGHT_1);
     rightSlave = new TalonSRX(RobotMap.CT_RIGHT_2);
+    
+    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     // With the new SpeedControlGroups, do we have to do this ourselves anymore?
     // leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
@@ -163,7 +165,7 @@ public class DriveTrain extends Subsystem {
     turningController.setInputRange(-180.0, 180.0);
     turningController.setOutputRange(-1.0, 1.0);
     turningController.setAbsoluteTolerance(tolerance);
-    turningController.setToleranceBuffer(1);
+//    turningController.setToleranceBuffer(1);
     turningController.setContinuous(true);
     turningController.setSetpoint(temp);
   }

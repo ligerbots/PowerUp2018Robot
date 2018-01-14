@@ -11,7 +11,7 @@ public class FieldPosition {
   }
 
   public FieldPosition add(FieldPosition other) {
-    return new FieldPosition(other.x, other.y);
+    return new FieldPosition(x + other.x, y + other.y);
   }
 
   public FieldPosition add(double x, double y) {
