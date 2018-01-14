@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -44,8 +45,8 @@ public class Elevator extends Subsystem {
     elevatorMaster.setNeutralMode(NeutralMode.Brake);
     elevatorSlave.setNeutralMode(NeutralMode.Brake);
 
-    // elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
-    // output -> pidOutput = output);
+   //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
+    //output -> pidOutput = output);
   }
 
   public void setSpeed(double requestedSpeed) {
