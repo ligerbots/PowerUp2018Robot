@@ -21,6 +21,7 @@ public class DriveDistance extends Command {
     double currentInches;
     double delta;
     double error;
+    boolean onTarget = false;
     DriveTrain driveTrain;
     public DriveDistance(double offsetInches, double tolerance, double angleTolerance) {
       driveTrain = Robot.driveTrain;
@@ -38,7 +39,7 @@ public class DriveDistance extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      driveTrain.enableTurningControl(startAngle - driveTrain.getAngle(), 0.3);
+      driveTrain.enableTurningControl(startAngle - driveTrain.getYaw(), angleTolerance);
       
       currentLeft = driveTrain.getEncoderDistance(DriveSide.LEFT);
       currentRight = driveTrain.getEncoderDistance(DriveSide.RIGHT);
@@ -48,13 +49,14 @@ public class DriveDistance extends Command {
       
       error = Math.abs(delta - offsetInches);
       
-      
+      onTarget = error < tolerance;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return onTarget;
     }
+    
 
     // Called once after isFinished returns true
     protected void end() {
