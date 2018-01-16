@@ -50,6 +50,8 @@ public class DriveDistance extends Command {
       error = Math.abs(delta - offsetInches);
       
       onTarget = error < tolerance;
+      
+      driveTrain.allDrive(Math.signum(offsetInches), driveTrain.getTurnOutput());
     }
 
     // Make this return true when this Command no longer needs to run execute()
