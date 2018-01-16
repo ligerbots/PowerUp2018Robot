@@ -16,7 +16,11 @@ public class DriveDistance extends Command {
     double tolerance;
     double startAngle;
     double angleTolerance;
-    double currentAngle;
+    double currentLeft;
+    double currentRight;
+    double currentInches;
+    double delta;
+    double error;
     DriveTrain driveTrain;
     public DriveDistance(double offsetInches, double tolerance, double angleTolerance) {
       driveTrain = Robot.driveTrain;
@@ -34,7 +38,15 @@ public class DriveDistance extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      currentAngle = driveTrain.getAngle();
+      driveTrain.enableTurningControl(startAngle - driveTrain.getAngle(), 0.3);
+      
+      currentLeft = driveTrain.getEncoderDistance(DriveSide.LEFT);
+      currentRight = driveTrain.getEncoderDistance(DriveSide.RIGHT);
+      
+      delta = ((currentLeft - startingLeft)
+          + (currentRight - startingRight)) / 2;
+      
+      error = Math.abs(delta - offsetInches);
       
       
     }
