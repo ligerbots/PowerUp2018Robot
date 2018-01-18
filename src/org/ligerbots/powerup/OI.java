@@ -50,7 +50,7 @@ public class OI {
     xbox = new XboxController(0);
     
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
-    xBoxA.whenPressed(new DriveDistance(36, 1, 1));
+    xBoxA.whenPressed(new DriveDistance(36, 1, 0.3));
   }
 
   public double getThrottle() {
