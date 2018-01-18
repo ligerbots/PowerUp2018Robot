@@ -44,8 +44,8 @@ public class Robot extends IterativeRobot {
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
-    elevator = new Elevator();
-    elevatorCommand = new ElevatorCommand();
+    //elevator = new Elevator();
+   // elevatorCommand = new ElevatorCommand();
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);

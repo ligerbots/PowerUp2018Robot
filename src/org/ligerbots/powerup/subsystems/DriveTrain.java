@@ -3,7 +3,7 @@ package org.ligerbots.powerup.subsystems;
 import com.ctre.phoenix.*;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -23,10 +23,10 @@ public class DriveTrain extends Subsystem {
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  TalonSRX leftMaster;
-  TalonSRX leftSlave;
-  TalonSRX rightMaster;
-  TalonSRX rightSlave;
+  WPI_TalonSRX leftMaster;
+  WPI_TalonSRX leftSlave;
+  WPI_TalonSRX rightMaster;
+  WPI_TalonSRX rightSlave;
   SpeedControllerGroup left;
   SpeedControllerGroup right;
   DifferentialDrive robotDrive;
@@ -45,7 +45,7 @@ public class DriveTrain extends Subsystem {
     int talonID;
     TalonSRX talon;
 
-    public TalonID(int talonID, TalonSRX talon) {
+    public TalonID(int talonID, WPI_TalonSRX talon) {
       this.talonID = talonID;
       this.talon = talon;
     }
@@ -57,10 +57,10 @@ public class DriveTrain extends Subsystem {
 
     SmartDashboard.putNumber("Strafe Ramp Rate", 0.08);
 
-    leftMaster = new TalonSRX(RobotMap.CT_LEFT_1);
-    leftSlave = new TalonSRX(RobotMap.CT_LEFT_2);
-    rightMaster = new TalonSRX(RobotMap.CT_RIGHT_1);
-    rightSlave = new TalonSRX(RobotMap.CT_RIGHT_2);
+    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
+    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
+    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
     
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
@@ -69,8 +69,8 @@ public class DriveTrain extends Subsystem {
     // rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
 
-    left = new SpeedControllerGroup((SpeedController) leftMaster, (SpeedController) leftSlave);
-    right = new SpeedControllerGroup((SpeedController) rightMaster, (SpeedController) rightSlave);
+    left = new SpeedControllerGroup(leftMaster,leftSlave);
+    right = new SpeedControllerGroup(rightMaster, rightSlave);
 
 
 
