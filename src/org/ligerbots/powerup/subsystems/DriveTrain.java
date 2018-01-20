@@ -43,7 +43,7 @@ public class DriveTrain extends Subsystem {
 
   public class TalonID {
     int talonID;
-    TalonSRX talon;
+    WPI_TalonSRX talon;
 
     public TalonID(int talonID, WPI_TalonSRX talon) {
       this.talonID = talonID;
@@ -62,14 +62,14 @@ public class DriveTrain extends Subsystem {
     rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
     rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
     
-    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+ //   leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     // With the new SpeedControlGroups, do we have to do this ourselves anymore?
     // leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
     // rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
 
-    left = new SpeedControllerGroup(leftMaster,leftSlave);
+    left = new SpeedControllerGroup(leftMaster, leftSlave);
     right = new SpeedControllerGroup(rightMaster, rightSlave);
 
 
@@ -88,7 +88,7 @@ public class DriveTrain extends Subsystem {
     // centerSlave.set(RobotMap.CT_CENTER_1);
 
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-        .forEach((TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
+        .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
     talons = new TalonID[] {new TalonID(RobotMap.CT_LEFT_1, leftMaster),
         new TalonID(RobotMap.CT_LEFT_2, leftSlave), new TalonID(RobotMap.CT_RIGHT_1, rightMaster),

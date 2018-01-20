@@ -2,7 +2,7 @@ package org.ligerbots.powerup.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -24,8 +24,8 @@ public class Elevator extends Subsystem {
     SCALE, SWITCH, EXCHANGE, UP, DOWN, RESTING
   }
 
-  TalonSRX elevatorMaster;
-  TalonSRX elevatorSlave;
+  WPI_TalonSRX elevatorMaster;
+  WPI_TalonSRX elevatorSlave;
   SpeedControllerGroup speedController;
   PIDController elevatorController;
   double P = 0.05;
@@ -58,8 +58,8 @@ public class Elevator extends Subsystem {
   
   public Elevator() {
 
-    elevatorMaster = new TalonSRX(RobotMap.CT_ELEVATOR_1);
-    elevatorSlave = new TalonSRX(RobotMap.CT_ELEVATOR_2);
+    elevatorMaster = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_1);
+    elevatorSlave = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_2);
 
     speedController =
         new SpeedControllerGroup((SpeedController) elevatorMaster, (SpeedController) elevatorSlave);
@@ -78,6 +78,8 @@ public class Elevator extends Subsystem {
   public void setRequestedPosition(double requestedPosition) {
     this.requestedPosition = requestedPosition;
     elevatorController.setSetpoint(requestedPosition);
+  // elevatorMaster.config_kI(arg0, arg1, arg2)
+   //ControlMode.Position  
   }
   public void goUp() {
     setSpeed(defaultSpeed);
