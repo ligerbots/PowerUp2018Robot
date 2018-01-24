@@ -10,6 +10,7 @@ package org.ligerbots.powerup;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.IntakeCommand;
 
@@ -58,8 +59,10 @@ public class OI {
   }
 
   public double getThrottle() {
+    System.out.println(-xbox.getY(GenericHID.Hand.kLeft));
     return -xbox.getY(GenericHID.Hand.kLeft);
   }
+  
 
   public double getTurn() {
     return xbox.getX(GenericHID.Hand.kRight);
