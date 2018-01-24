@@ -7,7 +7,6 @@
 
 package org.ligerbots.powerup;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -17,6 +16,7 @@ import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
+import org.ligerbots.powerup.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -29,6 +29,7 @@ public class Robot extends IterativeRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  public static Intake intake;
   public static DriveTrain driveTrain;
   public static OI oi;
   public static DriveCommand driveCommand;
@@ -41,6 +42,8 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void robotInit() {
+    
+    intake = new Intake();
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
@@ -110,6 +113,7 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    driveCommand.start();
   }
 
   /**

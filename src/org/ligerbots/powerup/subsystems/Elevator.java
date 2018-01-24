@@ -100,7 +100,7 @@ public class Elevator extends Subsystem {
     elevatorController.setAbsoluteTolerance(tolerance);
     //elevatorController.setToleranceBuffer(1);
     elevatorController.setContinuous(true);
-    elevatorController.setSetpoint(0.0);
+ //   elevatorController.setSetpoint(0.0);
   }
   public double getPIDOutput() {
     return pidOutput;

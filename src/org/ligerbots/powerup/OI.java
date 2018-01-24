@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.ligerbots.powerup.commands.DriveDistance;
+import org.ligerbots.powerup.commands.IntakeCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator interface to the commands
@@ -51,6 +52,9 @@ public class OI {
     
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new DriveDistance(36, 1, 0.3));
+    
+    JoystickButton xBoxX = new JoystickButton(xbox, 3);
+    xBoxX.whileHeld(new IntakeCommand(false));
   }
 
   public double getThrottle() {
