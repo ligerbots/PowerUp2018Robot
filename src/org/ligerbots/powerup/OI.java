@@ -54,12 +54,11 @@ public class OI {
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new DriveDistance(36, 1, 0.3));
     
-    JoystickButton xBoxX = new JoystickButton(xbox, 3);
-    xBoxX.whileHeld(new IntakeCommand(false));
+    /*JoystickButton xBoxX = new JoystickButton(xbox, 3);
+    xBoxX.whileHeld(new IntakeCommand(false));*/
   }
 
   public double getThrottle() {
-    System.out.println(-xbox.getY(GenericHID.Hand.kLeft));
     return -xbox.getY(GenericHID.Hand.kLeft);
   }
   

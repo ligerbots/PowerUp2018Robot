@@ -23,16 +23,16 @@ public class RobotMap {
   // public static int rangefinderPort = 1;
   // public static int rangefinderModule = 1;
 
-  public static final int CT_LEFT_1 = 5;
-  public static final int CT_LEFT_2 = 2;
-  public static final int CT_RIGHT_1 = 4;
-  public static final int CT_RIGHT_2 = 1;
+  public static final int CT_LEFT_1 = 1;
+  public static final int CT_LEFT_2 = 3;
+  public static final int CT_RIGHT_1 = 2;
+  public static final int CT_RIGHT_2 = 4;
   public static final int CT_ELEVATOR_1 = 3;
   public static final int CT_ELEVATOR_2 = 6;
   public static final int CT_INTAKE_1 = 7;
   public static final int CT_INTAKE_2 = 8;
   
-  public static final double GEARING_FACTOR = 1d / 6d;
+  public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
 
 }

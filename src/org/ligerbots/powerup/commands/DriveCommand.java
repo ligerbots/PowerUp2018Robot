@@ -27,7 +27,6 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
     
-    driveTrain.printEncoder();
     driveTrain.allDrive(oi.getThrottle(), oi.getTurn());
 
   }

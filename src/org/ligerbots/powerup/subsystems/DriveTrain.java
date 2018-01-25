@@ -129,10 +129,10 @@ public class DriveTrain extends Subsystem {
   
   public double getEncoderDistance (DriveSide driveSide) {
     if (driveSide == DriveSide.LEFT) {
-      return (leftMaster.getSelectedSensorPosition(0)/1024) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
+      return (-leftSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
     }
     else {
-      return (rightMaster.getSelectedSensorPosition(0)/1024) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
+      return (rightSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
 
@@ -144,7 +144,8 @@ public class DriveTrain extends Subsystem {
   }
 
   public void printEncoder() {
-    System.out.println((leftMaster.getSelectedSensorPosition(0) / 2048) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE);
+    System.out.println("Left: " + (-leftSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE + 
+        " Right: " + (rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE);
   }
   
   double temporaryFixDegrees(double input) {
