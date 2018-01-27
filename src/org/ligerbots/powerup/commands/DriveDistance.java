@@ -26,18 +26,25 @@ public class DriveDistance extends Command {
       this.offsetInches = offsetInches;
       this.tolerance = tolerance;
       this.angleTolerance = angleTolerance;
+      
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      startingLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+      /*startingLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       startingRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
-      startAngle = Robot.driveTrain.getAngle();
+      startAngle = Robot.driveTrain.getAngle();*/
+      Robot.driveTrain.configClosedLoop(1, 0, 0);
+
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      Robot.driveTrain.enableTurningControl(startAngle - Robot.driveTrain.getYaw(), angleTolerance);
+      Robot.driveTrain.PIDDrive(offsetInches);
+
+
+      //Robot.driveTrain.enableTurningControl(startAngle - Robot.driveTrain.getYaw(), angleTolerance);
       
       currentLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       currentRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
@@ -49,7 +56,7 @@ public class DriveDistance extends Command {
       
       onTarget = error < tolerance;
       
-      Robot.driveTrain.allDrive(Math.signum(offsetInches),/* Robot.driveTrain.getTurnOutput()*/0);
+     // Robot.driveTrain.allDrive(Math.signum(offsetInches), Robot.driveTrain.getTurnOutput());
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -60,7 +67,7 @@ public class DriveDistance extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-      Robot.driveTrain.disablePID();
+     //  Robot.driveTrain.disablePID();
     }
 
     // Called when another command which requires one or more of the same

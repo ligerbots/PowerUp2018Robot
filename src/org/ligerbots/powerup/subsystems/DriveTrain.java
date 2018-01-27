@@ -1,19 +1,17 @@
 package org.ligerbots.powerup.subsystems;
 
-import com.ctre.phoenix.*;
-import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
-
 import org.ligerbots.powerup.RobotMap;
 
 /**
@@ -57,10 +55,10 @@ public class DriveTrain extends Subsystem {
 
     SmartDashboard.putNumber("Strafe Ramp Rate", 0.08);
 
-    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
-    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
-    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
-    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
+    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
+    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
+    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
     
  //   leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
@@ -72,8 +70,9 @@ public class DriveTrain extends Subsystem {
     left = new SpeedControllerGroup(leftMaster, leftSlave);
     right = new SpeedControllerGroup(rightMaster, rightSlave);
 
-
-
+    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
     // rightMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -89,25 +88,28 @@ public class DriveTrain extends Subsystem {
 
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
-
-    talons = new TalonID[] {new TalonID(RobotMap.CT_LEFT_1, leftMaster),
-        new TalonID(RobotMap.CT_LEFT_2, leftSlave), new TalonID(RobotMap.CT_RIGHT_1, rightMaster),
-        new TalonID(RobotMap.CT_RIGHT_2, rightSlave)};
+    
 
     robotDrive = new DifferentialDrive(left, right);
 
-    navx = new AHRS(SPI.Port.kMXP, (byte) 200);
+    navx = new AHRS(Port.kMXP, (byte) 200);
 
     turningController =
         new PIDController(0.045, 0.004, 0.06, navx, output -> this.turnOutput = output);
   }
+  
+  public void talonCurrent() {
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+    .forEach((WPI_TalonSRX talon) -> SmartDashboard.putNumber(((Integer)talon.getDeviceID()).toString(), talon.getOutputCurrent()));
+  }
+  
 
   double rampRate;
 
   public void allDrive(double throttle, double rotate) {
 
  //   rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
-    robotDrive.arcadeDrive(throttle, rotate);
+    robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
   public double getYaw() {
@@ -129,23 +131,16 @@ public class DriveTrain extends Subsystem {
   
   public double getEncoderDistance (DriveSide driveSide) {
     if (driveSide == DriveSide.LEFT) {
-      return (-leftSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
+      return (leftSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
     }
     else {
-      return (rightSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
-    }
-  }
-
-  public void checkTalonVoltage() {
-    for (TalonID talon : talons) {
-      SmartDashboard.putNumber(((Integer) talon.talonID).toString(),
-          talon.talon.getMotorOutputVoltage() * talon.talon.getOutputCurrent());
+      return (-rightSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
 
   public void printEncoder() {
-    System.out.println("Left: " + (-leftSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE + 
-        " Right: " + (rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE);
+    System.out.println("Left: " + (leftSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.WHEEL_CIRCUMFERENCE + 
+        " Right: " + (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.WHEEL_CIRCUMFERENCE);
   }
   
   double temporaryFixDegrees(double input) {
@@ -191,9 +186,29 @@ public class DriveTrain extends Subsystem {
   public double getTurnOutput() {
     return turnOutput;
   }
+  
+  public void configClosedLoop (double p, double i, double d) {
+    leftMaster.config_kP(0, p, 100000);
+    leftMaster.config_kI(0, i, 100000);
+    leftMaster.config_kD(0, d, 100000);
+    
+    rightMaster.config_kP(0, p, 100000);
+    rightMaster.config_kI(0, i, 100000);
+    rightMaster.config_kD(0, d, 100000);
+    
+    rightMaster.setInverted(true);
+  }
+  
+  public void PIDDrive(double dist) {
+   
+    leftMaster.set(ControlMode.Position, dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    rightMaster.set(ControlMode.Position, dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+
+  }
 
   public void zeroYaw() {
     navx.zeroYaw();
   }
 }
+
 

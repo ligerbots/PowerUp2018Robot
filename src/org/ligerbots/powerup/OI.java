@@ -52,7 +52,7 @@ public class OI {
     xbox = new XboxController(0);
     
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
-    xBoxA.whenPressed(new DriveDistance(36, 1, 0.3));
+    xBoxA.whenPressed(new DriveDistance(36.0, 1, 0.3));
     
     /*JoystickButton xBoxX = new JoystickButton(xbox, 3);
     xBoxX.whileHeld(new IntakeCommand(false));*/
