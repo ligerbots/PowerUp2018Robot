@@ -139,8 +139,8 @@ public class DriveTrain extends Subsystem {
   }
 
   public void printEncoder() {
-    System.out.println("Left: " + (leftSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.WHEEL_CIRCUMFERENCE + 
-        " Right: " + (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.WHEEL_CIRCUMFERENCE);
+    SmartDashboard.putNumber("Left Encoder", leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
+    SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
   }
   
   double temporaryFixDegrees(double input) {
@@ -196,13 +196,18 @@ public class DriveTrain extends Subsystem {
     rightMaster.config_kI(0, i, 100000);
     rightMaster.config_kD(0, d, 100000);
     
-    rightMaster.setInverted(true);
+  }
+  
+  public void endClosedLoop() {
+    rightMaster.setInverted(false);
+    rightSlave.setInverted(false);
   }
   
   public void PIDDrive(double dist) {
    
     leftMaster.set(ControlMode.Position, dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
-    rightMaster.set(ControlMode.Position, dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    rightMaster.set(ControlMode.Position, -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    System.out.println("Destination: " + -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
 
   }
 

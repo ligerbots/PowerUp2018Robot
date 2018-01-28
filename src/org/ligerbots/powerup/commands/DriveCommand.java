@@ -13,6 +13,7 @@ public class DriveCommand extends Command {
 
   OI oi;
   DriveTrain driveTrain;
+  int i = 0;
 
   public DriveCommand() {
     driveTrain = Robot.driveTrain;
@@ -27,7 +28,11 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
     
+    if (i % 10 == 0) {
+      driveTrain.printEncoder();
+    }
     driveTrain.allDrive(oi.getThrottle(), oi.getTurn());
+    i+=1;
 
   }
 

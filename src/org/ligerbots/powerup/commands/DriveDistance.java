@@ -67,11 +67,13 @@ public class DriveDistance extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+        Robot.driveTrain.endClosedLoop();
      //  Robot.driveTrain.disablePID();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+      Robot.driveTrain.endClosedLoop();
     }
 }
