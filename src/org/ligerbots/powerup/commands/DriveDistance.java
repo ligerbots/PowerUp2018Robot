@@ -41,8 +41,6 @@ public class DriveDistance extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      Robot.driveTrain.PIDDrive(offsetInches);
-
 
       //Robot.driveTrain.enableTurningControl(startAngle - Robot.driveTrain.getYaw(), angleTolerance);
       
@@ -52,6 +50,7 @@ public class DriveDistance extends Command {
       delta = ((currentLeft - startingLeft)
           + (currentRight - startingRight)) / 2;
       
+      Robot.driveTrain.PIDDrive(offsetInches - delta);
       error = Math.abs(delta - offsetInches);
       
       onTarget = error < tolerance;

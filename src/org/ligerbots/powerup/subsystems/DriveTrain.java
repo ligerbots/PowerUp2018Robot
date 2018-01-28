@@ -73,6 +73,8 @@ public class DriveTrain extends Subsystem {
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     
+    rightMaster.setSensorPhase(true);
+    
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
     // rightMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -205,8 +207,8 @@ public class DriveTrain extends Subsystem {
   
   public void PIDDrive(double dist) {
    
-    leftMaster.set(ControlMode.Position, dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
-    rightMaster.set(ControlMode.Position, -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    leftMaster.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    rightMaster.set(ControlMode.Position, rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
     System.out.println("Destination: " + -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
 
   }
