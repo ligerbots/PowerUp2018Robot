@@ -16,6 +16,7 @@ public class DriveCommand extends Command {
   int i = 0;
 
   public DriveCommand() {
+    requires(Robot.driveTrain);
     driveTrain = Robot.driveTrain;
     oi = Robot.oi;
     // Use requires() here to declare subsystem dependencies

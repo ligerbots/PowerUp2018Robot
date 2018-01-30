@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.commands.DriveCommand;
+import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
@@ -82,7 +83,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    m_autonomousCommand = new DriveDistance(12.0, 1, 1);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -94,6 +95,7 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.start();
     }
+    
   }
 
   /**
@@ -101,6 +103,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    driveTrain.printEncoder();
     Scheduler.getInstance().run();
   }
 
@@ -113,6 +116,9 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    SmartDashboard.putNumber("DriveP", 1);
+    SmartDashboard.putNumber("DriveI", 0);
+    SmartDashboard.putNumber("DriveD", 0.05);
     driveCommand.start();
   }
 
@@ -122,6 +128,9 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+    driveTrain.logInversion();
+
+   
   }
 
   /**

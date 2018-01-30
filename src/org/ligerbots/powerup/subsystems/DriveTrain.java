@@ -55,11 +55,13 @@ public class DriveTrain extends Subsystem {
 
     SmartDashboard.putNumber("Strafe Ramp Rate", 0.08);
 
-    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
-    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
-    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
-    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
+    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
+    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
+    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
     
+    rightSlave.set(ControlMode.Follower, RobotMap.CT_RIGHT_1);
+    leftSlave.set(ControlMode.Follower, RobotMap.CT_LEFT_1);
  //   leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     // With the new SpeedControlGroups, do we have to do this ourselves anymore?
@@ -74,6 +76,9 @@ public class DriveTrain extends Subsystem {
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     
     rightMaster.setSensorPhase(true);
+    leftMaster.setSensorPhase(true);
+    
+    
     
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -201,16 +206,40 @@ public class DriveTrain extends Subsystem {
   }
   
   public void endClosedLoop() {
-    rightMaster.setInverted(false);
-    rightSlave.setInverted(false);
+//    rightMaster.setInverted(false);
+//    rightSlave.setInverted(false);
   }
   
   public void PIDDrive(double dist) {
    
-    leftMaster.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    leftMaster.setSelectedSensorPosition(0, 0, 0);
+    rightMaster.setSelectedSensorPosition(0, 0, 0);
+    leftMaster.configAllowableClosedloopError(0, 5, 0);
+    rightMaster.configAllowableClosedloopError(0, 5, 0);
+    leftMaster.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE - dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
     rightMaster.set(ControlMode.Position, rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+  //  leftSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+  //  rightSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+
     System.out.println("Destination: " + -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
 
+  }
+  
+  public void logInversion() {
+    SmartDashboard.putBoolean("Left Master Inversion", leftMaster.getInverted());
+    SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
+    SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
+    SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
+  }
+  
+  public double getClosedLoopError(DriveSide side) {
+    if (side == DriveSide.LEFT) {
+      return leftMaster.getClosedLoopError(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE;
+    }
+    else {
+      return rightMaster.getClosedLoopError(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE;
+
+    }
   }
 
   public void zeroYaw() {
