@@ -83,7 +83,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = new DriveDistance(12.0, 1, 1);
+    m_autonomousCommand = new DriveDistance(24.0, 0.1, 1);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -119,6 +119,7 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveP", 1);
     SmartDashboard.putNumber("DriveI", 0);
     SmartDashboard.putNumber("DriveD", 0.05);
+    driveTrain.configTeleop();
     driveCommand.start();
   }
 

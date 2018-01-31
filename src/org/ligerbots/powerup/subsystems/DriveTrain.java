@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 import org.ligerbots.powerup.RobotMap;
+import org.ligerbots.powerup.commands.DriveDistance;
 
 /**
  *
@@ -97,7 +98,7 @@ public class DriveTrain extends Subsystem {
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
     
 
-    robotDrive = new DifferentialDrive(left, right);
+    //robotDrive = new DifferentialDrive(left, right);
 
     navx = new AHRS(Port.kMXP, (byte) 200);
 
@@ -144,10 +145,15 @@ public class DriveTrain extends Subsystem {
       return (-rightSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
+  
+  public void configTeleop() {
+    robotDrive = new DifferentialDrive(left, right);
+  }
 
   public void printEncoder() {
     SmartDashboard.putNumber("Left Encoder", leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
     SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
+    SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
   
   double temporaryFixDegrees(double input) {

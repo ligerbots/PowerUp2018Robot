@@ -41,14 +41,14 @@ public class DriveDistance extends Command {
       double d = SmartDashboard.getNumber("DriveD", 0.05);
       Robot.driveTrain.configClosedLoop(p, i, d);
       Robot.driveTrain.PIDDrive(offsetInches);
-
+      SmartDashboard.putNumber("DriveDistanceInit",SmartDashboard.getNumber("DriveDistanceInit", 0));
 
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
-      //Robot.driveTrain.enableTurningControl(startAngle - Robot.driveTrain.getYaw(), angleTolerance);
+      Robot.driveTrain.enableTurningControl(startAngle - Robot.driveTrain.getYaw(), angleTolerance);
       
       currentLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       currentRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
