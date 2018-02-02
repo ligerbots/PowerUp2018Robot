@@ -33,6 +33,8 @@ public class RobotMap {
   public static final int CT_INTAKE_2 = 8;
   
   public static final double GEARING_FACTOR = 1d;
-  public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
+  public static final double WHEEL_CIRCUMFERENCE = 3.96 * Math.PI;
+  
+  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 1; //inches
 
 }

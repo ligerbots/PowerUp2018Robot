@@ -35,9 +35,9 @@ public class DriveTrain extends Subsystem {
   TalonID[] talons;
 
   public enum DriveSide {
-    LEFT,
-    RIGHT
+    LEFT, RIGHT
   }
+
   AHRS navx;
 
   public class TalonID {
@@ -60,10 +60,10 @@ public class DriveTrain extends Subsystem {
     leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
     rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
     rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
-    
+
     rightSlave.set(ControlMode.Follower, RobotMap.CT_RIGHT_1);
     leftSlave.set(ControlMode.Follower, RobotMap.CT_LEFT_1);
- //   leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     // With the new SpeedControlGroups, do we have to do this ourselves anymore?
     // leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
@@ -75,12 +75,12 @@ public class DriveTrain extends Subsystem {
 
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    
+
     rightMaster.setSensorPhase(true);
     leftMaster.setSensorPhase(true);
-    
-    
-    
+
+
+
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
     // rightMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -96,28 +96,29 @@ public class DriveTrain extends Subsystem {
 
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
-    
 
-    //robotDrive = new DifferentialDrive(left, right);
 
-    navx = new AHRS(Port.kMXP, (byte) 200);
+    // robotDrive = new DifferentialDrive(left, right);
+
+    navx = new AHRS(Port.kMXP, (byte) 50);
 
     turningController =
-        new PIDController(0.045, 0.004, 0.06, navx, output -> this.turnOutput = output);
+        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
   }
-  
+
   public void talonCurrent() {
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-    .forEach((WPI_TalonSRX talon) -> SmartDashboard.putNumber(((Integer)talon.getDeviceID()).toString(), talon.getOutputCurrent()));
+        .forEach((WPI_TalonSRX talon) -> SmartDashboard
+            .putNumber(((Integer) talon.getDeviceID()).toString(), talon.getOutputCurrent()));
   }
-  
+
 
   double rampRate;
 
   public void allDrive(double throttle, double rotate) {
 
- //   rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
-    robotDrive.arcadeDrive(-throttle, -rotate);
+    // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
+    //robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
   public double getYaw() {
@@ -136,26 +137,30 @@ public class DriveTrain extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-  
-  public double getEncoderDistance (DriveSide driveSide) {
+
+  public double getEncoderDistance(DriveSide driveSide) {
     if (driveSide == DriveSide.LEFT) {
-      return (leftSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
-    }
-    else {
-      return (-rightSlave.getSelectedSensorPosition(0)/1024.0) * RobotMap.GEARING_FACTOR * RobotMap.WHEEL_CIRCUMFERENCE;
+      return (leftSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
+          * RobotMap.WHEEL_CIRCUMFERENCE;
+    } else {
+      return (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
+          * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
-  
+
   public void configTeleop() {
-    robotDrive = new DifferentialDrive(left, right);
+    //System.out.println("Differential Drive Exists");
+    //robotDrive = new DifferentialDrive(left, right);
   }
 
   public void printEncoder() {
-    SmartDashboard.putNumber("Left Encoder", leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
-    SmartDashboard.putNumber("Right Encoder", rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
-    SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
+    SmartDashboard.putNumber("Left Encoder",
+        leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
+    SmartDashboard.putNumber("Right Encoder",
+        rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
+    //SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
-  
+
   double temporaryFixDegrees(double input) {
     if (input > 180) {
       return input - 360;
@@ -178,7 +183,7 @@ public class DriveTrain extends Subsystem {
     turningController.setInputRange(-180.0, 180.0);
     turningController.setOutputRange(-1.0, 1.0);
     turningController.setAbsoluteTolerance(tolerance);
-//    turningController.setToleranceBuffer(1);
+    // turningController.setToleranceBuffer(1);
     turningController.setContinuous(true);
     turningController.setSetpoint(temp);
   }
@@ -199,50 +204,65 @@ public class DriveTrain extends Subsystem {
   public double getTurnOutput() {
     return turnOutput;
   }
-  
-  public void configClosedLoop (double p, double i, double d) {
-    leftMaster.config_kP(0, p, 100000);
-    leftMaster.config_kI(0, i, 100000);
-    leftMaster.config_kD(0, d, 100000);
-    
-    rightMaster.config_kP(0, p, 100000);
-    rightMaster.config_kI(0, i, 100000);
-    rightMaster.config_kD(0, d, 100000);
-    
+
+  public void configClosedLoop(double p, double i, double d) {
+    leftMaster.config_kP(0, p, 0);
+    leftMaster.config_kI(0, i, 0);
+    leftMaster.config_kD(0, d, 0);
+
+    rightMaster.config_kP(0, p, 0);
+    rightMaster.config_kI(0, i, 0);
+    rightMaster.config_kD(0, d, 0);
+
   }
-  
+
   public void endClosedLoop() {
-//    rightMaster.setInverted(false);
-//    rightSlave.setInverted(false);
+    // rightMaster.setInverted(false);
+    // rightSlave.setInverted(false);
   }
-  
+
   public void PIDDrive(double dist) {
-   
+
     leftMaster.setSelectedSensorPosition(0, 0, 0);
     rightMaster.setSelectedSensorPosition(0, 0, 0);
-    leftMaster.configAllowableClosedloopError(0, 5, 0);
-    rightMaster.configAllowableClosedloopError(0, 5, 0);
-    leftMaster.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE - dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
-    rightMaster.set(ControlMode.Position, rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
-  //  leftSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
-  //  rightSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+ //   leftMaster.configAllowableClosedloopError(0, 5, 0);
+ //   rightMaster.configAllowableClosedloopError(0, 5, 0);
+    leftMaster.set(ControlMode.Position,
+        /*leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE*/
+            -dist * 1024.0 * 1.25 / RobotMap.WHEEL_CIRCUMFERENCE);
+    rightMaster.set(ControlMode.Position,
+        /*rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
+            +*/ dist * 1024.0 * 1.25 / RobotMap.WHEEL_CIRCUMFERENCE);
+    // leftSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 *
+    // RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+    // rightSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 *
+    // RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
 
     System.out.println("Destination: " + -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
 
   }
-  
+
   public void logInversion() {
     SmartDashboard.putBoolean("Left Master Inversion", leftMaster.getInverted());
     SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
     SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
     SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
+    //SmartDashboard.putData("DifferentialDrive", robotDrive);
+
   }
   
+  //-1 to 1 input
+  public void autoTurn(double speed) {
+    rightMaster.set(ControlMode.PercentOutput, speed);
+    rightSlave.set(ControlMode.PercentOutput, speed);
+    leftMaster.set(ControlMode.PercentOutput, speed);
+    leftSlave.set(ControlMode.PercentOutput, speed);
+  }
+
   public double getClosedLoopError(DriveSide side) {
     if (side == DriveSide.LEFT) {
       return leftMaster.getClosedLoopError(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE;
-    }
-    else {
+    } else {
       return rightMaster.getClosedLoopError(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE;
 
     }

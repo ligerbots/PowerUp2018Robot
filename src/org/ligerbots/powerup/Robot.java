@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.Arrays;
+import java.util.List;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
+import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
@@ -83,7 +86,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = new DriveDistance(24.0, 0.1, 1);
+    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0)));
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -103,8 +106,9 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    driveTrain.printEncoder();
     Scheduler.getInstance().run();
+    driveTrain.printEncoder();
+
   }
 
   @Override
@@ -130,6 +134,7 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     driveTrain.logInversion();
+    Robot.driveTrain.setPID(SmartDashboard.getNumber("DriveP", 1), SmartDashboard.getNumber("DriveI", 0), SmartDashboard.getNumber("DriveD", 0.05));
 
    
   }
