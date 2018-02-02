@@ -4,7 +4,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.AHRSProtocol.AHRSUpdateBase;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -39,6 +42,17 @@ public class DriveTrain extends Subsystem {
   }
 
   AHRS navx;
+
+  double positionX;
+  double positionY;
+  double rotation;
+  double absoluteDistanceTraveled;
+
+  double prevEncoderLeft;
+  double prevEncoderRight;
+  double rotationOffset;
+  double lastOutputLeft = 0;
+  double lastOutputRight = 0;
 
   public class TalonID {
     int talonID;
@@ -102,7 +116,14 @@ public class DriveTrain extends Subsystem {
 
     navx = new AHRS(Port.kMXP, (byte) 50);
 
-    turningController =
+    navx.registerCallback(
+            (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
+              updatePosition(sensorData.yaw);
+            }, new Object());
+
+        calibrateYaw();
+
+        turningController =
         new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
   }
 
@@ -268,9 +289,44 @@ public class DriveTrain extends Subsystem {
     }
   }
 
+  /**
+   * Sets initial yaw based on where our starting position is.
+   */
+  public void calibrateYaw() {
+    if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
+      rotationOffset = -90.0;
+    } else {
+      rotationOffset = 90.0;
+    }
+  }
+
   public void zeroYaw() {
     navx.zeroYaw();
   }
+
+  /**
+   * Updates the dead reckoning for our current position.
+   */
+  public void updatePosition(double navXYaw) {
+    rotation = temporaryFixDegrees(navXYaw + rotationOffset);
+
+    double encoderLeft = getEncoderDistance(DriveSide.LEFT);
+    double encoderRight = getEncoderDistance(DriveSide.RIGHT);
+
+    double deltaEncoderLeft = encoderLeft - prevEncoderLeft;
+    double deltaEncoderRight = encoderRight - prevEncoderRight;
+
+    double deltaInches = (deltaEncoderLeft + deltaEncoderRight) / 2;
+
+    absoluteDistanceTraveled += Math.abs(deltaInches);
+
+    positionX = positionX + Math.cos(Math.toRadians(90 - rotation)) * deltaInches;
+    positionY = positionY + Math.sin(Math.toRadians(90 - rotation)) * deltaInches;
+
+    prevEncoderLeft = encoderLeft;
+    prevEncoderRight = encoderRight;
+  }
+
 }
 
 
