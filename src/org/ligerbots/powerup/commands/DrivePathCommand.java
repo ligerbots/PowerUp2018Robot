@@ -23,6 +23,7 @@ public class DrivePathCommand extends Command {
     double rightInches;
     double delta;
     double angleError;
+    double angleToWaypoint;
     double driveSpeed;
     double angle;
     int waypointIndex = 0;
@@ -42,7 +43,7 @@ public class DrivePathCommand extends Command {
       currentWaypoint = waypoints.get(waypointIndex);
       prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       prevRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
-      Robot.driveTrain.enableTurningControl(currentPosition.angleTo(currentWaypoint) , 0.3);
+      Robot.driveTrain.enableTurningControl(currentPosition.angleTo(currentWaypoint), 0.3);
 
     }
 
@@ -57,14 +58,23 @@ public class DrivePathCommand extends Command {
       delta = ((leftInches - prevLeft) + (rightInches - prevRight)) / 2;
       currentPosition = currentPosition.add(Math.sin(Math.toRadians(angle)) * delta, Math.cos(Math.toRadians(angle)) * delta);
       
-      angleError = currentPosition.angleTo(currentWaypoint);
       
       SmartDashboard.putNumber("Delta", delta);
       SmartDashboard.putNumber("Waypoint Index", waypointIndex);
       SmartDashboard.putNumber("Angle Error", angleError);
       SmartDashboard.putNumber("Distance to Waypoint", currentPosition.distanceTo(currentWaypoint));
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
-      if (Math.abs(angleError) > 2.0) {
+      SmartDashboard.putBoolean("Drive", drive);
+      SmartDashboard.putBoolean("Turn", turn);
+      
+      angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
+      angleError = (angleToWaypoint - angle + 360) % 360;
+      if (angleError > 180) {
+        angleError -= 360;
+      }
+
+      if (Math.abs(angleError) > 2.0 && !driving) {
+        System.out.println("Angle Error: " + Math.abs(angleError) + "    Turn: " + turn);
         drive = false;
         turn = true;
       } else {
@@ -72,7 +82,7 @@ public class DrivePathCommand extends Command {
         turn = false;
       }
       
-      if (drive && !driving) {
+      if (!turn && !driving) {
         Robot.driveTrain.PIDDrive(currentPosition.distanceTo(currentWaypoint));
         driving = true;
       }
@@ -87,8 +97,12 @@ public class DrivePathCommand extends Command {
         driving = false;
         waypointIndex += 1;
         currentWaypoint = waypoints.get(waypointIndex);
-        Robot.driveTrain.enableTurningControl(currentPosition.angleTo(currentWaypoint) , 1);
+        Robot.driveTrain.enableTurningControl(currentPosition.angleTo(currentWaypoint), 1);
+        System.out.println("New Waypoint");
       }
+      
+      prevLeft = leftInches;
+      prevRight = rightInches;
     }
 
     // Make this return true when this Command no longer needs to run execute()
