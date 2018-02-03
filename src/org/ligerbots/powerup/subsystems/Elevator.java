@@ -3,6 +3,7 @@ package org.ligerbots.powerup.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -26,7 +27,6 @@ public class Elevator extends Subsystem {
 
   WPI_TalonSRX elevatorMaster;
   WPI_TalonSRX elevatorSlave;
-  SpeedControllerGroup speedController;
   PIDController elevatorController;
   double P = 0.05;
   double I = 0.05;
@@ -36,6 +36,9 @@ public class Elevator extends Subsystem {
                                  // (maintain 0 RPM)
   double pidOutput;
   double defaultSpeed = 0.05;// How fast it should go when it is moved up or down
+  
+  DigitalInput topLimitSwitch;
+  DigitalInput bottomLimitSwitch;
   
   /*class EncoderPID implements PIDSource {
     
@@ -58,19 +61,27 @@ public class Elevator extends Subsystem {
   
   public Elevator() {
 
+    topLimitSwitch = new DigitalInput(0);
+    bottomLimitSwitch = new DigitalInput(1);
     elevatorMaster = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_1);
     elevatorSlave = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_2);
+    
 
-    speedController =
-        new SpeedControllerGroup((SpeedController) elevatorMaster, (SpeedController) elevatorSlave);
     elevatorMaster.setNeutralMode(NeutralMode.Brake);
     elevatorSlave.setNeutralMode(NeutralMode.Brake);
+    elevatorSlave.setInverted(true);
+    
+    elevatorSlave.set(ControlMode.Follower, RobotMap.CT_ELEVATOR_1);
    //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
   }
 
   public void setSpeed(double requestedSpeed) {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
+  }
+  
+  public void set(double speed) {
+    elevatorMaster.set(speed);
   }
   public void setPosition(double requestedPosition) {
     elevatorMaster.set(ControlMode.Position, requestedPosition);
@@ -104,6 +115,10 @@ public class Elevator extends Subsystem {
   }
   public double getPIDOutput() {
     return pidOutput;
+  }
+  
+  public boolean getLimitSwitch(boolean top) {
+    return top ? topLimitSwitch.get() : bottomLimitSwitch.get();
   }
 
   public void initDefaultCommand() {

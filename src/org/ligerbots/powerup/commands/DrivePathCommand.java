@@ -6,6 +6,7 @@ import java.util.List;
 import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
+import org.ligerbots.powerup.RobotPosition;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 
@@ -16,7 +17,7 @@ public class DrivePathCommand extends Command {
 
     List<FieldPosition> waypoints;
     FieldPosition currentWaypoint;
-    FieldPosition currentPosition;
+    RobotPosition currentPosition;
     double prevLeft;
     double prevRight;
     double leftInches;
@@ -39,10 +40,10 @@ public class DrivePathCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      currentPosition = new FieldPosition(0, 0);
+      currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
-      prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
-      prevRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+    //  prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+    //  prevRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       Robot.driveTrain.enableTurningControl(currentPosition.angleTo(currentWaypoint), 0.3);
 
     }
@@ -52,11 +53,11 @@ public class DrivePathCommand extends Command {
       
       
       //leftDelta = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT) - leftInches;
-      angle = Robot.driveTrain.getAngle();
-      leftInches = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
-      rightInches = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
-      delta = ((leftInches - prevLeft) + (rightInches - prevRight)) / 2;
-      currentPosition = currentPosition.add(Math.sin(Math.toRadians(angle)) * delta, Math.cos(Math.toRadians(angle)) * delta);
+     // angle = Robot.driveTrain.getAngle();
+     // leftInches = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+     // rightInches = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+     // delta = ((leftInches - prevLeft) + (rightInches - prevRight)) / 2;
+      currentPosition = /*currentPosition.add(Math.sin(Math.toRadians(angle)) * delta, Math.cos(Math.toRadians(angle)) * delta)*/Robot.driveTrain.getRobotPosition();
       
       
       SmartDashboard.putNumber("Delta", delta);
@@ -68,7 +69,7 @@ public class DrivePathCommand extends Command {
       SmartDashboard.putBoolean("Turn", turn);
       
       angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
-      angleError = (angleToWaypoint - angle + 360) % 360;
+      angleError = (angleToWaypoint - currentPosition.getDirection() + 360) % 360;
       if (angleError > 180) {
         angleError -= 360;
       }
@@ -88,7 +89,7 @@ public class DrivePathCommand extends Command {
       }
       
       if (turn) {
-        Robot.driveTrain.autoTurn(Math.signum(angleError + 180) / 3);
+        Robot.driveTrain.autoTurn(1 / 3);
       }
       
       if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) {

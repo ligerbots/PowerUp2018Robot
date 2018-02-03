@@ -31,7 +31,16 @@ public class ElevatorCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
         if (!(oi.getElevatorUp() != 0 && oi.getElevatorDown() != 0)) {
-          elevator.setSpeed(oi.getElevatorUp() - oi.getElevatorDown());
+          if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
+            if (!elevator.getLimitSwitch(true)) {
+              elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
+            }
+          }
+          else {
+            if (!elevator.getLimitSwitch(false)) {
+              elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
+            }
+          }
         }
     }
 

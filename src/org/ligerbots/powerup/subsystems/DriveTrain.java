@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.commands.DriveDistance;
+import org.ligerbots.powerup.RobotPosition;
 
 /**
  *
@@ -139,7 +140,7 @@ public class DriveTrain extends Subsystem {
   public void allDrive(double throttle, double rotate) {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
-    //robotDrive.arcadeDrive(-throttle, -rotate);
+    robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
   public double getYaw() {
@@ -171,7 +172,7 @@ public class DriveTrain extends Subsystem {
 
   public void configTeleop() {
     //System.out.println("Differential Drive Exists");
-    //robotDrive = new DifferentialDrive(left, right);
+    robotDrive = new DifferentialDrive(left, right);
   }
 
   public void printEncoder() {
@@ -268,7 +269,7 @@ public class DriveTrain extends Subsystem {
     SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
     SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
     SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
-    //SmartDashboard.putData("DifferentialDrive", robotDrive);
+    SmartDashboard.putData("DifferentialDrive", robotDrive);
 
   }
   
@@ -325,6 +326,10 @@ public class DriveTrain extends Subsystem {
 
     prevEncoderLeft = encoderLeft;
     prevEncoderRight = encoderRight;
+  }
+  
+  public RobotPosition getRobotPosition() {
+    return new RobotPosition(positionX, positionY, rotation);
   }
 
 }
