@@ -68,7 +68,11 @@ public class Elevator extends Subsystem {
     elevatorSlave.setInverted(true);
     
     elevatorSlave.set(ControlMode.Follower, RobotMap.CT_ELEVATOR_1);
-   //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
+
+    // Set the encoder for the master Talon.
+    elevatorMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    
+    //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
   }
 
