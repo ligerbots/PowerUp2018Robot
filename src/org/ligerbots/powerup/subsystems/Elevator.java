@@ -27,10 +27,6 @@ public class Elevator extends Subsystem {
 
   WPI_TalonSRX elevatorMaster;
   WPI_TalonSRX elevatorSlave;
-  PIDController elevatorController;
-  double P = 0.05;
-  double I = 0.05;
-  double D = 0.05;
   double tolerance = 0.05;
   double requestedPosition = 0.0;// When the elevator is not moving, the 775s should stay in place
                                  // (maintain 0 RPM)
@@ -88,7 +84,7 @@ public class Elevator extends Subsystem {
   }
   public void setRequestedPosition(double requestedPosition) {
     this.requestedPosition = requestedPosition;
-    elevatorController.setSetpoint(requestedPosition);
+   // elevatorController.setSetpoint(requestedPosition);
   // elevatorMaster.config_kI(arg0, arg1, arg2)
    //ControlMode.Position  
   }
@@ -104,7 +100,7 @@ public class Elevator extends Subsystem {
     setRequestedPosition(elevatorMaster.getSelectedSensorPosition(0));
   }
 
-  public void initializePIDControl() {
+ /* public void initializePIDControl() {
     elevatorController.enable();
     elevatorController.setInputRange(-10.0, 10.0);
     elevatorController.setOutputRange(-10.0,10.0);
@@ -112,7 +108,7 @@ public class Elevator extends Subsystem {
     //elevatorController.setToleranceBuffer(1);
     elevatorController.setContinuous(true);
  //   elevatorController.setSetpoint(0.0);
-  }
+  }*/
   public double getPIDOutput() {
     return pidOutput;
   }
