@@ -1,6 +1,7 @@
 package org.ligerbots.powerup.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -76,33 +77,26 @@ public class Elevator extends Subsystem {
     //output -> pidOutput = output);
   }
 
-  public void setSpeed(double requestedSpeed) {
+ /* public void setSpeed(double requestedSpeed) {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
-  }
+  }*/
   
   public void set(double speed) {
     elevatorMaster.set(speed);
   }
-  public void setPosition(double requestedPosition) {
-    elevatorMaster.set(ControlMode.Position, requestedPosition);
+  
+  public void holdPosition(double requestedPosition) {
+    elevatorMaster.set(ControlMode.Position, (requestedPosition - getPosition()) / (Math.PI * 0.5) * 4096);
   }
-  public void setRequestedPosition(double requestedPosition) {
-    this.requestedPosition = requestedPosition;
    // elevatorController.setSetpoint(requestedPosition);
   // elevatorMaster.config_kI(arg0, arg1, arg2)
    //ControlMode.Position  
-  }
-  public void goUp() {
-    setSpeed(defaultSpeed);
-  }
-
-  public void goDown() {
-    setSpeed(-defaultSpeed);
+  
+  //returns position in inches
+  public double getPosition() {
+    return elevatorMaster.getSelectedSensorPosition(0) / 4096 * (Math.PI * 0.5);
   }
 
-  public void holdPosition() {
-    setRequestedPosition(elevatorMaster.getSelectedSensorPosition(0));
-  }
 
  /* public void initializePIDControl() {
     elevatorController.enable();
@@ -113,9 +107,7 @@ public class Elevator extends Subsystem {
     elevatorController.setContinuous(true);
  //   elevatorController.setSetpoint(0.0);
   }*/
-  public double getPIDOutput() {
-    return pidOutput;
-  }
+
   
   public boolean getLimitSwitch(boolean top) {
     return top ? topLimitSwitch.get() : bottomLimitSwitch.get();
