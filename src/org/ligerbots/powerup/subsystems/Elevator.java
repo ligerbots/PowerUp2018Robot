@@ -80,6 +80,9 @@ public class Elevator extends Subsystem {
  /* public void setSpeed(double requestedSpeed) {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
   }*/
+  public void zeroEncoder() {
+    elevatorMaster.setSelectedSensorPosition(0, 0, 0);
+  }
   
   public void set(double speed) {
     elevatorMaster.set(speed);

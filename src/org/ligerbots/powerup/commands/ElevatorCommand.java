@@ -16,6 +16,7 @@ public class ElevatorCommand extends Command {
   OI oi;
 
   public ElevatorCommand() {
+    
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     oi = Robot.oi;
@@ -25,6 +26,7 @@ public class ElevatorCommand extends Command {
 
   // Called just before this Command runs the first time
   protected void initialize() {
+    elevator.zeroEncoder();
 
   }
 
