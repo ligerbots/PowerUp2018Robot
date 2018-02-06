@@ -11,7 +11,7 @@ import org.ligerbots.powerup.subsystems.Elevator.ElevatorPosition;
  */
 public class ElevatorCommand extends Command {
 
-  ElevatorPosition position;
+  double position;
   Elevator elevator;
   OI oi;
 
@@ -21,18 +21,17 @@ public class ElevatorCommand extends Command {
     // eg. requires(chassis);
     oi = Robot.oi;
     elevator = Robot.elevator;
-    this.position = position;
   }
 
   // Called just before this Command runs the first time
   protected void initialize() {
     elevator.zeroEncoder();
-
   }
 
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
         if (!(Math.abs(oi.getElevatorUp()) <= 0.05 && Math.abs(oi.getElevatorDown()) <= 0.05)) {
+          position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
             if (!elevator.getLimitSwitch(true)) {
               elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
@@ -45,7 +44,7 @@ public class ElevatorCommand extends Command {
           }
         }
         else {
-          elevator.set(0);
+          elevator.holdPosition(position);
         }
     }
 
