@@ -72,6 +72,7 @@ public class Elevator extends Subsystem {
 
     // Set the encoder for the master Talon.
     elevatorMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+    elevatorMaster.setSensorPhase(true);
     
     //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
@@ -89,7 +90,13 @@ public class Elevator extends Subsystem {
   }
   
   public void holdPosition(double requestedPosition) {
-    elevatorMaster.set(ControlMode.Position, (requestedPosition - getPosition()) / (Math.PI * 0.5) * 4096);
+    elevatorMaster.set(ControlMode.Position, requestedPosition / (Math.PI * 0.5) * 4096);
+  }
+  
+  public void setPID () {
+    elevatorMaster.config_kP(0, 0.1, 0);
+    elevatorMaster.config_kI(0, 0.001, 0);
+    elevatorMaster.config_kD(0, 0.05, 0);
   }
    // elevatorController.setSetpoint(requestedPosition);
   // elevatorMaster.config_kI(arg0, arg1, arg2)
@@ -97,7 +104,7 @@ public class Elevator extends Subsystem {
   
   //returns position in inches
   public double getPosition() {
-    return elevatorMaster.getSelectedSensorPosition(0) / 4096 * (Math.PI * 0.5);
+    return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
   }
 
 

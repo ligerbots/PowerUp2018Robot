@@ -36,6 +36,10 @@ public class DriveCommand extends Command {
     }
     driveTrain.allDrive(oi.getThrottle(), oi.getTurn());
     i+=1;
+    
+   /* if (driveTrain.getRoll() > 0) {
+      
+    }*/
 
   }
 

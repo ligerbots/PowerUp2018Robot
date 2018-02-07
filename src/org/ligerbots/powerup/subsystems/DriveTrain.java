@@ -127,6 +127,14 @@ public class DriveTrain extends Subsystem {
         turningController =
         new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
   }
+  
+  public double getPitch() {
+    return (double) navx.getPitch();
+  }
+  
+  public double getRoll() {
+    return (double) navx.getRoll();
+  }
 
   public void talonCurrent() {
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)

@@ -51,8 +51,8 @@ public class Robot extends IterativeRobot {
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
-    //elevator = new Elevator();
-   // elevatorCommand = new ElevatorCommand();
+    elevator = new Elevator();
+    elevatorCommand = new ElevatorCommand();
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -125,6 +125,7 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveD", 0.05);
     driveTrain.configTeleop();
     driveCommand.start();
+    elevatorCommand.start();
   }
 
   /**
@@ -135,6 +136,7 @@ public class Robot extends IterativeRobot {
     Scheduler.getInstance().run();
     driveTrain.logInversion();
     Robot.driveTrain.setPID(SmartDashboard.getNumber("DriveP", 1), SmartDashboard.getNumber("DriveI", 0), SmartDashboard.getNumber("DriveD", 0.05));
+    SmartDashboard.putNumber("ElevatorEncoder", elevator.getPosition());
 
    
   }
