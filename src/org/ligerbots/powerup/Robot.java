@@ -18,6 +18,7 @@ import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
 import org.ligerbots.powerup.subsystems.Intake;
+import org.ligerbots.powerup.subsystems.LEDStrip;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,6 +37,7 @@ public class Robot extends IterativeRobot {
   public static DriveCommand driveCommand;
   public static Elevator elevator;
   public static ElevatorCommand elevatorCommand;
+  public static LEDStrip ledstrip;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,6 +50,8 @@ public class Robot extends IterativeRobot {
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
+    ledstrip = new LEDStrip();
+    
     //elevator = new Elevator();
    // elevatorCommand = new ElevatorCommand();
     // m_chooser.addDefault("Default Auto", new ExampleCommand());

@@ -34,5 +34,5 @@ public class RobotMap {
   
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
-
+  public static final int REV_BLINKIN = 0;
 }
