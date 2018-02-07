@@ -30,10 +30,16 @@ public class DriveCommand extends Command {
   protected void execute() {
     
     if (i % 10 == 0) {
-      driveTrain.printEncoder();
+ //     driveTrain.printEncoder();
+      driveTrain.talonCurrent();
+      SmartDashboard.putNumber("Yaw", driveTrain.getYaw());
     }
     driveTrain.allDrive(oi.getThrottle(), oi.getTurn());
     i+=1;
+    
+   /* if (driveTrain.getRoll() > 0) {
+      
+    }*/
 
   }
 

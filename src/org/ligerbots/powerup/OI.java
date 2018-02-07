@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.Arrays;
 import org.ligerbots.powerup.commands.DriveDistance;
+import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
 
 /**
@@ -53,6 +55,9 @@ public class OI {
     
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new DriveDistance(12.0, 0.1, 0.3));
+    
+    JoystickButton xBoxB = new JoystickButton(xbox, 2);
+    xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
     /*JoystickButton xBoxX = new JoystickButton(xbox, 3);
     xBoxX.whileHeld(new IntakeCommand(false));*/

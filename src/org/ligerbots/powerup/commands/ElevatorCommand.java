@@ -1,6 +1,7 @@
 package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.OI;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.subsystems.Elevator;
@@ -11,28 +12,59 @@ import org.ligerbots.powerup.subsystems.Elevator.ElevatorPosition;
  */
 public class ElevatorCommand extends Command {
 
-  ElevatorPosition position;
+  double position;
   Elevator elevator;
   OI oi;
 
   public ElevatorCommand() {
+    
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     oi = Robot.oi;
     elevator = Robot.elevator;
-    this.position = position;
   }
 
   // Called just before this Command runs the first time
   protected void initialize() {
-
+    elevator.setPID();
+    elevator.zeroEncoder();
   }
 
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
-        if (!(oi.getElevatorUp() != 0 && oi.getElevatorDown() != 0)) {
-          elevator.setSpeed(oi.getElevatorUp() - oi.getElevatorDown());
+        if (!(Math.abs(oi.getElevatorUp()) <= 0.05 && Math.abs(oi.getElevatorDown()) <= 0.05)) {
+          position = elevator.getPosition();
+          if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
+            if (elevator.getLimitSwitch(true) && !(elevator.getPosition() > 95)) {
+              if (elevator.getPosition() >= 90) { 
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
+              }
+              else {
+                elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
+              }
+            }
+            else {
+              elevator.set(0);
+            }
+          }
+          else {
+            if (elevator.getLimitSwitch(false) && !(elevator.getPosition() < 1)) {
+              if (elevator.getPosition() <= 6) { 
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
+              }
+              else {
+                elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
+              }
+            }
+            else {
+              elevator.set(0);
+            }
+          }
         }
+        else {
+          elevator.holdPosition(position);
+        }
+        SmartDashboard.putNumber("Position", position);
     }
 
   // Make this return true when this Command no longer needs to run execute()
