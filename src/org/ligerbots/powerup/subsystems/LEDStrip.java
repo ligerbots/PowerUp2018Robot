@@ -26,5 +26,10 @@ public class LEDStrip extends Subsystem {
     public void lightsOff() {
       revBlinkin.setSpeed(0.0);
     }
+
+	public void doNothing(int i) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
