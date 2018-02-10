@@ -27,7 +27,7 @@ public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   WPI_TalonSRX leftMaster;
-  WPI_TalonSRX leftSlave;
+  WPI_TalonSRX leftFactoryWorker;
   WPI_TalonSRX rightMaster;
   WPI_TalonSRX rightSlave;
   SpeedControllerGroup left;
@@ -72,12 +72,12 @@ public class DriveTrain extends Subsystem {
     SmartDashboard.putNumber("Strafe Ramp Rate", 0.08);
 
     leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
-    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+    leftFactoryWorker = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
     rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
     rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
 
     rightSlave.set(ControlMode.Follower, RobotMap.CT_RIGHT_1);
-    leftSlave.set(ControlMode.Follower, RobotMap.CT_LEFT_1);
+    leftFactoryWorker.set(ControlMode.Follower, RobotMap.CT_LEFT_1);
     // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     // With the new SpeedControlGroups, do we have to do this ourselves anymore?
@@ -85,7 +85,7 @@ public class DriveTrain extends Subsystem {
     // rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
 
-    left = new SpeedControllerGroup(leftMaster, leftSlave);
+    left = new SpeedControllerGroup(leftMaster, leftFactoryWorker);
     right = new SpeedControllerGroup(rightMaster, rightSlave);
 
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -109,7 +109,7 @@ public class DriveTrain extends Subsystem {
     // rightSlave.set(RobotMap.CT_RIGHT_1);
     // centerSlave.set(RobotMap.CT_CENTER_1);
 
-    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+    Arrays.asList(leftMaster, rightMaster, leftFactoryWorker, rightSlave)
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
 
@@ -137,9 +137,15 @@ public class DriveTrain extends Subsystem {
   }
 
   public void talonCurrent() {
-    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+    Arrays.asList(leftMaster, rightMaster, leftFactoryWorker, rightSlave)
         .forEach((WPI_TalonSRX talon) -> SmartDashboard
             .putNumber(((Integer) talon.getDeviceID()).toString(), talon.getOutputCurrent()));
+  }
+  
+  public void zeroEncoders() {
+    leftMaster.setSelectedSensorPosition(0, 0, 0);
+    rightMaster.setSelectedSensorPosition(0, 0, 0);
+
   }
 
 
@@ -170,7 +176,7 @@ public class DriveTrain extends Subsystem {
 
   public double getEncoderDistance(DriveSide driveSide) {
     if (driveSide == DriveSide.LEFT) {
-      return (leftSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
+      return (leftFactoryWorker.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
           * RobotMap.WHEEL_CIRCUMFERENCE;
     } else {
       return (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
@@ -180,7 +186,9 @@ public class DriveTrain extends Subsystem {
 
   public void configTeleop() {
     //System.out.println("Differential Drive Exists");
-    robotDrive = new DifferentialDrive(left, right);
+    if (robotDrive == null) {
+      robotDrive = new DifferentialDrive(left, right);
+    }
   }
 
   public void printEncoder() {
@@ -275,7 +283,7 @@ public class DriveTrain extends Subsystem {
   public void logInversion() {
     SmartDashboard.putBoolean("Left Master Inversion", leftMaster.getInverted());
     SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
-    SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
+    SmartDashboard.putBoolean("Left Slave Inversion", leftFactoryWorker.getInverted());
     SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
     SmartDashboard.putData("DifferentialDrive", robotDrive);
 
@@ -286,7 +294,7 @@ public class DriveTrain extends Subsystem {
     rightMaster.set(ControlMode.PercentOutput, speed);
     rightSlave.set(ControlMode.PercentOutput, speed);
     leftMaster.set(ControlMode.PercentOutput, speed);
-    leftSlave.set(ControlMode.PercentOutput, speed);
+    leftFactoryWorker.set(ControlMode.PercentOutput, speed);
   }
 
   public double getClosedLoopError(DriveSide side) {

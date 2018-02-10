@@ -73,6 +73,7 @@ public class DrivePathCommand extends Command {
       if (angleError > 180) {
         angleError -= 360;
       }
+      
 
       if (Math.abs(angleError) > 2.0 && !driving) {
         System.out.println("Angle Error: " + Math.abs(angleError) + "    Turn: " + turn);
@@ -89,7 +90,7 @@ public class DrivePathCommand extends Command {
       }
       
       if (turn) {
-        Robot.driveTrain.autoTurn(1 / 3);
+        Robot.driveTrain.autoTurn(0.5);
       }
       
       if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) {

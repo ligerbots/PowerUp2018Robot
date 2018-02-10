@@ -7,6 +7,8 @@
 
 package org.ligerbots.powerup;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into to a variable name.
  * This provides flexibility changing wiring, makes checking the wiring easier and significantly
@@ -27,12 +29,19 @@ public class RobotMap {
   public static final int CT_LEFT_2 = 4;
   public static final int CT_RIGHT_1 = 3;
   public static final int CT_RIGHT_2 = 6;
-  public static final int CT_ELEVATOR_1 = 3;
-  public static final int CT_ELEVATOR_2 = 6;
+  public static final int CT_ELEVATOR_1 = 2;
+  public static final int CT_ELEVATOR_2 = 1;
   public static final int CT_INTAKE_1 = 7;
   public static final int CT_INTAKE_2 = 8;
   
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
   public static final int REV_BLINKIN = 0;
+  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 2;
+  
+  public static final int ULTRASONIC_LEFT_TRIGGER = 4;
+  public static final int ULTRASONIC_LEFT_ECHO = 5;
+  public static final int ULTRASONIC_RIGHT_TRIGGER = 6;
+  public static final int ULTRASONIC_RIGHT_ECHO = 7;
+  public static final double ULTRASONIC_DISTANCE_THRESHOLD = 3; //inches
 }

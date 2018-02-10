@@ -59,8 +59,11 @@ public class OI {
     JoystickButton xBoxB = new JoystickButton(xbox, 2);
     xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
-    /*JoystickButton xBoxX = new JoystickButton(xbox, 3);
-    xBoxX.whileHeld(new IntakeCommand(false));*/
+    JoystickButton xBoxBumperRight = new JoystickButton(xbox, 6);
+    xBoxBumperRight.whileHeld(new IntakeCommand(false));
+    
+    JoystickButton xBoxBumperLeft = new JoystickButton(xbox, 5);
+    xBoxBumperLeft.whileHeld(new IntakeCommand(true));
   }
 
   public double getThrottle() {

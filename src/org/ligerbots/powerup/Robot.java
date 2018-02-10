@@ -12,13 +12,17 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.Arrays;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
+import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
+import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
 import org.ligerbots.powerup.subsystems.Intake;
 import org.ligerbots.powerup.subsystems.LEDStrip;
+import org.ligerbots.powerup.subsystems.ProximitySensor;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -38,6 +42,7 @@ public class Robot extends IterativeRobot {
   public static Elevator elevator;
   public static ElevatorCommand elevatorCommand;
   public static LEDStrip ledstrip;
+  public static ProximitySensor proximitySensor;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -51,9 +56,9 @@ public class Robot extends IterativeRobot {
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     ledstrip = new LEDStrip();
-    
-    //elevator = new Elevator();
-   // elevatorCommand = new ElevatorCommand();
+    proximitySensor = new ProximitySensor();
+    elevator = new Elevator();
+    elevatorCommand = new ElevatorCommand();
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -87,11 +92,13 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = new DriveDistance(24.0, 0.1, 1);
+    SmartDashboard.putData(new ZeroEncoderCommand());
+    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
      * switch(autoSelected) { case "My Auto": autonomousCommand = new MyAutoCommand(); break; case
+     * 
      * "Default Auto": default: autonomousCommand = new ExampleCommand(); break; }
      */
 
@@ -125,6 +132,7 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveD", 0.05);
     driveTrain.configTeleop();
     driveCommand.start();
+    elevatorCommand.start();
   }
 
   /**

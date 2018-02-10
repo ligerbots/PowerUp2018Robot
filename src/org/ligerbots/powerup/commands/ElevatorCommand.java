@@ -28,11 +28,13 @@ public class ElevatorCommand extends Command {
   protected void initialize() {
     elevator.setPID();
     elevator.zeroEncoder();
+    position = 0;
   }
 
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
         if (!(Math.abs(oi.getElevatorUp()) <= 0.05 && Math.abs(oi.getElevatorDown()) <= 0.05)) {
+          SmartDashboard.putBoolean("holding", false);
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
             if (elevator.getLimitSwitch(true) && !(elevator.getPosition() > 95)) {
@@ -63,8 +65,9 @@ public class ElevatorCommand extends Command {
         }
         else {
           elevator.holdPosition(position);
+          SmartDashboard.putBoolean("holding", true);
+          SmartDashboard.putNumber("Elevator Position", position);
         }
-        SmartDashboard.putNumber("Position", position);
     }
 
   // Make this return true when this Command no longer needs to run execute()
