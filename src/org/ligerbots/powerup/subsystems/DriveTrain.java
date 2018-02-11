@@ -9,12 +9,15 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
+
+import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.RobotPosition;
@@ -92,6 +95,9 @@ public class DriveTrain extends Subsystem {
 
     rightMaster.setSensorPhase(true);
     leftMaster.setSensorPhase(true);
+    
+    leftMaster.configClosedloopRamp(0.3, 0);
+    rightMaster.configClosedloopRamp(0.3, 0);
 
 
 
@@ -112,10 +118,15 @@ public class DriveTrain extends Subsystem {
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
 
-    // robotDrive = new DifferentialDrive(left, right);
+   // robotDrive = new DifferentialDrive(left, right);
 
-    navx = new AHRS(Port.kMXP, (byte) 50);
+    navx = new AHRS(SerialPort.Port.kUSB);
+    
+    System.out.println("navx is " + (navx.isConnected() ? "connected" : "not connected"));
 
+    turningController =
+            new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004), SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
+    
     navx.registerCallback(
             (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
               updatePosition(sensorData.yaw);
@@ -123,16 +134,18 @@ public class DriveTrain extends Subsystem {
 
         calibrateYaw();
 
-        turningController =
-        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
+        turningController.setP(SmartDashboard.getNumber("DriveP", 0.045));
+        turningController.setI(SmartDashboard.getNumber("DriveI", 0.004));
+        turningController.setD(SmartDashboard.getNumber("DriveD", 0.06));
+
   }
   
   public double getPitch() {
-    return (double) navx.getPitch();
+    return navx.getPitch();
   }
   
   public double getRoll() {
-    return (double) navx.getRoll();
+    return navx.getRoll();
   }
 
   public void talonCurrent() {
@@ -291,9 +304,9 @@ public class DriveTrain extends Subsystem {
   //-1 to 1 input
   public void autoTurn(double speed) {
     rightMaster.set(ControlMode.PercentOutput, speed);
-    rightSlave.set(ControlMode.PercentOutput, speed);
+    //rightSlave.set(ControlMode.PercentOutput, speed);
     leftMaster.set(ControlMode.PercentOutput, speed);
-    leftSlave.set(ControlMode.PercentOutput, speed);
+    //leftSlave.set(ControlMode.PercentOutput, speed);
   }
 
   public double getClosedLoopError(DriveSide side) {
@@ -318,6 +331,7 @@ public class DriveTrain extends Subsystem {
 
   public void zeroYaw() {
     navx.zeroYaw();
+    
   }
 
   /**
@@ -341,6 +355,19 @@ public class DriveTrain extends Subsystem {
 
     prevEncoderLeft = encoderLeft;
     prevEncoderRight = encoderRight;
+    
+    SmartDashboard.putNumber("Yaw", rotation);
+    
+    SmartDashboard.putNumber("Left Encoder", encoderLeft);
+    SmartDashboard.putNumber("Right Encoder", encoderRight);
+    
+  }
+  
+  public void zeroPosition() {
+	  positionX = 0;
+	  positionY = 0;
+	  zeroYaw();
+	  zeroEncoders();
   }
   
   public RobotPosition getRobotPosition() {

@@ -62,6 +62,10 @@ public class Robot extends IterativeRobot {
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    
+    SmartDashboard.putNumber("DriveP", 0.045);
+    SmartDashboard.putNumber("DriveI", 0.004);
+    SmartDashboard.putNumber("DriveD", 0.06);
     //CameraServer.getInstance().startAutomaticCapture();
   }
 
@@ -93,7 +97,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     SmartDashboard.putData(new ZeroEncoderCommand());
-    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
+    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0)));
+   // m_autonomousCommand = new DriveDistance(24.0, 0.5, 2);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -114,7 +119,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    driveTrain.printEncoder();
+	
     Scheduler.getInstance().run();
   }
 
@@ -127,9 +132,7 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    SmartDashboard.putNumber("DriveP", 1);
-    SmartDashboard.putNumber("DriveI", 0);
-    SmartDashboard.putNumber("DriveD", 0.05);
+   
     driveTrain.configTeleop();
     driveCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();
