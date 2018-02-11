@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.Faults;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +24,8 @@ public class Elevator extends Subsystem {
 
   WPI_TalonSRX elevatorMaster;
   WPI_TalonSRX elevatorSlave;
+  Faults elevatorMasterFaults;
+  boolean elevatorMasterPresent;
   double tolerance = 0.05;
   double requestedPosition = 0.0;// When the elevator is not moving, the 775s should stay in place
                                  // (maintain 0 RPM)
@@ -58,7 +61,10 @@ public class Elevator extends Subsystem {
     elevatorMaster = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_1);
     elevatorSlave = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_2);
     
-
+    elevatorMasterFaults = new Faults();
+    elevatorMaster.getFaults(elevatorMasterFaults);
+    elevatorMasterPresent = elevatorMasterFaults.HardwareFailure; 	// check for presence
+    System.out.println("Elevator master Talon is " + (elevatorMasterPresent ? "Present" : "NOT Present"));
     elevatorMaster.setNeutralMode(NeutralMode.Brake);
     elevatorSlave.setNeutralMode(NeutralMode.Brake);
     elevatorSlave.setInverted(true);
@@ -127,6 +133,10 @@ public class Elevator extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+  }
+  
+  public boolean isPresent() {
+	  return elevatorMasterPresent;
   }
 }
 

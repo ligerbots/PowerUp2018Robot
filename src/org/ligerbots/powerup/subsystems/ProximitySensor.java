@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 import org.ligerbots.powerup.RobotMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Subsystem for the ultrasonic sensor that will be used to align to precise distances from the
@@ -30,13 +28,11 @@ public class ProximitySensor extends Subsystem {
   double adjustedDistanceRight;
   double distanceRight;
 
-  private static final Logger logger = LoggerFactory.getLogger(ProximitySensor.class);
-
   /**
    * Creates the ProximitySensor.
    */
   public ProximitySensor() {
-    logger.trace("Initializing proximity sensor");
+    System.out.println("Initializing proximity sensor");
 
     ultrasonicLeft = new Ultrasonic(RobotMap.ULTRASONIC_LEFT_TRIGGER, RobotMap.ULTRASONIC_LEFT_ECHO);
     

@@ -132,7 +132,7 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveD", 0.05);
     driveTrain.configTeleop();
     driveCommand.start();
-    elevatorCommand.start();
+    if (elevator.isPresent()) elevatorCommand.start();
   }
 
   /**
