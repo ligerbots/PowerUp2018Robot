@@ -119,7 +119,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
-	
+    driveTrain.printEncoder();
     Scheduler.getInstance().run();
   }
 
@@ -132,7 +132,9 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-   
+    SmartDashboard.putNumber("DriveP", 1);
+    SmartDashboard.putNumber("DriveI", 0);
+    SmartDashboard.putNumber("DriveD", 0.05);
     driveTrain.configTeleop();
     driveCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();

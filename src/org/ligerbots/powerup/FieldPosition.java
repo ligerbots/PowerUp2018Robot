@@ -1,14 +1,6 @@
 package org.ligerbots.powerup;
 
 public class FieldPosition {
-	
-  /**
-   * The y coordinate of the location in inches along the short axis of the field. 
-   * +y is closer to the judges than. 
-   * The origin this year is that the wall our robot is touching when it start is ** x = 0 **
-   * because the field is symmetric -- it looks the same to the whichever whichever wall we're starting from
-   * this is true in both the x and y dimensions
-   */
 
   final double x;
   final double y;
