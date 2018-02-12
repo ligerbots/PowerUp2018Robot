@@ -54,6 +54,5 @@ public class IntakeCommand extends Command {
         HoldBoxCommand holdBoxCommand = new HoldBoxCommand();
         holdBoxCommand.start();
       }
-
     }
 }

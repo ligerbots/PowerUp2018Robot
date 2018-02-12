@@ -51,7 +51,7 @@ public class DriveTrain extends Subsystem {
 
   double prevEncoderLeft;
   double prevEncoderRight;
-  double rotationOffset;
+  double rotationOffset = 90;
   double lastOutputLeft = 0;
   double lastOutputRight = 0;
 
@@ -224,6 +224,10 @@ public class DriveTrain extends Subsystem {
     // turningController.setToleranceBuffer(1);
     turningController.setContinuous(true);
     turningController.setSetpoint(temp);
+  }
+  
+  public boolean isTurnOnTarget() {
+    return turningController.onTarget();
   }
 
 

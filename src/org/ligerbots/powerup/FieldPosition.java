@@ -25,6 +25,14 @@ public class FieldPosition {
   public double angleTo(FieldPosition other) {
     return Math.toDegrees(Math.atan2(other.y - y, other.x - x));
   }
+  
+  public double getX () {
+    return x;
+  }
+  
+  public double getY () {
+    return y;
+  }
 
   public double distanceTo(FieldPosition other) {
     double dx = other.x - x;

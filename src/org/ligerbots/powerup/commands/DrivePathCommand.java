@@ -60,6 +60,9 @@ public class DrivePathCommand extends Command {
       currentPosition = /*currentPosition.add(Math.sin(Math.toRadians(angle)) * delta, Math.cos(Math.toRadians(angle)) * delta)*/Robot.driveTrain.getRobotPosition();
       
       
+      SmartDashboard.putNumber("Current Position X", currentPosition.getX());
+      SmartDashboard.putNumber("Current Position Y", currentPosition.getY());
+      
       SmartDashboard.putNumber("Delta", delta);
       SmartDashboard.putNumber("Waypoint Index", waypointIndex);
       SmartDashboard.putNumber("Angle Error", angleError);
@@ -67,6 +70,7 @@ public class DrivePathCommand extends Command {
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
       SmartDashboard.putBoolean("Drive", drive);
       SmartDashboard.putBoolean("Turn", turn);
+      SmartDashboard.putNumber("Angle to Waypoint", angleToWaypoint);
       
       angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
       angleError = (angleToWaypoint - currentPosition.getDirection() + 360) % 360;
