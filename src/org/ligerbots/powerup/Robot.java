@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
+import org.ligerbots.powerup.commands.AutoCommandGroup;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
@@ -97,8 +98,14 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     SmartDashboard.putData(new ZeroEncoderCommand());
+<<<<<<< HEAD
     m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0)));
    // m_autonomousCommand = new DriveDistance(24.0, 0.5, 2);
+=======
+    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(0, 0), new FieldPosition(0, 0), new FieldPosition(0,0)));
+    
+    AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
+>>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -109,7 +116,8 @@ public class Robot extends IterativeRobot {
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
+     // m_autonomousCommand.start();
+      auto.start();
     }
     
   }

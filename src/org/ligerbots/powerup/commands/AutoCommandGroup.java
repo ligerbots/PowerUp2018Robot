@@ -15,11 +15,11 @@ public class AutoCommandGroup extends CommandGroup {
       
       //Check my math
     
-      for (FieldPosition i: wayPoints) {
+     /* for (FieldPosition i: wayPoints) {
         angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(i);
         addSequential(new TurnCommand(Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection(), 0.3));
         addSequential(new DriveDistance(Robot.driveTrain.getRobotPosition().distanceTo(i), 1.0, 1.0));
-      }
+      }*/
       
       addSequential(new TurnCommand(Robot.driveTrain.getRobotPosition().getDirection() - endAngle, 0.3));
         // Add Commands here:

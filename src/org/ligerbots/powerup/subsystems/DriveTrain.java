@@ -53,7 +53,7 @@ public class DriveTrain extends Subsystem {
 
   double prevEncoderLeft;
   double prevEncoderRight;
-  double rotationOffset = 90;
+  double rotationOffset = 0;
   double lastOutputLeft = 0;
   double lastOutputRight = 0;
 
@@ -133,11 +133,19 @@ public class DriveTrain extends Subsystem {
             }, new Object());
 
         calibrateYaw();
+<<<<<<< HEAD
 
         turningController.setP(SmartDashboard.getNumber("DriveP", 0.045));
         turningController.setI(SmartDashboard.getNumber("DriveI", 0.004));
         turningController.setD(SmartDashboard.getNumber("DriveD", 0.06));
 
+=======
+        
+        turningController =
+        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
+        
+     System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
+>>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
   }
   
   public double getPitch() {
@@ -310,7 +318,11 @@ public class DriveTrain extends Subsystem {
     rightMaster.set(ControlMode.PercentOutput, speed);
     //rightSlave.set(ControlMode.PercentOutput, speed);
     leftMaster.set(ControlMode.PercentOutput, speed);
+<<<<<<< HEAD
     //leftSlave.set(ControlMode.PercentOutput, speed);
+=======
+    leftSlave.set(ControlMode.PercentOutput, speed);
+>>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
   }
 
   public double getClosedLoopError(DriveSide side) {
@@ -360,6 +372,7 @@ public class DriveTrain extends Subsystem {
     prevEncoderLeft = encoderLeft;
     prevEncoderRight = encoderRight;
     
+<<<<<<< HEAD
     SmartDashboard.putNumber("Yaw", rotation);
     
     SmartDashboard.putNumber("Left Encoder", encoderLeft);
@@ -372,10 +385,18 @@ public class DriveTrain extends Subsystem {
 	  positionY = 0;
 	  zeroYaw();
 	  zeroEncoders();
+=======
+    SmartDashboard.putNumber("Robot Direction", getRobotPosition().getDirection());
+   // SmartDashboard.putNumber("Turn setPoint", turningController.getSetpoint());
+>>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
   }
   
   public RobotPosition getRobotPosition() {
     return new RobotPosition(positionX, positionY, rotation);
+  }
+  
+  public double turnError() {
+    return turningController.getError();
   }
 
 }
