@@ -34,6 +34,8 @@ public class RobotMap {
   public static final int CT_INTAKE_1 = 7;
   public static final int CT_INTAKE_2 = 8;
   
+  public static final int PCM_ID = 9;
+  
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
   public static final int REV_BLINKIN = 0;

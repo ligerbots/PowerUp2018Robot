@@ -43,7 +43,6 @@ public class ElevatorCommand extends Command {
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
-                System.out.println("elevatoring");
               }
             }
             else {

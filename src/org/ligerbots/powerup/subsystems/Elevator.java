@@ -91,7 +91,7 @@ public class Elevator extends Subsystem {
   }
   
   public void holdPosition(double requestedPosition) {
-    elevatorMaster.set(ControlMode.Position, -requestedPosition / (Math.PI * 0.5) * 4096);
+    elevatorMaster.set(ControlMode.Position, requestedPosition / (Math.PI * 0.5) * 4096);
   }
   
   public void setPID () {

@@ -31,4 +31,12 @@ public class FieldPosition {
     double dy = other.y - y;
     return Math.sqrt(dx * dx + dy * dy);
   }
+  
+  public double getX () {
+    return x;
+  }
+	  
+  public double getY () {
+    return y;
+  }  
 }
