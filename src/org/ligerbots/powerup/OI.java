@@ -15,6 +15,7 @@ import java.util.Arrays;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
+import org.ligerbots.powerup.commands.IntakePistonCommand;
 
 /**
  * This class is the glue that binds the controls on the physical operator interface to the commands
@@ -64,6 +65,13 @@ public class OI {
     
     JoystickButton xBoxBumperLeft = new JoystickButton(xbox, 5);
     xBoxBumperLeft.whileHeld(new IntakeCommand(true));
+    
+    JoystickButton xBoxRightJoystick = new JoystickButton(xbox, 10);
+    xBoxRightJoystick.whenPressed(new IntakePistonCommand(false));
+    
+    JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
+    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));
+
   }
 
   public double getThrottle() {

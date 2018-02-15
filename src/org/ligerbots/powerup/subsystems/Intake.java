@@ -2,6 +2,8 @@ package org.ligerbots.powerup.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,11 +19,15 @@ public class Intake extends Subsystem {
     WPI_TalonSRX intakeMaster;
     WPI_TalonSRX intakeSlave;
     SpeedControllerGroup controllerGroup;
+    DoubleSolenoid solenoid;
+    
 
     public Intake() {
     
       SmartDashboard.putNumber("Intake Speed", 0.5);
 
+      solenoid = new DoubleSolenoid(RobotMap.PCM_ID, 0, 1);
+      
       intakeMaster = new WPI_TalonSRX(RobotMap.CT_INTAKE_1);
       intakeSlave = new WPI_TalonSRX(RobotMap.CT_INTAKE_2);
       
@@ -47,6 +53,16 @@ public class Intake extends Subsystem {
         intakeSlave.set(ControlMode.PercentOutput, speed);
       }
     }
+    
+    public void setPistons(boolean open) {
+      if (open) {
+        solenoid.set(Value.kReverse);
+      }
+      else {
+        solenoid.set(Value.kForward);
+      }
+    }
+    
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.

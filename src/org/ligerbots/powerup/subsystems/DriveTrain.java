@@ -122,12 +122,12 @@ public class DriveTrain extends Subsystem {
               updatePosition(sensorData.yaw);
             }, new Object());
 
-        calibrateYaw();
+    //calibrateYaw();
         
-        turningController =
+    turningController =
         new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
         
-     System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
+    System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
   }
   
   public double getPitch() {
