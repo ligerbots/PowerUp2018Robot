@@ -37,7 +37,7 @@ public class ElevatorCommand extends Command {
           SmartDashboard.putBoolean("holding", false);
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
-            if (elevator.getLimitSwitch(true) && !(elevator.getPosition() > 95)) {
+            if (/*elevator.getLimitSwitch(true) &&*/ !(elevator.getPosition() > 95)) {
               if (elevator.getPosition() >= 90) { 
                 elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
               }
@@ -50,7 +50,7 @@ public class ElevatorCommand extends Command {
             }
           }
           else {
-            if (elevator.getLimitSwitch(false) && !(elevator.getPosition() < 1)) {
+            if (/*elevator.getLimitSwitch(false) && */!(elevator.getPosition() < 1)) {
               if (elevator.getPosition() <= 6) { 
                 elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
               }

@@ -14,7 +14,7 @@ public class TurnCommand extends Command {
 
     public TurnCommand(double angleOffset, double tolerance) {
       
-      requires (Robot.driveTrain);
+    //  requires (Robot.driveTrain);
       this.angleOffset = angleOffset;
       this.tolerance = tolerance;
       

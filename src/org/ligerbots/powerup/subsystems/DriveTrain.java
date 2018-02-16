@@ -94,7 +94,8 @@ public class DriveTrain extends Subsystem {
     rightMaster.setSensorPhase(true);
     leftMaster.setSensorPhase(true);
 
-
+    turningController =
+        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
 
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -120,12 +121,14 @@ public class DriveTrain extends Subsystem {
     navx.registerCallback(
             (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
               updatePosition(sensorData.yaw);
+     /*         turningController.setP(SmartDashboard.getNumber("DriveP", 1));
+              turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
+              turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));*/
             }, new Object());
 
     //calibrateYaw();
         
-    turningController =
-        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
+    
         
     System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
   }
@@ -156,7 +159,7 @@ public class DriveTrain extends Subsystem {
   public void allDrive(double throttle, double rotate) {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
-    robotDrive.arcadeDrive(-throttle, -rotate);
+    //robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
   public double getYaw() {
@@ -187,9 +190,10 @@ public class DriveTrain extends Subsystem {
   }
 
   public void configTeleop() {
+    
     //System.out.println("Differential Drive Exists");
     if (robotDrive == null) {
-      robotDrive = new DifferentialDrive(left, right);
+      //robotDrive = new DifferentialDrive(left, right);
     }
   }
 
@@ -291,7 +295,7 @@ public class DriveTrain extends Subsystem {
     SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
     SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
     SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
-    SmartDashboard.putData("DifferentialDrive", robotDrive);
+   // SmartDashboard.putData("DifferentialDrive", robotDrive);
 
   }
   
