@@ -61,7 +61,7 @@ public class OI {
     JoystickButton xBoxB = new JoystickButton(xbox, 2);
     xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
-   /* JoystickButton xBoxBumperRight = new JoystickButton(xbox, 6);
+    JoystickButton xBoxBumperRight = new JoystickButton(xbox, 6);
     xBoxBumperRight.whileHeld(new IntakeCommand(false));
     
     JoystickButton xBoxBumperLeft = new JoystickButton(xbox, 5);
@@ -71,7 +71,7 @@ public class OI {
     xBoxRightJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
-    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));*/
+    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));
 
   }
 
