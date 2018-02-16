@@ -94,8 +94,6 @@ public class DriveTrain extends Subsystem {
     rightMaster.setSensorPhase(true);
     leftMaster.setSensorPhase(true);
 
-    turningController =
-        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
 
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -126,6 +124,9 @@ public class DriveTrain extends Subsystem {
               turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
               turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));*/
             }, new Object());
+
+    turningController =
+        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
 
     //calibrateYaw();
         
@@ -161,7 +162,7 @@ public class DriveTrain extends Subsystem {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
 	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
-    //robotDrive.arcadeDrive(-throttle, -rotate);
+    robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
   // Returns the current yaw value (in degrees, from -180 to 180)
@@ -199,7 +200,7 @@ public class DriveTrain extends Subsystem {
     
     //System.out.println("Differential Drive Exists");
     if (robotDrive == null) {
-      //robotDrive = new DifferentialDrive(left, right);
+      robotDrive = new DifferentialDrive(left, right);
     }
   }
 
@@ -373,6 +374,10 @@ public class DriveTrain extends Subsystem {
   
   public double turnError() {
     return turningController.getError();
+  }
+  
+  public double getSetpoint() {
+    return turningController.getSetpoint();
   }
 
 }

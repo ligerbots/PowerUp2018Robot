@@ -28,6 +28,8 @@ public class ElevatorCommand extends Command {
   protected void initialize() {
     elevator.setPID();
     // TODO: Can't call zeroEncoder here since we don't know where it will be at the start of teleop.
+    
+    SmartDashboard.putNumber("Elevator Slow", 0.25);
     elevator.zeroEncoder();
     position = 0;
   }
@@ -42,7 +44,7 @@ public class ElevatorCommand extends Command {
               if (elevator.getPosition() >= 90) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
@@ -54,11 +56,12 @@ public class ElevatorCommand extends Command {
           }
           else {
         	  // TODO: Need to allow it to go lower. Maybe set the "1" to "0.5" or smaller
-            if (/*elevator.getLimitSwitch(false) && */!(elevator.getPosition() < 1)) {
+            if (/*elevator.getLimitSwitch(false) && */!(elevator.getPosition() < 0.5)) {
               if (elevator.getPosition() <= 6) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
+                
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());

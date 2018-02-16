@@ -22,6 +22,7 @@ public class TurnCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+      Robot.driveTrain.setPID(SmartDashboard.getNumber("DriveP", 1), SmartDashboard.getNumber("DriveI", 0.01), SmartDashboard.getNumber("DriveD", 0.5));
       Robot.driveTrain.enableTurningControl(angleOffset, tolerance);
     }
 
@@ -29,6 +30,7 @@ public class TurnCommand extends Command {
     protected void execute() {
       Robot.driveTrain.autoTurn(Robot.driveTrain.getTurnOutput());
       SmartDashboard.putNumber("Angle offset", Robot.driveTrain.turnError());
+      SmartDashboard.putNumber("Setpoint", Robot.driveTrain.getSetpoint());
     }
 
     // Make this return true when this Command no longer needs to run execute()
