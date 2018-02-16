@@ -116,7 +116,7 @@ public class DriveTrain extends Subsystem {
 
     // robotDrive = new DifferentialDrive(left, right);
 
-    navx = new AHRS(Port.kMXP, (byte) 50);
+    navx = new AHRS(Port.kMXP, (byte) 50); 
 
     navx.registerCallback(
             (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
