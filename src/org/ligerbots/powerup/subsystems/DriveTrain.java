@@ -116,6 +116,7 @@ public class DriveTrain extends Subsystem {
 
     // robotDrive = new DifferentialDrive(left, right);
 
+    // TODO: This should be sampled at 200Hz
     navx = new AHRS(Port.kMXP, (byte) 50); 
 
     navx.registerCallback(
@@ -159,17 +160,22 @@ public class DriveTrain extends Subsystem {
   public void allDrive(double throttle, double rotate) {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
+	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     //robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
+  // Returns the current yaw value (in degrees, from -180 to 180)
   public double getYaw() {
     return navx.getYaw();
   }
 
+  // Return the rate of rotation of the yaw (Z-axis) gyro, in degrees per second.
   public double getRate() {
     return navx.getRate();
   }
 
+  // Returns the total accumulated yaw angle (Z Axis, in degrees)
+  // reported by the sensor since it was last zeroed. This will go beyond 360 degrees.
   public double getAngle() {
     return navx.getAngle();
   }
@@ -205,6 +211,7 @@ public class DriveTrain extends Subsystem {
     //SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
 
+  // TODO: Can we refactor this to remove the "temporary" from its name?
   double temporaryFixDegrees(double input) {
     if (input > 180) {
       return input - 360;
@@ -358,6 +365,9 @@ public class DriveTrain extends Subsystem {
   }
   
   public RobotPosition getRobotPosition() {
+	  // TODO: I know Erik did this last year, but I don't like to "new" anything after initialization
+	  // if we can help it. We should have a robotPosition attribute in this class and return it by
+	  // value here.
     return new RobotPosition(positionX, positionY, rotation);
   }
   

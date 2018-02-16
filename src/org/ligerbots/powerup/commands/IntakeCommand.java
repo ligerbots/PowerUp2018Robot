@@ -27,12 +27,14 @@ public class IntakeCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	// TODO: The "0.5" should be a parameter in RobotMap settable via the Smart Dashboard
       speed = SmartDashboard.getNumber("Intake Speed", 0.5);
       Robot.intake.intakeOn(reverse, speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	// TODO: How will a reverse IntakeCommand ever end?
         return reverse ? false : Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD && 
             Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD;
     }
