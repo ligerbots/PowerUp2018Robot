@@ -38,6 +38,7 @@ public class DriveTrain extends Subsystem {
   DifferentialDrive robotDrive;
   PIDController turningController;
   double turnOutput = 0;
+  double angleOffset = 0;
   TalonID[] talons;
 
   public enum DriveSide {
@@ -50,7 +51,8 @@ public class DriveTrain extends Subsystem {
   double positionY;
   double rotation;
   double absoluteDistanceTraveled;
-
+  int numberOfTicks = 0;
+  
   double prevEncoderLeft;
   double prevEncoderRight;
   double rotationOffset = 0;
@@ -230,7 +232,6 @@ public class DriveTrain extends Subsystem {
       return input;
     }
   }
-
   public void enableTurningControl(double angle, double tolerance) {
     double startAngle = this.getYaw();
     double temp = startAngle + angle;
@@ -249,7 +250,19 @@ public class DriveTrain extends Subsystem {
   }
   
   public boolean isTurnOnTarget() {
-    return turningController.onTarget();
+
+	  if (Math.abs(turnError()) <= 4) {
+		  ++numberOfTicks;
+		  if (numberOfTicks >= 15) {
+			  numberOfTicks = 0;
+			  return true;
+		  }
+	  }
+	  else {
+		  numberOfTicks = 0;
+	  }
+	  return false;
+    //return turningController.onTarget();
   }
 
 
@@ -264,9 +277,38 @@ public class DriveTrain extends Subsystem {
   public boolean isPidOn() {
     return turningController.isEnabled();
   }
-
+  public void setAngleOffset(double angleOffset) {
+	  this.angleOffset = angleOffset;
+  }
   public double getTurnOutput() {
-    return turnOutput;
+	  angleOffset = turnError();
+	  //System.out.println(turnError());
+	  
+	  if (angleOffset > 75) {
+		  return -1;
+	  }
+	  if (angleOffset > 45) {
+		  return -0.75;
+	  }
+	  if (angleOffset > 20) {
+		  return -0.45;
+	  }
+	  if (angleOffset > 4) {
+		  return -0.3;
+	  }
+	  if (angleOffset < -75) {
+		  return 1;
+	  }
+	  if (angleOffset < -45) {
+		  return 0.75;
+	  }
+	  if (angleOffset < -20) {
+		  return 0.45;
+	  }
+	  if (angleOffset < -4) {
+		  return 0.3;
+	  }
+	  return 0;
   }
 
   public void configClosedLoop(double p, double i, double d) {
@@ -318,13 +360,11 @@ public class DriveTrain extends Subsystem {
   //-1 to 1 input
   public void autoTurn(double speed) {
     rightMaster.set(ControlMode.PercentOutput, speed);
+    rightSlave.set(ControlMode.PercentOutput, speed);
     //rightSlave.set(ControlMode.PercentOutput, speed);
     leftMaster.set(ControlMode.PercentOutput, speed);
-<<<<<<< HEAD
     //leftSlave.set(ControlMode.PercentOutput, speed);
-=======
     leftSlave.set(ControlMode.PercentOutput, speed);
->>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
   }
 
   public double getClosedLoopError(DriveSide side) {
@@ -374,7 +414,6 @@ public class DriveTrain extends Subsystem {
     prevEncoderLeft = encoderLeft;
     prevEncoderRight = encoderRight;
     
-<<<<<<< HEAD
     SmartDashboard.putNumber("Yaw", rotation);
     
     SmartDashboard.putNumber("Left Encoder", encoderLeft);
@@ -387,10 +426,8 @@ public class DriveTrain extends Subsystem {
 	  positionY = 0;
 	  zeroYaw();
 	  zeroEncoders();
-=======
     SmartDashboard.putNumber("Robot Direction", getRobotPosition().getDirection());
    // SmartDashboard.putNumber("Turn setPoint", turningController.getSetpoint());
->>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
   }
   
   public RobotPosition getRobotPosition() {

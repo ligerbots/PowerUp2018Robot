@@ -28,7 +28,9 @@ public class TurnCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
       Robot.driveTrain.autoTurn(Robot.driveTrain.getTurnOutput());
+      System.out.println(Robot.driveTrain.getTurnOutput());
       SmartDashboard.putNumber("Angle offset", Robot.driveTrain.turnError());
       SmartDashboard.putNumber("Setpoint", Robot.driveTrain.getSetpoint());
     }
