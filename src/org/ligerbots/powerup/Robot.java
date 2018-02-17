@@ -132,9 +132,9 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    SmartDashboard.putNumber("DriveP", 1);
-    SmartDashboard.putNumber("DriveI", 0);
-    SmartDashboard.putNumber("DriveD", 0.05);
+//    SmartDashboard.putNumber("DriveP", 1);
+//    SmartDashboard.putNumber("DriveI", 0);
+//    SmartDashboard.putNumber("DriveD", 0.05);
     driveTrain.configTeleop();
     driveCommand.start();
     elevatorCommand.start();
