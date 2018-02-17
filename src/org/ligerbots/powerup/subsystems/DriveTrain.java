@@ -100,7 +100,6 @@ public class DriveTrain extends Subsystem {
     rightMaster.configClosedloopRamp(0.3, 0);
 
 
-
     // deprecated CANTalon methods of doing things:
     // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
     // rightMaster.changeControlMode(TalonControlMode.PercentVbus);
@@ -120,9 +119,9 @@ public class DriveTrain extends Subsystem {
 
    // robotDrive = new DifferentialDrive(left, right);
 
-    navx = new AHRS(SerialPort.Port.kUSB);
-    
-    System.out.println("navx is " + (navx.isConnected() ? "connected" : "not connected"));
+
+    // TODO: This should be sampled at 200Hz
+    navx = new AHRS(Port.kMXP, (byte) 50); 
 
     turningController =
             new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004), SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
@@ -130,30 +129,18 @@ public class DriveTrain extends Subsystem {
     navx.registerCallback(
             (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
               updatePosition(sensorData.yaw);
+     /*         turningController.setP(SmartDashboard.getNumber("DriveP", 1));
+              turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
+              turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));*/
             }, new Object());
 
-<<<<<<< HEAD
-        calibrateYaw();
-<<<<<<< HEAD
 
-        turningController.setP(SmartDashboard.getNumber("DriveP", 0.045));
-        turningController.setI(SmartDashboard.getNumber("DriveI", 0.004));
-        turningController.setD(SmartDashboard.getNumber("DriveD", 0.06));
-
-=======
-=======
-    //calibrateYaw();
->>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot
-        
     turningController =
         new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
-        
-<<<<<<< HEAD
-     System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
->>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
-=======
+
+
+    //calibrateYaw();
     System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
->>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot
   }
   
   public double getPitch() {
@@ -182,17 +169,22 @@ public class DriveTrain extends Subsystem {
   public void allDrive(double throttle, double rotate) {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
+	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     robotDrive.arcadeDrive(-throttle, -rotate);
   }
 
+  // Returns the current yaw value (in degrees, from -180 to 180)
   public double getYaw() {
     return navx.getYaw();
   }
 
+  // Return the rate of rotation of the yaw (Z-axis) gyro, in degrees per second.
   public double getRate() {
     return navx.getRate();
   }
 
+  // Returns the total accumulated yaw angle (Z Axis, in degrees)
+  // reported by the sensor since it was last zeroed. This will go beyond 360 degrees.
   public double getAngle() {
     return navx.getAngle();
   }
@@ -213,6 +205,7 @@ public class DriveTrain extends Subsystem {
   }
 
   public void configTeleop() {
+    
     //System.out.println("Differential Drive Exists");
     if (robotDrive == null) {
       robotDrive = new DifferentialDrive(left, right);
@@ -227,6 +220,7 @@ public class DriveTrain extends Subsystem {
     //SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
 
+  // TODO: Can we refactor this to remove the "temporary" from its name?
   double temporaryFixDegrees(double input) {
     if (input > 180) {
       return input - 360;
@@ -317,7 +311,7 @@ public class DriveTrain extends Subsystem {
     SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
     SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
     SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
-    SmartDashboard.putData("DifferentialDrive", robotDrive);
+   // SmartDashboard.putData("DifferentialDrive", robotDrive);
 
   }
   
@@ -400,11 +394,18 @@ public class DriveTrain extends Subsystem {
   }
   
   public RobotPosition getRobotPosition() {
+	  // TODO: I know Erik did this last year, but I don't like to "new" anything after initialization
+	  // if we can help it. We should have a robotPosition attribute in this class and return it by
+	  // value here.
     return new RobotPosition(positionX, positionY, rotation);
   }
   
   public double turnError() {
     return turningController.getError();
+  }
+  
+  public double getSetpoint() {
+    return turningController.getSetpoint();
   }
 
 }

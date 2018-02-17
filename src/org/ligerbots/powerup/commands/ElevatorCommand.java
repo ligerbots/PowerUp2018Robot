@@ -27,6 +27,9 @@ public class ElevatorCommand extends Command {
   // Called just before this Command runs the first time
   protected void initialize() {
     elevator.setPID();
+    // TODO: Can't call zeroEncoder here since we don't know where it will be at the start of teleop.
+    
+    SmartDashboard.putNumber("Elevator Slow", 0.25);
     elevator.zeroEncoder();
     position = 0;
   }
@@ -37,9 +40,11 @@ public class ElevatorCommand extends Command {
           SmartDashboard.putBoolean("holding", false);
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
-            if (elevator.getLimitSwitch(true) && !(elevator.getPosition() > 95)) {
+            if (/*elevator.getLimitSwitch(true) &&*/ !(elevator.getPosition() > 95)) {
               if (elevator.getPosition() >= 90) { 
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
+            	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
+            	  // settable by the Smart Dashboard.
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
@@ -50,9 +55,13 @@ public class ElevatorCommand extends Command {
             }
           }
           else {
-            if (elevator.getLimitSwitch(false) && !(elevator.getPosition() < 1)) {
+        	  // TODO: Need to allow it to go lower. Maybe set the "1" to "0.5" or smaller
+            if (/*elevator.getLimitSwitch(false) && */!(elevator.getPosition() < 0.5)) {
               if (elevator.getPosition() <= 6) { 
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * 0.25);
+            	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
+            	  // settable by the Smart Dashboard.
+                
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());

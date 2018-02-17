@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
@@ -10,9 +11,9 @@
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix-sources.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/navx_frc.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/CTRLib.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/logback-classic-1.1.9.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/logback-core-1.1.9.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/slf4j-api-1.7.22.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/strongback.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

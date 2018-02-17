@@ -75,6 +75,9 @@ public class Elevator extends Subsystem {
     elevatorMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
     elevatorMaster.setSensorPhase(true);
     
+    // TODO: Need to make sure that the elevator is starting out at the lowest point.
+    // I think it is in which case we should explicitly zero the encoder here.
+    
     //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
   }

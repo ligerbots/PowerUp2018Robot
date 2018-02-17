@@ -20,6 +20,7 @@ import org.ligerbots.powerup.triggers.JoystickPov;
 import org.ligerbots.powerup.triggers.JoystickPov.Direction;
 
 import org.ligerbots.powerup.commands.IntakePistonCommand;
+import org.ligerbots.powerup.commands.TurnCommand;
 
 
 /**
@@ -60,9 +61,9 @@ public class OI {
     xbox = new XboxController(0);
     
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
-    xBoxA.whenPressed(new DriveDistance(12.0, 0.1, 0.3));
+    xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
     
-    JoystickButton xBoxB = new JoystickButton(xbox, 2);
+   /* JoystickButton xBoxB = new JoystickButton(xbox, 2);
     xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
     JoystickButton xBoxBumperRight = new JoystickButton(xbox, 6);
@@ -75,7 +76,7 @@ public class OI {
     xBoxRightJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
-    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));
+    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));*/
 
   }
 

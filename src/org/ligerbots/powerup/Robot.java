@@ -18,6 +18,7 @@ import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
+import org.ligerbots.powerup.commands.TurnCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
@@ -52,7 +53,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     
-    intake = new Intake();
+//    intake = new Intake();
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
@@ -98,14 +99,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
     SmartDashboard.putData(new ZeroEncoderCommand());
-<<<<<<< HEAD
-    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0)));
-   // m_autonomousCommand = new DriveDistance(24.0, 0.5, 2);
-=======
-    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(0, 0), new FieldPosition(0, 0), new FieldPosition(0,0)));
-    
-    AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
->>>>>>> 920d853894ba841521d10c85a6827d9cbc41dba6
+    m_autonomousCommand = new TurnCommand(90, 0.3);
+    //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -117,7 +112,7 @@ public class Robot extends IterativeRobot {
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
      // m_autonomousCommand.start();
-      auto.start();
+      m_autonomousCommand.start();
     }
     
   }
@@ -140,9 +135,9 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    SmartDashboard.putNumber("DriveP", 1);
-    SmartDashboard.putNumber("DriveI", 0);
-    SmartDashboard.putNumber("DriveD", 0.05);
+//    SmartDashboard.putNumber("DriveP", 1);
+//    SmartDashboard.putNumber("DriveI", 0);
+//    SmartDashboard.putNumber("DriveD", 0.05);
     driveTrain.configTeleop();
     driveCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();

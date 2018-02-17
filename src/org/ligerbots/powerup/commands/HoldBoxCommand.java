@@ -35,6 +35,7 @@ public class HoldBoxCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	// TODO: Since isFinished always returns false, this will never execute.
         Robot.intake.setSlave(true, 0);
     }
 
