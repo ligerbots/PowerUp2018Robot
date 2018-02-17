@@ -100,6 +100,7 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     SmartDashboard.putData(new ZeroEncoderCommand());
     //m_autonomousCommand = new TurnCommand(90, 0.3);
+    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     
     //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
 

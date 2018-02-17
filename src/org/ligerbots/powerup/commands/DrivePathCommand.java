@@ -77,9 +77,9 @@ public class DrivePathCommand extends Command {
       if (angleError > 180) {
         angleError -= 360;
       }
-      turn(angleError);
+      //System.out.println("Thing");
       
-      if (Math.abs(angleError) > 2.0 && !driving) {
+      if (Math.abs(angleError) > 4.0 && !driving) {
         System.out.println("Angle Error: " + Math.abs(angleError) + "    Turn: " + turn);
         drive = false;
         turn = true;
@@ -89,6 +89,10 @@ public class DrivePathCommand extends Command {
       }
       
       if (!turn && !driving) {
+    	System.out.print("Starting drive, ");
+    	System.out.print(-currentPosition.distanceTo(currentWaypoint));
+    	System.out.print(" units");
+    	
         Robot.driveTrain.PIDDrive(-currentPosition.distanceTo(currentWaypoint));
         driving = true;
       }
