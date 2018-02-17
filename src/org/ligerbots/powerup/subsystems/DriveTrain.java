@@ -291,10 +291,10 @@ public class DriveTrain extends Subsystem {
 		  return -0.75;
 	  }
 	  if (angleOffset > 20) {
-		  return -0.45;
+		  return -0.4;
 	  }
 	  if (angleOffset > 4) {
-		  return -0.3;
+		  return -0.2;
 	  }
 	  if (angleOffset < -75) {
 		  return 1;
@@ -303,10 +303,10 @@ public class DriveTrain extends Subsystem {
 		  return 0.75;
 	  }
 	  if (angleOffset < -20) {
-		  return 0.45;
+		  return 0.4;
 	  }
 	  if (angleOffset < -4) {
-		  return 0.3;
+		  return 0.2;
 	  }
 	  return 0;
   }

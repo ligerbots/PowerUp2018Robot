@@ -31,6 +31,7 @@ public class DrivePathCommand extends Command {
     boolean turn = false;
     boolean drive = false;
     boolean driving = false;
+    TurnCommand turnCommand;
     
     public DrivePathCommand(List<FieldPosition> waypoints) {
       this.waypoints = waypoints;
@@ -76,8 +77,8 @@ public class DrivePathCommand extends Command {
       if (angleError > 180) {
         angleError -= 360;
       }
+      turn(angleError);
       
-
       if (Math.abs(angleError) > 2.0 && !driving) {
         System.out.println("Angle Error: " + Math.abs(angleError) + "    Turn: " + turn);
         drive = false;
@@ -121,7 +122,9 @@ public class DrivePathCommand extends Command {
     protected void end() {
       Robot.driveTrain.disablePID();
     }
-
+    private void turn(double angle) {
+    	turnCommand = new TurnCommand(angle, 3);
+    }
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
