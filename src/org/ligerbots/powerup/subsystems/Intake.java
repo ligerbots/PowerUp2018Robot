@@ -1,6 +1,7 @@
 package org.ligerbots.powerup.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -19,48 +20,60 @@ public class Intake extends Subsystem {
     WPI_TalonSRX intakeMaster;
     WPI_TalonSRX intakeSlave;
     SpeedControllerGroup controllerGroup;
-    DoubleSolenoid solenoid;
+    Faults intakeMasterFaults;
+    boolean intakePresent;
+    private DoubleSolenoid solenoid;
     
 
     public Intake() {
     
       SmartDashboard.putNumber("Intake Speed", 0.5);
-
-      solenoid = new DoubleSolenoid(RobotMap.PCM_ID, 0, 1);
       
       intakeMaster = new WPI_TalonSRX(RobotMap.CT_INTAKE_1);
-      intakeSlave = new WPI_TalonSRX(RobotMap.CT_INTAKE_2);
+      intakeMasterFaults = new Faults();
+      intakeMaster.getFaults(intakeMasterFaults);
+      intakePresent = intakeMasterFaults.HardwareFailure; 	// check for presence
       
-      intakeSlave.setInverted(true);
-      
-      intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
+      if (intakePresent) {
+	      intakeSlave = new WPI_TalonSRX(RobotMap.CT_INTAKE_2);
+	      solenoid = new DoubleSolenoid(RobotMap.PCM_ID, 0, 1);
+	      
+	      intakeSlave.setInverted(true);
+	      intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
+      }
     }
     
     public void intakeOn(boolean reverse, double speed) {
-        if (reverse) {
-          intakeMaster.set(-speed);
-        }
-        else {
-          intakeMaster.set(speed);
-        }
+    	if (intakePresent) {
+	        if (reverse) {
+	          intakeMaster.set(-speed);
+	        }
+	        else {
+	          intakeMaster.set(speed);
+	        }
+    	}
     }
     
     public void setSlave(boolean slave, double speed) {
-      if (slave) {
-        intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
-      }
-      else {
-        intakeSlave.set(ControlMode.PercentOutput, speed);
-      }
+    	if (intakePresent) {
+	      if (slave) {
+	        intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
+	      }
+	      else {
+	        intakeSlave.set(ControlMode.PercentOutput, speed);
+	      }
+    	}
     }
     
     public void setPistons(boolean open) {
-      if (open) {
-        solenoid.set(Value.kReverse);
-      }
-      else {
-        solenoid.set(Value.kForward);
-      }
+    	if (intakePresent) {
+	      if (open) {
+	        solenoid.set(Value.kReverse);
+	      }
+	      else {
+	        solenoid.set(Value.kForward);
+	      }
+    	}
     }
     
 

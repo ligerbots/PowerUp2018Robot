@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     
-//    intake = new Intake();
+    intake = new Intake();
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();

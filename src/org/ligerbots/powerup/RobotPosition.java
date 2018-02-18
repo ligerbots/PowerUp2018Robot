@@ -3,7 +3,8 @@ package org.ligerbots.powerup;
 
 public class RobotPosition extends FieldPosition {
   /**
-   * The direction the robot is facing in degrees clockwise, where 0.0 degrees is facing the judges.
+   * The direction the robot is facing in degrees clockwise, where 0.0 degrees 
+   * is facing the long way down the field. (Note -- this is different from 2017!)
    */
   protected final double direction;
 
