@@ -63,7 +63,7 @@ public class OI {
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
     
-   /* JoystickButton xBoxB = new JoystickButton(xbox, 2);
+    JoystickButton xBoxB = new JoystickButton(xbox, 2);
     xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
     JoystickButton xBoxBumperRight = new JoystickButton(xbox, 6);
@@ -76,7 +76,15 @@ public class OI {
     xBoxRightJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
-    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));*/
+    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));
+    
+    // TODO: Add a button to switch the camera mode
+    // options are ""switch", "cube", and "driver"
+    // switch is for start of autonomous
+    // cube is also for autonomous after we get past the switch target
+    // cube can also be used to view when the elevator is raised
+    // "driver" is the camera mounted on the elevator support.
+    // Allows driver to watch cube being loaded
 
   }
 

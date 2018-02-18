@@ -98,6 +98,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
+	SmartDashboard.putString("/vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //m_autonomousCommand = new TurnCommand(90, 0.3);
     m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
@@ -137,6 +138,10 @@ public class Robot extends IterativeRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
+    // Switch cmaera to Driver mode
+	SmartDashboard.putString("/vision/active_mode", "driver");
+    
 //    SmartDashboard.putNumber("DriveP", 1);
 //    SmartDashboard.putNumber("DriveI", 0);
 //    SmartDashboard.putNumber("DriveD", 0.05);
