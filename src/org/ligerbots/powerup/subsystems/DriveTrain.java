@@ -59,6 +59,8 @@ public class DriveTrain extends Subsystem {
   double rotationOffset = 0;
   double lastOutputLeft = 0;
   double lastOutputRight = 0;
+  
+  RobotPosition robotPosition;
 
   public class TalonID {
     int talonID;
@@ -68,16 +70,16 @@ public class DriveTrain extends Subsystem {
       this.talonID = talonID;
       this.talon = talon;
     }
-    
-    
-
   }
 
   @SuppressWarnings("unused")
 public DriveTrain() {
 
-
     SmartDashboard.putNumber("Ramp Rate", 0.08);
+    
+    // This initial robot position will be overwritten by our autonomous selection
+    // we only zero it out here for practice, where we go straight teleop
+    robotPosition = new RobotPosition(0.0, 0.0, 0.0);
 
     leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
     leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
@@ -194,6 +196,11 @@ public DriveTrain() {
 	    //calibrateYaw();
 	    System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
     }
+  }
+  
+  public void setInitialRobotPosition(double x, double y, double angle)
+  {
+	  robotPosition.setRobotPosition(x, y, angle);
   }
   
   public double getPitch() {
@@ -495,7 +502,8 @@ public DriveTrain() {
 	  // TODO: I know Erik did this last year, but I don't like to "new" anything after initialization
 	  // if we can help it. We should have a robotPosition attribute in this class and return it by
 	  // value here.
-    return new RobotPosition(positionX, positionY, rotation);
+	robotPosition.setRobotPosition(positionX, positionY, rotation);
+    return robotPosition;
   }
   
   public double turnError() {

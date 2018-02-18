@@ -2,8 +2,8 @@ package org.ligerbots.powerup;
 
 public class FieldPosition {
 
-  final double x;
-  final double y;
+  double x;
+  double y;
 
   public FieldPosition(double x, double y) {
     this.x = x;

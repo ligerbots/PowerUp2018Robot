@@ -41,10 +41,10 @@ public class FieldMap {
 		// scoring positions are where we want the nose of the robot to end up
 		switchScoringSpot[0] = new RobotPosition(167.3, 76.0, -90.0);
 		switchScoringSpot[1] = new RobotPosition(139.5, 54.8, 0.0);
-		switchScoringSpot[2] = new RobotPosition(209., 54.8, 180.0);
+		switchScoringSpot[2] = new RobotPosition(209.9, 54.8, 180.0);
 		
-		scaleScoringSpot[0] = new RobotPosition(323.2, 134.5, -90.0);
-		scaleScoringSpot[1] = new RobotPosition(254.8, 90.6, 0.0);
+		scaleScoringSpot[0] = new RobotPosition(323.2, 92.6, -90.0);
+		scaleScoringSpot[1] = new RobotPosition(297.3, 84.4, 0.0);
 		
 				
 		// TODO -- create waypoints corresponding to each scoring position

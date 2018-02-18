@@ -33,6 +33,7 @@ public class Intake extends Subsystem {
       intakeMasterFaults = new Faults();
       intakeMaster.getFaults(intakeMasterFaults);
       intakePresent = intakeMasterFaults.HardwareFailure; 	// check for presence
+      System.out.println("Intake master Talon is " + (intakePresent ? "Present" : "NOT Present"));
       
       if (intakePresent) {
 	      intakeSlave = new WPI_TalonSRX(RobotMap.CT_INTAKE_2);
