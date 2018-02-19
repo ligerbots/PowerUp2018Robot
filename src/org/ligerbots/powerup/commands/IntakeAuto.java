@@ -12,7 +12,7 @@ public class IntakeAuto extends Command {
     double time; //seconds
     double speed;
     
-    long startTime;
+    double startTime;
   
     public IntakeAuto(boolean reverse, double speed, double time) {
       this.reverse = reverse;
@@ -24,7 +24,7 @@ public class IntakeAuto extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      startTime = System.nanoTime();
+      startTime = Robot.time();
       
     }
 
@@ -35,7 +35,7 @@ public class IntakeAuto extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (System.nanoTime() - startTime) >= time * 1_000_000_000;
+        return (Robot.time() - startTime) >= time;
     }
 
     // Called once after isFinished returns true

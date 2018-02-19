@@ -136,6 +136,10 @@ public class Robot extends IterativeRobot {
     gameData = "";		// zero it here in case of restart
   }
 
+  public static double time() {
+	  return (double)System.nanoTime() * 1.0E9;
+  }
+  
   /**
    * This function is called once each time the robot enters Disabled mode. You can use it to reset
    * any subsystem information you want to clear when the robot is disabled.

@@ -1,7 +1,9 @@
 package org.ligerbots.powerup.subsystems;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.Faults;
+import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -20,7 +22,7 @@ public class Intake extends Subsystem {
     WPI_TalonSRX intakeMaster;
     WPI_TalonSRX intakeSlave;
     SpeedControllerGroup controllerGroup;
-    Faults intakeMasterFaults;
+    StickyFaults intakeMasterFaults;
     boolean intakePresent;
     private DoubleSolenoid solenoid;
     
@@ -30,9 +32,8 @@ public class Intake extends Subsystem {
       SmartDashboard.putNumber("Intake Speed", 0.5);
       
       intakeMaster = new WPI_TalonSRX(RobotMap.CT_INTAKE_1);
-      intakeMasterFaults = new Faults();
-      intakeMaster.getFaults(intakeMasterFaults);
-      intakePresent = intakeMasterFaults.HardwareFailure;   // check for presence
+      intakeMasterFaults = new StickyFaults();
+      intakePresent = (intakeMaster.getStickyFaults(intakeMasterFaults) == ErrorCode.OK);
       System.out.println("Intake master Talon is " + (intakePresent ? "Present" : "NOT Present"));
       
       if (intakePresent) {
