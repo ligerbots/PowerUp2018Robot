@@ -105,6 +105,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
+
 	SmartDashboard.putString("/vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //m_autonomousCommand = new TurnCommand(90, 0.3);

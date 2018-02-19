@@ -25,7 +25,7 @@ public class Elevator extends Subsystem {
   WPI_TalonSRX elevatorMaster;
   WPI_TalonSRX elevatorSlave;
   Faults elevatorMasterFaults;
-  boolean elevatorMasterPresent;
+  boolean elevatorPresent;
   double tolerance = 0.05;
   double requestedPosition = 0.0;// When the elevator is not moving, the 775s should stay in place
                                  // (maintain 0 RPM)
@@ -63,9 +63,15 @@ public class Elevator extends Subsystem {
     
     elevatorMasterFaults = new Faults();
     elevatorMaster.getFaults(elevatorMasterFaults);
+<<<<<<< HEAD
     elevatorMasterPresent = elevatorMasterFaults.HardwareFailure; 	// check for presence
     System.out.println("Elevator master Talon is " + (elevatorMasterPresent ? "Present" : "NOT Present"));
     if (elevatorMasterPresent) {
+=======
+    elevatorPresent = elevatorMasterFaults.HardwareFailure; 	// check for presence
+    System.out.println("Elevator master Talon is " + (elevatorPresent ? "Present" : "NOT Present"));
+    if (elevatorPresent) {
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
 	    elevatorMaster.setNeutralMode(NeutralMode.Brake);
 	    elevatorSlave.setNeutralMode(NeutralMode.Brake);
 	    elevatorSlave.setInverted(true);
@@ -87,19 +93,35 @@ public class Elevator extends Subsystem {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
   }*/
   public void zeroEncoder() {
+<<<<<<< HEAD
 	  if (elevatorMasterPresent) elevatorMaster.setSelectedSensorPosition(0, 0, 0);
+=======
+	  if (elevatorPresent) elevatorMaster.setSelectedSensorPosition(0, 0, 0);
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
   }
   
   public void set(double speed) {
+<<<<<<< HEAD
 	  if (elevatorMasterPresent) elevatorMaster.set(speed);
+=======
+	  if (elevatorPresent) elevatorMaster.set(speed);
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
   }
   
   public void holdPosition(double requestedPosition) {
+<<<<<<< HEAD
 	  if (elevatorMasterPresent) elevatorMaster.set(ControlMode.Position, requestedPosition / (Math.PI * 0.5) * 4096);
+=======
+	  if (elevatorPresent) elevatorMaster.set(ControlMode.Position, requestedPosition / (Math.PI * 0.5) * 4096);
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
   }
   
   public void setPID () {
+<<<<<<< HEAD
 	  if (elevatorMasterPresent) {
+=======
+	  if (elevatorPresent) {
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
 		  elevatorMaster.config_kP(0, 0.1, 0);
 		  elevatorMaster.config_kI(0, 0.001, 0);
 		  elevatorMaster.config_kD(0, 0.05, 0);
@@ -111,7 +133,11 @@ public class Elevator extends Subsystem {
   
   //returns position in inches
   public double getPosition() {
+<<<<<<< HEAD
 	  if (elevatorMasterPresent) return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
+=======
+	  if (elevatorPresent) return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
 	  else return 0.0;
   }
 
@@ -132,7 +158,11 @@ public class Elevator extends Subsystem {
   }
   
   public void logCurrent() {
+<<<<<<< HEAD
 	  if (elevatorMasterPresent) { 
+=======
+	  if (elevatorPresent) { 
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
 		  SmartDashboard.putNumber("Elevator Master Current", elevatorMaster.getOutputCurrent());
 		  SmartDashboard.putNumber("Elevator Slave Current", elevatorSlave.getOutputCurrent());
 	  }
@@ -145,7 +175,7 @@ public class Elevator extends Subsystem {
   }
   
   public boolean isPresent() {
-	  return elevatorMasterPresent;
+	  return elevatorPresent;
   }
 }
 

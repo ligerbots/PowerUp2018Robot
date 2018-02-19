@@ -32,7 +32,11 @@ public class Intake extends Subsystem {
       intakeMaster = new WPI_TalonSRX(RobotMap.CT_INTAKE_1);
       intakeMasterFaults = new Faults();
       intakeMaster.getFaults(intakeMasterFaults);
+<<<<<<< HEAD
       intakePresent = intakeMasterFaults.HardwareFailure;   // check for presence
+=======
+      intakePresent = intakeMasterFaults.HardwareFailure; 	// check for presence
+>>>>>>> branch 'master' of https://github.com/ligerbots/PowerUp2018Robot/
       System.out.println("Intake master Talon is " + (intakePresent ? "Present" : "NOT Present"));
       
       if (intakePresent) {

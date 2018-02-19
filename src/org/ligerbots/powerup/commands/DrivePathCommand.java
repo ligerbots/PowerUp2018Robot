@@ -44,8 +44,8 @@ public class DrivePathCommand extends Command {
       Robot.driveTrain.zeroPosition();
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
-    //  prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
-    //  prevRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+      //  prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+      //  prevRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
       angleError = (angleToWaypoint - currentPosition.getDirection() + 360) % 360;
       Robot.driveTrain.enableTurningControl(angleError, 0.3);
@@ -67,8 +67,6 @@ public class DrivePathCommand extends Command {
       SmartDashboard.putNumber("Angle Error", angleError);
       SmartDashboard.putNumber("Distance to Waypoint", distanceToWaypoint);
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
-      SmartDashboard.putBoolean("Drive", drive);
-      SmartDashboard.putBoolean("Turn", turn);
       SmartDashboard.putNumber("Yaw", Robot.driveTrain.getYaw());
       
       angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
