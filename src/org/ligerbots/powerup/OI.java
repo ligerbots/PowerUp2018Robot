@@ -10,15 +10,18 @@ package org.ligerbots.powerup;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
+
+import org.ligerbots.powerup.Robot;
+import org.ligerbots.powerup.Robot.StartingPosition;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
 //import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.triggers.JoystickPov;
 import org.ligerbots.powerup.triggers.JoystickPov.Direction;
-
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
@@ -29,6 +32,12 @@ import org.ligerbots.powerup.commands.TurnCommand;
  * and command groups that allow control of the robot.
  */
 public class OI {
+	
+  SendableChooser<Robot.StartingPosition> startingPosition;
+  SendableChooser<Robot.FirstAction> firstAction;
+  SendableChooser<Robot.SecondAction> secondAction;
+  
+	
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
   //// joystick.
@@ -59,6 +68,18 @@ public class OI {
   XboxController xbox;
 
   public OI() {
+    startingPosition = new SendableChooser<>();
+    populateSelect(startingPosition, Robot.StartingPosition.class);
+    SmartDashboard.putData("SartingPosition", startingPosition);
+
+    firstAction = new SendableChooser<>();
+    populateSelect(firstAction, Robot.FirstAction.class);
+    SmartDashboard.putData("FirstAction", firstAction);
+
+    secondAction = new SendableChooser<>();
+    populateSelect(secondAction, Robot.SecondAction.class);
+    SmartDashboard.putData("SecondAction", secondAction);
+	    
     xbox = new XboxController(0);
     
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
@@ -92,7 +113,20 @@ public class OI {
 
   }
 
-  public double getThrottle() {
+  private <T extends Enum<?>> void populateSelect(SendableChooser<T> chooser, Class<T> options) {
+    boolean first = true;
+    for (T value : options.getEnumConstants()) {
+      if (first) {
+        first = false;
+        chooser.addDefault(value.toString(), value);
+      } 
+      else {
+        chooser.addObject(value.toString(), value);
+      }
+    }
+  }
+
+public double getThrottle() {
     return -xbox.getY(GenericHID.Hand.kLeft);
   }
   

@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
   // Game data -- the field configuration
   // L
   
-  public String gameData;					// 
+  public String gameData;
   
   public static Intake intake;
   public static DriveTrain driveTrain;
@@ -52,6 +52,62 @@ public class Robot extends IterativeRobot {
   public static ElevatorCommand elevatorCommand;
   public static LEDStrip ledstrip;
   public static ProximitySensor proximitySensor;
+  
+  public enum StartingPosition {
+	One("1"),
+	Two("2"),
+	Three("3"),
+	Four("4");
+	    
+	public final String name;
+	StartingPosition(String name) {
+	  this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+	  return name;
+	}
+  }
+  
+  public enum FirstAction {
+    DriveForward("Drive Forward"),
+	SwitchA("Switch A"),
+	SwitchB("Switch B"),
+	SwitchC("Switch C"),
+	ScaleAlpha("Scale Alpha"),
+	ScaleBeta("Scale Beta"),
+	Nothing("Do Nothing");
+	    
+	public final String name;
+	FirstAction(String name) {
+	  this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+	  return name;
+	}
+  }  
+  
+  public enum SecondAction {
+    Nothing("Do Nothing"),
+	SwitchA("Switch A"),
+	SwitchB("Switch B"),
+	SwitchC("Switch C"),
+	ScaleAlpha("Scale Alpha"),
+	ScaleBeta("Scale Beta");
+
+	public final String name;
+	SecondAction(String name) {
+	  this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+	  return name;
+	}
+  }  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -76,6 +132,8 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveI", 0.004);
     SmartDashboard.putNumber("DriveD", 0.06);
     //CameraServer.getInstance().startAutomaticCapture();
+    
+    gameData = "";		// zero it here in case of restart
   }
 
   /**
@@ -109,6 +167,15 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("/vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //m_autonomousCommand = new TurnCommand(90, 0.3);
+
+    alliance = DriverStation.getInstance().getAlliance();
+	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
+	do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
+	while (gameData.length() == 0);
+
+	System.out.println("Game Data: " + gameData);
+	SmartDashboard.putString("Game Data", gameData);
+    
     m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     
     //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
@@ -127,13 +194,7 @@ public class Robot extends IterativeRobot {
     }
     
   }
-
-  public void autonomousEnabled() {
-		alliance = DriverStation.getInstance().getAlliance();
-		// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
-		gameData = DriverStation.getInstance().getGameSpecificMessage(); 
-  }
-  
+ 
   
   /**
    * This function is called periodically during autonomous.
