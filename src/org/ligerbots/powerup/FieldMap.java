@@ -11,7 +11,8 @@ import org.ligerbots.powerup.RobotPosition;
 
 public class FieldMap {
     
-    public static final double scaleScoringheight = (8.0 * 12.0);   // 8 feet high (in inches)
+    public static final double scaleScoringHeight = 70.0;   // 70" is our max elevator height
+    public static final double switchScoringHeight = 18.0;
     
     // Robot dimensions with bumpers
     public static final double robotWidth = 27.125 + 7.0;
