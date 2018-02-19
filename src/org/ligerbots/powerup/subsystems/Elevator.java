@@ -65,42 +65,45 @@ public class Elevator extends Subsystem {
     elevatorMaster.getFaults(elevatorMasterFaults);
     elevatorMasterPresent = elevatorMasterFaults.HardwareFailure; 	// check for presence
     System.out.println("Elevator master Talon is " + (elevatorMasterPresent ? "Present" : "NOT Present"));
-    elevatorMaster.setNeutralMode(NeutralMode.Brake);
-    elevatorSlave.setNeutralMode(NeutralMode.Brake);
-    elevatorSlave.setInverted(true);
-    
-    elevatorSlave.set(ControlMode.Follower, RobotMap.CT_ELEVATOR_1);
-
-    // Set the encoder for the master Talon.
-    elevatorMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    elevatorMaster.setSensorPhase(true);
+    if (elevatorMasterPresent) {
+	    elevatorMaster.setNeutralMode(NeutralMode.Brake);
+	    elevatorSlave.setNeutralMode(NeutralMode.Brake);
+	    elevatorSlave.setInverted(true);
+	    elevatorSlave.set(ControlMode.Follower, RobotMap.CT_ELEVATOR_1);
+	
+	    // Set the encoder for the master Talon.
+	    elevatorMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+	    elevatorMaster.setSensorPhase(true);
     
     // TODO: Need to make sure that the elevator is starting out at the lowest point.
     // I think it is in which case we should explicitly zero the encoder here.
     
     //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
+    }
   }
 
  /* public void setSpeed(double requestedSpeed) {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
   }*/
   public void zeroEncoder() {
-    elevatorMaster.setSelectedSensorPosition(0, 0, 0);
+	  if (elevatorMasterPresent) elevatorMaster.setSelectedSensorPosition(0, 0, 0);
   }
   
   public void set(double speed) {
-    elevatorMaster.set(speed);
+	  if (elevatorMasterPresent) elevatorMaster.set(speed);
   }
   
   public void holdPosition(double requestedPosition) {
-    elevatorMaster.set(ControlMode.Position, requestedPosition / (Math.PI * 0.5) * 4096);
+	  if (elevatorMasterPresent) elevatorMaster.set(ControlMode.Position, requestedPosition / (Math.PI * 0.5) * 4096);
   }
   
   public void setPID () {
-    elevatorMaster.config_kP(0, 0.1, 0);
-    elevatorMaster.config_kI(0, 0.001, 0);
-    elevatorMaster.config_kD(0, 0.05, 0);
+	  if (elevatorMasterPresent) {
+		  elevatorMaster.config_kP(0, 0.1, 0);
+		  elevatorMaster.config_kI(0, 0.001, 0);
+		  elevatorMaster.config_kD(0, 0.05, 0);
+	  }
   }
    // elevatorController.setSetpoint(requestedPosition);
   // elevatorMaster.config_kI(arg0, arg1, arg2)
@@ -108,7 +111,8 @@ public class Elevator extends Subsystem {
   
   //returns position in inches
   public double getPosition() {
-    return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
+	  if (elevatorMasterPresent) return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
+	  else return 0.0;
   }
 
 
@@ -128,8 +132,10 @@ public class Elevator extends Subsystem {
   }
   
   public void logCurrent() {
-    SmartDashboard.putNumber("Elevator Master Current", elevatorMaster.getOutputCurrent());
-    SmartDashboard.putNumber("Elevator Slave Current", elevatorSlave.getOutputCurrent());
+	  if (elevatorMasterPresent) { 
+		  SmartDashboard.putNumber("Elevator Master Current", elevatorMaster.getOutputCurrent());
+		  SmartDashboard.putNumber("Elevator Slave Current", elevatorSlave.getOutputCurrent());
+	  }
 
   }
 

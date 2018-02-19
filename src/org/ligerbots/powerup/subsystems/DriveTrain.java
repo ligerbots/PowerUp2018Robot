@@ -45,7 +45,8 @@ public class DriveTrain extends Subsystem {
     LEFT, RIGHT
   }
 
-  AHRS navx;
+  private AHRS navx;
+  boolean navxPresent;
 
   double positionX;
   double positionY;
@@ -58,6 +59,8 @@ public class DriveTrain extends Subsystem {
   double rotationOffset = 0;
   double lastOutputLeft = 0;
   double lastOutputRight = 0;
+  
+  RobotPosition robotPosition;
 
   public class TalonID {
     int talonID;
@@ -67,13 +70,16 @@ public class DriveTrain extends Subsystem {
       this.talonID = talonID;
       this.talon = talon;
     }
-
   }
 
-  public DriveTrain() {
-
+  @SuppressWarnings("unused")
+public DriveTrain() {
 
     SmartDashboard.putNumber("Ramp Rate", 0.08);
+    
+    // This initial robot position will be overwritten by our autonomous selection
+    // we only zero it out here for practice, where we go straight teleop
+    robotPosition = new RobotPosition(0.0, 0.0, 0.0);
 
     leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
     leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
@@ -123,12 +129,59 @@ public class DriveTrain extends Subsystem {
 
 
     // TODO: This should be sampled at 200Hz
-    navx = new AHRS(Port.kMXP, (byte) 50); 
-
-    turningController =
-            new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004), SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
+    navxPresent = false;
     
-    navx.registerCallback(
+    // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
+    if (Robot.elevator.elevatorMasterPresent) {
+	    navx = new AHRS(Port.kMXP, (byte) 50);
+	    if (navx.isConnected()) {
+	    	navxPresent = true;
+	    	System.out.println("NavX present on MXP");
+	    }
+		else {
+			try {
+				navx.free();
+		    	// H-Drive robot -- navX isn't working on MXP port, so try USB
+		    	int port = 0;
+		    	navx = new AHRS(SerialPort.Port.kUSB);
+		    	if (navx.isConnected()) {
+		    		System.out.printf("NavX wasn't present on MXP port, using USB port %d.", port);
+		    		navxPresent = true;
+		    	}
+		    	else {
+		    		port++;
+		    		navx.free();
+		        	navx = new AHRS(SerialPort.Port.kUSB1);
+		        	if (navx.isConnected()) {
+		        		System.out.printf("NavX wasn't present on MXP port, using USB port %d.", port);
+		        		navxPresent = true;
+		    		}
+		         	else {
+		        		port++;
+		        		navx.free();
+		            	navx = new AHRS(SerialPort.Port.kUSB2);
+		            	if (navx.isConnected()) {
+		            		System.out.printf("NavX wasn't present on MXP port, using USB port %d.", port);
+		            		navxPresent = true;
+		        		}        	
+		         	}
+		    	}
+			} catch (java.lang.NullPointerException e) { };
+		}
+	    
+	    if (!navxPresent) {
+			System.out.println("No NavX present on either USB or MXP!.");
+			navx.free();
+			navx = null;
+		}	    
+  	}
+    
+    if (navxPresent) {
+    	turningController =
+            new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004),
+             			      SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
+    
+    	navx.registerCallback(
             (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
               updatePosition(sensorData.yaw);
      /*         turningController.setP(SmartDashboard.getNumber("DriveP", 1));
@@ -137,20 +190,27 @@ public class DriveTrain extends Subsystem {
             }, new Object());
 
 
-    turningController =
-        new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
+    	turningController =
+    			new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
 
-
-    //calibrateYaw();
-    System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
+	    //calibrateYaw();
+	    System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
+    }
+  }
+  
+  public void setInitialRobotPosition(double x, double y, double angle)
+  {
+	  robotPosition.setRobotPosition(x, y, angle);
   }
   
   public double getPitch() {
-    return navx.getPitch();
+	  if (navxPresent) return navx.getPitch();
+	  else return 0.0;
   }
   
   public double getRoll() {
-    return navx.getRoll();
+	  if (navxPresent) return navx.getRoll();
+	  else return 0.0;
   }
 
   public void talonCurrent() {
@@ -177,18 +237,21 @@ public class DriveTrain extends Subsystem {
 
   // Returns the current yaw value (in degrees, from -180 to 180)
   public double getYaw() {
-    return navx.getYaw();
+	  if (navxPresent) return navx.getYaw();
+	  else return 0.0;
   }
 
   // Return the rate of rotation of the yaw (Z-axis) gyro, in degrees per second.
   public double getRate() {
-    return navx.getRate();
+	  if (navxPresent) return navx.getRate();
+	  else return 0.0;
   }
 
   // Returns the total accumulated yaw angle (Z Axis, in degrees)
   // reported by the sensor since it was last zeroed. This will go beyond 360 degrees.
   public double getAngle() {
-    return navx.getAngle();
+	  if (navxPresent) return navx.getAngle();
+	  else return 0.0;
   }
 
   public void initDefaultCommand() {
@@ -233,6 +296,7 @@ public class DriveTrain extends Subsystem {
     }
   }
   public void enableTurningControl(double angle, double tolerance) {
+	if (!navxPresent) return;
     double startAngle = this.getYaw();
     double temp = startAngle + angle;
     // RobotMap.TURN_P = turningController.getP();
@@ -267,15 +331,16 @@ public class DriveTrain extends Subsystem {
 
 
   public void setPID(double p, double i, double d) {
-    turningController.setPID(p, i, d);
+	  if (!navxPresent) turningController.setPID(p, i, d);
   }
 
   public void disablePID() {
-    turningController.disable();
+	  if (!navxPresent) turningController.disable();
   }
 
   public boolean isPidOn() {
-    return turningController.isEnabled();
+	  if (!navxPresent) return turningController.isEnabled();
+	  else return false;
   }
   public void setAngleOffset(double angleOffset) {
 	  this.angleOffset = angleOffset;
@@ -285,7 +350,7 @@ public class DriveTrain extends Subsystem {
 	  //System.out.println(turnError());
 	  
 	  if (angleOffset > 75) {
-		  return -1;
+		  return -1.0;
 	  }
 	  if (angleOffset > 45) {
 		  return -0.75;
@@ -380,16 +445,19 @@ public class DriveTrain extends Subsystem {
    * Sets initial yaw based on where our starting position is.
    */
   public void calibrateYaw() {
+	if (!navxPresent) return;
+	/*
+	 * This was for only for the 2017 game, with a non-symmetrical field
+	 * 
     if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
       rotationOffset = -90.0;
     } else {
       rotationOffset = 90.0;
-    }
+    } */
   }
 
   public void zeroYaw() {
-    navx.zeroYaw();
-    
+    if (navxPresent) navx.zeroYaw();
   }
 
   /**
@@ -426,7 +494,7 @@ public class DriveTrain extends Subsystem {
 	  positionY = 0;
 	  zeroYaw();
 	  zeroEncoders();
-    SmartDashboard.putNumber("Robot Direction", getRobotPosition().getDirection());
+	  SmartDashboard.putNumber("Robot Direction", getRobotPosition().getDirection());
    // SmartDashboard.putNumber("Turn setPoint", turningController.getSetpoint());
   }
   
@@ -434,7 +502,8 @@ public class DriveTrain extends Subsystem {
 	  // TODO: I know Erik did this last year, but I don't like to "new" anything after initialization
 	  // if we can help it. We should have a robotPosition attribute in this class and return it by
 	  // value here.
-    return new RobotPosition(positionX, positionY, rotation);
+	robotPosition.setRobotPosition(positionX, positionY, rotation);
+    return robotPosition;
   }
   
   public double turnError() {

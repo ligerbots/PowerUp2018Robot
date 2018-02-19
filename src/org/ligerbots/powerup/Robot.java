@@ -7,7 +7,9 @@
 
 package org.ligerbots.powerup;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,7 +38,12 @@ public class Robot extends IterativeRobot {
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+  public DriverStation.Alliance alliance;	// Red or Blue
+  // Game data -- the field configuration
+  // L
+  
+  public String gameData;					// 
+  
   public static Intake intake;
   public static DriveTrain driveTrain;
   public static OI oi;
@@ -53,13 +60,13 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     
-//    intake = new Intake();
+    intake = new Intake();
+    elevator = new Elevator();	 // init this before DriveTrain for now
     oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     ledstrip = new LEDStrip();
     proximitySensor = new ProximitySensor();
-    elevator = new Elevator();
     elevatorCommand = new ElevatorCommand();
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
@@ -120,6 +127,13 @@ public class Robot extends IterativeRobot {
     
   }
 
+  public void autonomousEnabled() {
+		alliance = DriverStation.getInstance().getAlliance();
+		// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
+		gameData = DriverStation.getInstance().getGameSpecificMessage(); 
+  }
+  
+  
   /**
    * This function is called periodically during autonomous.
    */

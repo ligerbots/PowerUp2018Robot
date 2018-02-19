@@ -46,4 +46,6 @@ public class RobotMap {
   public static final int ULTRASONIC_RIGHT_TRIGGER = 6;
   public static final int ULTRASONIC_RIGHT_ECHO = 7;
   public static final double ULTRASONIC_DISTANCE_THRESHOLD = 3; //inches
+  
+  public static final int PRESSURE_GAUGE = 0;	// Analog port zero
 }

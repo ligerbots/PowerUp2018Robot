@@ -35,8 +35,9 @@ public class IntakeCommand extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	// TODO: How will a reverse IntakeCommand ever end?
-        return reverse ? false : Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD && 
-            Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD;
+ return false;
+      //return reverse ? false : Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD && 
+     //       Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD;
     }
 
     // Called once after isFinished returns true
@@ -52,9 +53,11 @@ public class IntakeCommand extends Command {
     // subsystems is scheduled to run
     protected void interrupted() {
       Robot.intake.intakeOn(false, 0);
+      /*
       if (!reverse) {
         HoldBoxCommand holdBoxCommand = new HoldBoxCommand();
         holdBoxCommand.start();
       }
+      */
     }
 }

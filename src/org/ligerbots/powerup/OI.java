@@ -15,11 +15,12 @@ import java.util.Arrays;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
-import org.ligerbots.powerup.commands.LEDStripCommand;
+//import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.triggers.JoystickPov;
 import org.ligerbots.powerup.triggers.JoystickPov.Direction;
 
 import org.ligerbots.powerup.commands.IntakePistonCommand;
+import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
 
 
@@ -73,10 +74,13 @@ public class OI {
     xBoxBumperLeft.whileHeld(new IntakeCommand(true));
     
     JoystickButton xBoxRightJoystick = new JoystickButton(xbox, 10);
-    xBoxRightJoystick.whenPressed(new IntakePistonCommand(false));
+    xBoxRightJoystick.whenPressed(new IntakePistonCommand(true));
     
     JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
-    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(true));
+    xBoxLeftJoystick.whenPressed(new IntakePistonCommand(false));
+    
+    JoystickButton xBoxX = new JoystickButton(xbox, 3);
+    xBoxA.whenPressed(new LEDStripCommand());
     
     // TODO: Add a button to switch the camera mode
     // options are ""switch", "cube", and "driver"

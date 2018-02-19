@@ -3,9 +3,10 @@ package org.ligerbots.powerup;
 
 public class RobotPosition extends FieldPosition {
   /**
-   * The direction the robot is facing in degrees clockwise, where 0.0 degrees is facing the judges.
+   * The direction the robot is facing in degrees clockwise, where 0.0 degrees 
+   * is facing the long way down the field. (Note -- this is different from 2017!)
    */
-  protected final double direction;
+  protected double direction;
 
   @SuppressWarnings("parametername")
   public RobotPosition(double x, double y, double direction) {
@@ -13,6 +14,12 @@ public class RobotPosition extends FieldPosition {
     this.direction = direction;
   }
 
+  public void setRobotPosition(double x, double y, double direction) {
+	  super.x = x;
+	  super.y = y;
+	  this.direction = direction;
+  }
+  
   public double getDirection() {
     return direction;
   }
@@ -21,4 +28,6 @@ public class RobotPosition extends FieldPosition {
   public String toString() {
     return "RobotPosition [direction=" + direction + ", x=" + x + ", y=" + y + "]";
   }
+  
+  
 }

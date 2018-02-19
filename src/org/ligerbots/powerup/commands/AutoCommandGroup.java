@@ -14,7 +14,7 @@ public class AutoCommandGroup extends CommandGroup {
     boolean lowerQuadrants;
     public AutoCommandGroup(List<FieldPosition> wayPoints, double endAngle) {
       
-      //Check my math
+      // Check my math
     
       for (FieldPosition i: wayPoints) {
         angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(i);
