@@ -180,57 +180,6 @@ public DriveTrain() {
     	turningController =
             new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004),
              			      SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
-    navxPresent = false;
-    
-    // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
-    if (Robot.elevator.elevatorPresent) {
-	    navx = new AHRS(Port.kMXP, (byte) 50);
-	    if (navx.isConnected()) {
-	    	navxPresent = true;
-	    	System.out.println("NavX present on MXP");
-	    }
-		else {
-			try {
-				navx.free();
-		    	// H-Drive robot -- navX isn't working on MXP port, so try USB
-		    	int port = 0;
-		    	navx = new AHRS(SerialPort.Port.kUSB);
-		    	if (navx.isConnected()) {
-		    		System.out.printf("NavX wasn't present on MXP port, using USB port %d.", port);
-		    		navxPresent = true;
-		    	}
-		    	else {
-		    		port++;
-		    		navx.free();
-		        	navx = new AHRS(SerialPort.Port.kUSB1);
-		        	if (navx.isConnected()) {
-		        		System.out.printf("NavX wasn't present on MXP port, using USB port %d.", port);
-		        		navxPresent = true;
-		    		}
-		         	else {
-		        		port++;
-		        		navx.free();
-		            	navx = new AHRS(SerialPort.Port.kUSB2);
-		            	if (navx.isConnected()) {
-		            		System.out.printf("NavX wasn't present on MXP port, using USB port %d.", port);
-		            		navxPresent = true;
-		        		}        	
-		         	}
-		    	}
-			} catch (java.lang.NullPointerException e) { };
-		}
-	    
-	    if (!navxPresent) {
-			System.out.println("No NavX present on either USB or MXP!.");
-			navx.free();
-			navx = null;
-		}	    
-  	}
-    
-    if (navxPresent) {
-    	turningController =
-            new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004),
-             			      SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
     
     	navx.registerCallback(
             (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
