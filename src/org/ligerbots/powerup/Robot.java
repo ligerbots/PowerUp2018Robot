@@ -137,7 +137,7 @@ public class Robot extends IterativeRobot {
   }
 
   public static double time() {
-	  return (double)System.nanoTime() * 1.0E9;
+	  return (double)System.nanoTime() / 1.0E9;
   }
   
   /**
