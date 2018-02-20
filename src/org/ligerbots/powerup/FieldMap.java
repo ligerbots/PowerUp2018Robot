@@ -8,7 +8,7 @@ import org.ligerbots.powerup.RobotPosition;
  * All positions are in inches
  * 
  * To understand this map, refer to the diagram at
- * http://team.ligerbots.com/home/2018-game-info 
+ * http://team.ligerbots.com/home/2018/2018-game-info
  */
 
 public class FieldMap {
