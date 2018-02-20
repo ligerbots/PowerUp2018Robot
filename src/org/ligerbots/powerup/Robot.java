@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +21,7 @@ import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
+import org.ligerbots.powerup.commands.SimpleSwitchAuto;
 import org.ligerbots.powerup.commands.TurnCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
@@ -171,12 +173,20 @@ public class Robot extends IterativeRobot {
     //m_autonomousCommand = new TurnCommand(90, 0.3);
 
     alliance = DriverStation.getInstance().getAlliance();
-	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
+  	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
 	do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
 	while (gameData.length() == 0);
 
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);
+	
+	CommandGroup auto;
+	
+	if (gameData.substring(0, 1) == "L") {
+	  auto = new SimpleSwitchAuto(true);
+	} else {
+	   auto = new SimpleSwitchAuto(true);
+	}
     
     m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     

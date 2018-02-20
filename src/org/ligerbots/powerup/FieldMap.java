@@ -28,7 +28,7 @@ public class FieldMap {
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
     
-    public static RobotPosition[] switchScoringSpot = new RobotPosition[3];    
+    public RobotPosition[] switchScoringSpot = new RobotPosition[3];    
     public RobotPosition[] scaleScoringSpot = new RobotPosition[2]; 
 
     public RobotPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
@@ -39,10 +39,10 @@ public class FieldMap {
     // reached in a straight line from any starting position. In practice, some might not
     // work so well. We depend on the user to not choose a waypoint that would drive
     // clear across the field, or that is likely to collide with an alliance partner
-    public ArrayList<FieldPosition> wayPointsA = new ArrayList<FieldPosition>();
-    public ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
-    public ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
-    public ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsA = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
 
     
     FieldMap () {

@@ -101,7 +101,7 @@ public class OI {
     xBoxLeftJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxX = new JoystickButton(xbox, 3);
-    xBoxA.whenPressed(new LEDStripCommand());
+    xBoxX.whenPressed(new LEDStripCommand());
     
     // TODO: Add a button to switch the camera mode
     // options are ""switch", "cube", and "driver"
