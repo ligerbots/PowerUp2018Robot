@@ -182,11 +182,7 @@ public class Robot extends IterativeRobot {
 	
 	CommandGroup auto;
 	
-	if (gameData.substring(0, 1) == "L") {
-	  auto = new SimpleSwitchAuto(true);
-	} else {
-	   auto = new SimpleSwitchAuto(true);
-	}
+	auto = new SimpleSwitchAuto();
     
     m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     

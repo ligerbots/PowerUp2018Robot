@@ -10,14 +10,10 @@ import org.ligerbots.powerup.Robot;
  */
 public class SimpleSwitchAuto extends CommandGroup {
 
-    public SimpleSwitchAuto(boolean leftSwitch) {
+    public SimpleSwitchAuto() {
       
-      if (leftSwitch) {
-        addSequential(new AutoCommandGroup(FieldMap.wayPointsA, 0));
-      }
-      else {
-        addSequential(new AutoCommandGroup(FieldMap.wayPointsB, 0));
-      }
+      
+      addSequential(new AutoCommandGroup(FieldMap.wayPointsA, 0));
             
       addSequential(new ElevatorAuto(FieldMap.switchScoringHeight, 0.2));
       
