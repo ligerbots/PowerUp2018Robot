@@ -74,7 +74,6 @@ public class Robot extends IterativeRobot {
     DriveForward("Drive Forward"),
 	SwitchA("Switch A"),
 	SwitchB("Switch B"),
-	SwitchC("Switch C"),
 	ScaleAlpha("Scale Alpha"),
 	ScaleBeta("Scale Beta"),
 	Nothing("Do Nothing");
@@ -94,7 +93,6 @@ public class Robot extends IterativeRobot {
     Nothing("Do Nothing"),
 	SwitchA("Switch A"),
 	SwitchB("Switch B"),
-	SwitchC("Switch C"),
 	ScaleAlpha("Scale Alpha"),
 	ScaleBeta("Scale Beta");
 
