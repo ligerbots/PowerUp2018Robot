@@ -23,8 +23,11 @@ public class DriveDistance extends Command {
     double delta;
     double error;
     boolean onTarget = false;
+    double timeStarted;
     public DriveDistance(double offsetInches, double tolerance, double angleTolerance) {
-     // requires(Robot.driveTrain);
+      System.out.printf("Drive Distance Constructed: %5.2f inches, %5.2f tolerance, %5.2f angleTolerance.\n",
+    		  			offsetInches, tolerance, angleTolerance);
+      requires(Robot.driveTrain);
       this.offsetInches = offsetInches;
       this.tolerance = tolerance;
       this.angleTolerance = angleTolerance;
@@ -34,9 +37,13 @@ public class DriveDistance extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
       SmartDashboard.putBoolean("Drive Distance Done", false);
-      /*startingLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+      onTarget = false;
+      timeStarted = Robot.time();
+      System.out.printf("Drive Distance started: %5.2f inches, %5.2f tolerance, %5.2f angleTolerance.\n",
+	  			offsetInches, tolerance, angleTolerance);      
+      startingLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       startingRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
-      startAngle = Robot.driveTrain.getAngle();*/
+      startAngle = Robot.driveTrain.getAngle();
       double p = SmartDashboard.getNumber("DriveP", 1);
       double i = SmartDashboard.getNumber("DriveI", 0);
       double d = SmartDashboard.getNumber("DriveD", 0.05);
@@ -59,14 +66,27 @@ public class DriveDistance extends Command {
       
       
       onTarget = Robot.driveTrain.getClosedLoopError(DriveSide.LEFT) < tolerance && Robot.driveTrain.getClosedLoopError(DriveSide.RIGHT) < tolerance;
+      // An untuned PID loop has a tendency the never complete and/or the stuff above just doesn't work
+      // So let's see if we've passed the target
+      onTarget = onTarget || Math.abs(delta) > Math.abs(offsetInches);
       
+      if ((Robot.ticks % 5) == 0)
+    	  System.out.printf("Drive Distance distance travelled: %5.2f, PID Left: %5.2f PID Right: %5.2f\n",
+    			  delta, Robot.driveTrain.getClosedLoopError(DriveSide.LEFT), Robot.driveTrain.getClosedLoopError(DriveSide.RIGHT) );        
      // Robot.driveTrain.allDrive(Math.signum(offsetInches), Robot.driveTrain.getTurnOutput());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
+    	double timePassed = Robot.time() - timeStarted; 
         
-        return onTarget;
+    	// if we're managing less than 0.5 fps, with some allowance for startup, it's time to give up
+    	double fps = (Math.abs(delta+4.0)/12.0) / timePassed; 
+    	if (fps < 0.5) {
+    		System.out.printf("DriveDistance %5.2f fps too slow. Timeout out!\n", fps);
+    		return true;
+    	}
+        else return onTarget;
     }
     
 

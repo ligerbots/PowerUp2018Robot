@@ -42,6 +42,7 @@ public class Robot extends IterativeRobot {
   // Game data -- the field configuration
   // L
   
+  public static long ticks = 0;
   public String gameData;
   
   public static Intake intake;
@@ -116,12 +117,15 @@ public class Robot extends IterativeRobot {
     
     intake = new Intake();
     elevator = new Elevator();	 // init this before DriveTrain for now
-    oi = new OI();
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     ledstrip = new LEDStrip();
     proximitySensor = new ProximitySensor();
     elevatorCommand = new ElevatorCommand();
+
+    // Put this after all commands and subsystems have been initialized!
+    oi = new OI();
+    
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -129,6 +133,11 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveP", 0.045);
     SmartDashboard.putNumber("DriveI", 0.004);
     SmartDashboard.putNumber("DriveD", 0.06);
+    
+    // For TurnTester command
+    SmartDashboard.putNumber("Turn Angle", 20.0);
+    SmartDashboard.putNumber("Turn Tolerance", 1.0);
+    
     //CameraServer.getInstance().startAutomaticCapture();
     
     gameData = "";		// zero it here in case of restart
@@ -149,6 +158,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void disabledPeriodic() {
+    commonPeriodic();  
     Scheduler.getInstance().run();
   }
 
@@ -203,6 +213,7 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    commonPeriodic();  
     driveTrain.printEncoder();
     Scheduler.getInstance().run();
   }
@@ -220,11 +231,11 @@ public class Robot extends IterativeRobot {
     // Switch cmaera to Driver mode
 	SmartDashboard.putString("/vision/active_mode", "driver");
     
-//    SmartDashboard.putNumber("DriveP", 1);
-//    SmartDashboard.putNumber("DriveI", 0);
-//    SmartDashboard.putNumber("DriveD", 0.05);
-    driveTrain.configTeleop();
-    driveCommand.start();
+    //    SmartDashboard.putNumber("DriveP", 1);
+    //    SmartDashboard.putNumber("DriveI", 0);
+    //    SmartDashboard.putNumber("DriveD", 0.05);
+    // driveTrain.configTeleop();
+    // driveCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();
   }
 
@@ -233,15 +244,20 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void teleopPeriodic() {
+    commonPeriodic();  
     Scheduler.getInstance().run();
-    driveTrain.logInversion();
-
-   
+    if ((ticks % 300) ==0) driveTrain.logInversion();		
   }
 
   /**
    * This function is called periodically during test mode.
    */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+	  commonPeriodic();
+  }
+  
+  public void commonPeriodic() {
+	  ticks ++;
+  }
 }

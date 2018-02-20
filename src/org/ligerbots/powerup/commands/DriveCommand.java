@@ -16,6 +16,8 @@ public class DriveCommand extends Command {
   int i = 0;
 
   public DriveCommand() {
+	System.out.println("DriveCommand constructed");
+
     requires(Robot.driveTrain);
     driveTrain = Robot.driveTrain;
     oi = Robot.oi;

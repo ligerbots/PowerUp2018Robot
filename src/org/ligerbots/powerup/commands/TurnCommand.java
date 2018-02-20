@@ -11,13 +11,19 @@ public class TurnCommand extends Command {
   
     public double angleOffset;
     public double tolerance;
+ 
 
     public TurnCommand(double angleOffset, double tolerance) {
-      
-    //  requires (Robot.driveTrain);
-      this.angleOffset = angleOffset;
-      this.tolerance = tolerance;
-      
+      System.out.println("TurnCommand constructed");
+
+      requires(Robot.driveTrain);
+      set(angleOffset, tolerance);
+    }
+    
+    // so we can keep reusing the same command instead of creating and throwing them away
+    public void set(double angleOffset, double tolerance) {
+        this.angleOffset = angleOffset;
+        this.tolerance = tolerance;
     }
 
     // Called just before this Command runs the first time
@@ -28,9 +34,13 @@ public class TurnCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
-      Robot.driveTrain.autoTurn(Robot.driveTrain.getTurnOutput());
-      System.out.println(Robot.driveTrain.getTurnOutput());
+      double turnOutput = Robot.driveTrain.getTurnOutput();
+      
+      Robot.driveTrain.autoTurn(turnOutput);
+
+      if ((Robot.ticks % 1) == 0)
+        System.out.printf("Left to turn %5.2f degrees, Turn output: %5.2f, setPoint %5.2f\n",
+    		  			 turnOutput, Robot.driveTrain.turnError(), Robot.driveTrain.getSetpoint());
       SmartDashboard.putNumber("Angle offset", Robot.driveTrain.turnError());
       SmartDashboard.putNumber("Setpoint", Robot.driveTrain.getSetpoint());
     }
@@ -42,6 +52,7 @@ public class TurnCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println("Turn done");
     }
 
     // Called when another command which requires one or more of the same

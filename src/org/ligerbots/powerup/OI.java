@@ -25,6 +25,7 @@ import org.ligerbots.powerup.triggers.JoystickPov.Direction;
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
+import org.ligerbots.powerup.commands.TurnTester;
 
 
 /**
@@ -82,9 +83,6 @@ public class OI {
 	    
     xbox = new XboxController(0);
     
-    JoystickButton xBoxA = new JoystickButton(xbox, 1);
-    xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
-    
     JoystickButton xBoxB = new JoystickButton(xbox, 2);
     xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
@@ -101,7 +99,20 @@ public class OI {
     xBoxLeftJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxX = new JoystickButton(xbox, 3);
-    xBoxA.whenPressed(new LEDStripCommand());
+    xBoxX.whenPressed(new LEDStripCommand());
+    
+    JoystickPov povTriggerRight = new JoystickPov(xbox, Direction.EAST);
+    povTriggerRight.whenPressed(new TurnTester(1.0));
+    
+    JoystickPov povTriggerLeft = new JoystickPov(xbox, Direction.WEST);
+    povTriggerLeft.whenPressed(new TurnTester(-1.0));
+    
+    JoystickPov povTriggerTop = new JoystickPov(xbox, Direction.NORTH);
+    povTriggerTop.whenPressed(new DriveDistance(10.0, 0.5, 1.0));
+
+    JoystickPov povTriggerBottom = new JoystickPov(xbox, Direction.NORTH);
+    povTriggerBottom.whenPressed(new DriveDistance(-10.0, 0.5, 1.0));
+
     
     // TODO: Add a button to switch the camera mode
     // options are ""switch", "cube", and "driver"

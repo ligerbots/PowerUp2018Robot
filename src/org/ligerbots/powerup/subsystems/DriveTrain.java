@@ -19,6 +19,7 @@ import java.util.Arrays;
 
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
+import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.RobotPosition;
 
@@ -73,6 +74,7 @@ public class DriveTrain extends Subsystem {
 
   @SuppressWarnings("unused")
 public DriveTrain() {
+	System.out.println("DriveTrain constructed");
 
     SmartDashboard.putNumber("Ramp Rate", 0.08);
     
@@ -89,13 +91,11 @@ public DriveTrain() {
     leftSlave.set(ControlMode.Follower, RobotMap.CT_LEFT_1);
     // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-    // With the new SpeedControlGroups, do we have to do this ourselves anymore?
-    // leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-    // rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+    leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
+    rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
-
-    left = new SpeedControllerGroup(leftMaster, leftSlave);
-    right = new SpeedControllerGroup(rightMaster, rightSlave);
+    // left = new SpeedControllerGroup(leftMaster, leftSlave);
+    // right = new SpeedControllerGroup(rightMaster, rightSlave);
 
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
@@ -106,25 +106,10 @@ public DriveTrain() {
     leftMaster.configClosedloopRamp(0.3, 0);
     rightMaster.configClosedloopRamp(0.3, 0);
 
-
-    // deprecated CANTalon methods of doing things:
-    // leftMaster.changeControlMode(TalonControlMode.PercentVbus);
-    // rightMaster.changeControlMode(TalonControlMode.PercentVbus);
-    // centerMaster.changeControlMode(TalonControlMode.PercentVbus);
-
-    // leftSlave.changeControlMode(TalonControlMode.Follower);
-    // rightSlave.changeControlMode(TalonControlMode.Follower);
-    // centerSlave.changeControlMode(TalonControlMode.Follower);
-
-    // leftSlave.set(RobotMap.CT_LEFT_1);
-    // rightSlave.set(RobotMap.CT_RIGHT_1);
-    // centerSlave.set(RobotMap.CT_CENTER_1);
-
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
-
-   // robotDrive = new DifferentialDrive(left, right);
+    robotDrive = new DifferentialDrive(leftMaster, rightMaster);
 
 
     // TODO: This should be sampled at 200Hz
@@ -149,8 +134,6 @@ public DriveTrain() {
 			new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
 
     //calibrateYaw();
-    System.out.println(navx.isConnected() ? "00000000000000000000000000000Connected" : "00000000000000000000Not Connected");
-
   }
   
   public void setInitialRobotPosition(double x, double y, double angle)
@@ -205,8 +188,7 @@ public DriveTrain() {
   }
 
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new DriveCommand());
   }
 
   public double getEncoderDistance(DriveSide driveSide) {
