@@ -14,8 +14,10 @@ public class AutoCommandGroup extends CommandGroup {
     boolean lowerQuadrants;
     public AutoCommandGroup(List<FieldPosition> wayPoints, double endAngle) {
       
+      // move forward 8" to get us away from the wall
+      addSequential(new DriveDistance(8.0, 1.0, 1.0));
+    	
       // Check my math
-    
       for (FieldPosition i: wayPoints) {
         angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(i);
         if (i.getY() - Robot.driveTrain.getRobotPosition().getY() >= 0) {
