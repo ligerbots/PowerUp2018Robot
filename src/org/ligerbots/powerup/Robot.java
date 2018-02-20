@@ -200,9 +200,9 @@ public class Robot extends IterativeRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    if (auto != null) {
      // m_autonomousCommand.start();
-      m_autonomousCommand.start();
+      auto.start();
     }
     
   }
