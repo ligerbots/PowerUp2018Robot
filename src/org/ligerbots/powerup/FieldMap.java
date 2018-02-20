@@ -21,14 +21,14 @@ public class FieldMap {
     public static final double robotLength = 32.0 + 7.0;
     // half dimensions - for getting the center point of the robot
     public static final double rW2 = robotWidth/2.0;
-    public static final double rL2 = robotWidth/2.0;
+    public static final double rL2 = robotLength/2.0;
     
     public RobotPosition[] startPositions = new RobotPosition[5];   // position 0 is not used! (because the diagrom is 1-based)
     
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
     
-    public RobotPosition[] switchScoringSpot = new RobotPosition[3];    
+    public static RobotPosition[] switchScoringSpot = new RobotPosition[3];    
     public RobotPosition[] scaleScoringSpot = new RobotPosition[2]; 
 
     public RobotPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
