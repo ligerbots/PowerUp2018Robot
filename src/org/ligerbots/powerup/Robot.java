@@ -21,6 +21,7 @@ import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
+import org.ligerbots.powerup.commands.SimpleSwitchAuto;
 import org.ligerbots.powerup.commands.TurnCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
@@ -193,6 +194,10 @@ public class Robot extends IterativeRobot {
 
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);
+	
+	CommandGroup auto;
+	
+	auto = new SimpleSwitchAuto();
     
     m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     
@@ -206,9 +211,9 @@ public class Robot extends IterativeRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    if (auto != null) {
      // m_autonomousCommand.start();
-      m_autonomousCommand.start();
+      auto.start();
     }
     
   }
@@ -240,8 +245,8 @@ public class Robot extends IterativeRobot {
     //    SmartDashboard.putNumber("DriveP", 1);
     //    SmartDashboard.putNumber("DriveI", 0);
     //    SmartDashboard.putNumber("DriveD", 0.05);
-    // driveTrain.configTeleop();
-    // driveCommand.start();
+    driveTrain.configTeleop();
+    driveCommand.start();
     ledStripCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();
 

@@ -8,7 +8,7 @@ import org.ligerbots.powerup.RobotPosition;
  * All positions are in inches
  * 
  * To understand this map, refer to the diagram at
- * http://team.ligerbots.com/home/2018-game-info 
+ * http://team.ligerbots.com/home/2018/2018-game-info
  */
 
 public class FieldMap {
@@ -21,7 +21,7 @@ public class FieldMap {
     public static final double robotLength = 32.0 + 7.0;
     // half dimensions - for getting the center point of the robot
     public static final double rW2 = robotWidth/2.0;
-    public static final double rL2 = robotWidth/2.0;
+    public static final double rL2 = robotLength/2.0;
     
     public RobotPosition[] startPositions = new RobotPosition[5];   // position 0 is not used! (because the diagrom is 1-based)
     
@@ -39,10 +39,10 @@ public class FieldMap {
     // reached in a straight line from any starting position. In practice, some might not
     // work so well. We depend on the user to not choose a waypoint that would drive
     // clear across the field, or that is likely to collide with an alliance partner
-    public ArrayList<FieldPosition> wayPointsA = new ArrayList<FieldPosition>();
-    public ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
-    public ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
-    public ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsA = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
 
     
     FieldMap () {
