@@ -56,6 +56,7 @@ public class ProximitySensor extends Subsystem {
   private void averagingThread() {
     while (true) {
       distanceLeft = ultrasonicLeft.getRangeInches();
+//      System.out.println("ultrasonicLeftRangeInches = " + distanceLeft);
       bufferLeft[bufferIndexLeft] = distanceLeft;
       bufferIndexLeft++;
       if (bufferIndexLeft >= bufferLeft.length) {
@@ -75,6 +76,7 @@ public class ProximitySensor extends Subsystem {
       adjustedDistanceLeft = sum / (bufferCopyLeft.length / 2);
       
       distanceRight = ultrasonicRight.getRangeInches();
+//      System.out.println("ultrasonicRightRangeInches = " + distanceRight);
       bufferRight[bufferIndexRight] = distanceRight;
       bufferIndexRight++;
       if (bufferIndexRight >= bufferRight.length) {

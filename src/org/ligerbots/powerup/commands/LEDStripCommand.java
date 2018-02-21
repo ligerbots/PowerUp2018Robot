@@ -1,35 +1,44 @@
 package org.ligerbots.powerup.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import org.ligerbots.powerup.Robot;
 
+import edu.wpi.first.wpilibj.command.Command;
+
+/**
+ * Command to refresh LED Strips -- runs forever
+ */
 public class LEDStripCommand extends Command {
-	
-  // Row from the LED Pattern table. From 1 to 100 
-  static final int firstRow = 1;
-  static final int lastRow = 100;
-  int selectedRow;
-  @Override
-  protected boolean isFinished() {
-    // TODO Auto-generated method stub
-    return false;
-    
-  }
-  
-  //Called repeatedly when this Command is scheduled to run
-  protected void execute() {
-    Robot.ledstrip.setLights(1);   //indicate the column value as the input
-  }
 
-  // Called once after isFinished returns true
-  protected void end() {
-    Robot.ledstrip.lightsOff();
-  }
+    public LEDStripCommand() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    }
 
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  protected void interrupted() {
-    end();
-  }
+    // Called just before this Command runs the first time
+    protected void initialize() {
+    }
 
+    // Called repeatedly when this Command is scheduled to run
+    protected void execute() {
+//        System.out.println("Refreshing lights");
+        //Robot.ledStrip.setLights(20);
+        Robot.ledstrip.refreshLights();
+    }
+
+    // Make this return true when this Command no longer needs to run execute()
+    protected boolean isFinished() {
+        return false;
+    }
+
+    // Called once after isFinished returns true
+    protected void end() {
+    }
+
+    // Called when another command which requires one or more of the same
+    // subsystems is scheduled to run
+    protected void interrupted() {
+    }
 }
+
+
+

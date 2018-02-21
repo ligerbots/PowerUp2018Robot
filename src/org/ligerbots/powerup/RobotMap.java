@@ -38,14 +38,15 @@ public class RobotMap {
   
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
-  public static final int REV_BLINKIN = 0;
+  public static final int REV_BLINKIN = 1;
   public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 2;
   
   public static final int ULTRASONIC_LEFT_TRIGGER = 4;
   public static final int ULTRASONIC_LEFT_ECHO = 5;
   public static final int ULTRASONIC_RIGHT_TRIGGER = 6;
   public static final int ULTRASONIC_RIGHT_ECHO = 7;
-  public static final double ULTRASONIC_DISTANCE_THRESHOLD = 3; //inches
+  public static final double ULTRASONIC_DISTANCE_THRESHOLD = 3.4; //inches suck it mark, i programmed something
   
   public static final int PRESSURE_GAUGE = 0;	// Analog port zero
+  public static final int LED_PWM_CHANNEL = 3;
 }

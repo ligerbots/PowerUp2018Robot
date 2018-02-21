@@ -20,6 +20,7 @@ import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
+import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
@@ -52,6 +53,7 @@ public class Robot extends IterativeRobot {
   public static Elevator elevator;
   public static ElevatorCommand elevatorCommand;
   public static LEDStrip ledstrip;
+  public static LEDStripCommand ledStripCommand;
   public static ProximitySensor proximitySensor;
   
   public enum StartingPosition {
@@ -120,12 +122,13 @@ public class Robot extends IterativeRobot {
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     ledstrip = new LEDStrip();
+    ledStripCommand = new LEDStripCommand();
     proximitySensor = new ProximitySensor();
-    elevatorCommand = new ElevatorCommand();
-
     // Put this after all commands and subsystems have been initialized!
     oi = new OI();
     
+    elevatorCommand = new ElevatorCommand();
+
     // m_chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
@@ -154,6 +157,9 @@ public class Robot extends IterativeRobot {
   @Override
   public void disabledInit() {
 
+    // Switch cmaera to Switch mode
+    SmartDashboard.putString("vision/active_mode", "switch");
+    
   }
 
   @Override
@@ -176,7 +182,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
 
-	SmartDashboard.putString("/vision/active_mode", "switch");
+	SmartDashboard.putString("vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //m_autonomousCommand = new TurnCommand(90, 0.3);
 
@@ -229,14 +235,16 @@ public class Robot extends IterativeRobot {
     }
     
     // Switch cmaera to Driver mode
-	SmartDashboard.putString("/vision/active_mode", "driver");
-    
+	SmartDashboard.putString("vision/active_mode", "driver");
+    SmartDashboard.putNumber("LEDStripKey", 0.0);
     //    SmartDashboard.putNumber("DriveP", 1);
     //    SmartDashboard.putNumber("DriveI", 0);
     //    SmartDashboard.putNumber("DriveD", 0.05);
     // driveTrain.configTeleop();
     // driveCommand.start();
+    ledStripCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();
+
   }
 
   /**
@@ -246,7 +254,13 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     commonPeriodic();  
     Scheduler.getInstance().run();
-    if ((ticks % 300) ==0) driveTrain.logInversion();		
+    if ((ticks % 100) ==0) {
+//      driveTrain.logInversion();
+      SmartDashboard.putNumber("UltrasonicLeft", Robot.proximitySensor.getDistanceLeft());
+      SmartDashboard.putNumber("UltrasonicRight", Robot.proximitySensor.getDistanceRight());
+//      System.out.println("UltrasonicLeft = " + Robot.proximitySensor.getDistanceLeft());
+//      System.out.println("UltrasonicRight = " + Robot.proximitySensor.getDistanceRight());
+    }
   }
 
   /**
