@@ -76,7 +76,9 @@ public class DriveTrain extends Subsystem {
 public DriveTrain() {
 	System.out.println("DriveTrain constructed");
 
+    SmartDashboard.putNumber("Elevator Up Accel", 2);
     SmartDashboard.putNumber("Elevator Up Speed", 0.25);
+
     
     // This initial robot position will be overwritten by our autonomous selection
     // we only zero it out here for practice, where we go straight teleop
@@ -169,10 +171,13 @@ public DriveTrain() {
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
 	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     if (Robot.elevator.getPosition() < 50) {
+      leftMaster.configOpenloopRamp(0, 0);
+      rightMaster.configOpenloopRamp(0, 0);
       robotDrive.arcadeDrive(-throttle, -rotate);
-
     }
     else {
+      leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+      rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
       robotDrive.arcadeDrive(-throttle * SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }
   }
