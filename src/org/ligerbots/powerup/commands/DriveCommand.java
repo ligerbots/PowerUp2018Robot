@@ -2,25 +2,17 @@ package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.ligerbots.powerup.OI;
 import org.ligerbots.powerup.Robot;
-import org.ligerbots.powerup.subsystems.DriveTrain;
 
 /**
  *
  */
 public class DriveCommand extends Command {
 
-  OI oi;
-  DriveTrain driveTrain;
-  int i = 0;
-
   public DriveCommand() {
+    requires(Robot.driveTrain);
 	System.out.println("DriveCommand constructed");
 
-    requires(Robot.driveTrain);
-    driveTrain = Robot.driveTrain;
-    oi = Robot.oi;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -31,13 +23,12 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
     
-    if (i % 10 == 0) {
- //     driveTrain.printEncoder();
-      driveTrain.talonCurrent();
-      SmartDashboard.putNumber("Yaw", driveTrain.getYaw());
-    }
-    driveTrain.allDrive(oi.getThrottle(), oi.getTurn());
-    i+=1;
+		Robot.driveTrain.allDrive(Robot.oi.getThrottle(), Robot.oi.getTurn());
+	    if (Robot.ticks % 10 == 0) {
+	      Robot.driveTrain.talonCurrent();
+	      SmartDashboard.putNumber("Yaw", Robot.driveTrain.getYaw());
+	    }    	
+	}
     
    /* if (driveTrain.getRoll() > 0) {
       

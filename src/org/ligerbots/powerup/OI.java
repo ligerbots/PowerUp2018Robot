@@ -116,6 +116,8 @@ public class OI {
 
     JoystickPov povTriggerBottom = new JoystickPov(xbox, Direction.SOUTH);
     povTriggerBottom.whenPressed(new DriveDistance(-10.0, 0.5, 1.0));
+    
+    System.out.println("OI constructed");
 
     
     // TODO: Add a button to switch the camera mode

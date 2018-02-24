@@ -39,8 +39,8 @@ import org.ligerbots.powerup.subsystems.ProximitySensor;
  */
 public class Robot extends IterativeRobot {
 
-  Command m_autonomousCommand;
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  Command autonomousCommand;
+  SendableChooser<Command> chooser = new SendableChooser<>();
   public DriverStation.Alliance alliance;	// Red or Blue
   // Game data -- the field configuration
   // L
@@ -131,9 +131,9 @@ public class Robot extends IterativeRobot {
     
     elevatorCommand = new ElevatorCommand();
 
-    // m_chooser.addDefault("Default Auto", new ExampleCommand());
+    // chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    SmartDashboard.putData("Auto mode", chooser);
     
     SmartDashboard.putNumber("DriveP", 0.045);
     SmartDashboard.putNumber("DriveI", 0.004);
@@ -186,7 +186,7 @@ public class Robot extends IterativeRobot {
 
 	SmartDashboard.putString("vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
-    //m_autonomousCommand = new TurnCommand(90, 0.3);
+    //autonomousCommand = new TurnCommand(90, 0.3);
 
     alliance = DriverStation.getInstance().getAlliance();
 	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
@@ -200,7 +200,7 @@ public class Robot extends IterativeRobot {
 	
 	auto = new SimpleSwitchAuto();
     
-    m_autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
+    autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     
     //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
 
@@ -213,7 +213,7 @@ public class Robot extends IterativeRobot {
 
     // schedule the autonomous command (example)
     if (auto != null) {
-     // m_autonomousCommand.start();
+     // autonomousCommand.start();
       auto.start();
     }
     
@@ -236,8 +236,8 @@ public class Robot extends IterativeRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    if (autonomousCommand != null) {
+      autonomousCommand.cancel();
     }
     
     // Switch cmaera to Driver mode
@@ -246,7 +246,6 @@ public class Robot extends IterativeRobot {
     //    SmartDashboard.putNumber("DriveP", 1);
     //    SmartDashboard.putNumber("DriveI", 0);
     //    SmartDashboard.putNumber("DriveD", 0.05);
-    driveTrain.configTeleop();
     driveCommand.start();
     ledStripCommand.start();
     if (elevator.isPresent()) elevatorCommand.start();

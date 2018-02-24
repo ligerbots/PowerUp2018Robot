@@ -89,8 +89,6 @@ public DriveTrain() {
     rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
     rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
 
-    rightSlave.set(ControlMode.Follower, RobotMap.CT_RIGHT_1);
-    leftSlave.set(ControlMode.Follower, RobotMap.CT_LEFT_1);
     // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
     leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
@@ -113,11 +111,16 @@ public DriveTrain() {
 
     robotDrive = new DifferentialDrive(leftMaster, rightMaster);
 
-
     // TODO: This should be sampled at 200Hz
     // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
-    if (Robot.elevator.elevatorPresent) navx = new AHRS(Port.kMXP, (byte) 50);
-    else navx = new AHRS(SerialPort.Port.kUSB);
+    if (Robot.elevator.elevatorPresent) {
+    	navx = new AHRS(Port.kMXP, (byte) 50);
+    	System.out.println("NavX on MXP port.");
+    	}
+    else {
+    	navx = new AHRS(SerialPort.Port.kUSB);
+    	System.out.println("NavX on USB port.");
+    }
    
 	turningController =
         new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004),
@@ -199,7 +202,8 @@ public DriveTrain() {
   }
 
   public void initDefaultCommand() {
-    setDefaultCommand(new DriveCommand());
+	if (Robot.driveCommand == null) Robot.driveCommand = new DriveCommand();
+    setDefaultCommand(Robot.driveCommand);
   }
 
   public double getEncoderDistance(DriveSide driveSide) {
@@ -209,14 +213,6 @@ public DriveTrain() {
     } else {
       return (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
           * RobotMap.WHEEL_CIRCUMFERENCE;
-    }
-  }
-
-  public void configTeleop() {
-    
-    //System.out.println("Differential Drive Exists");
-    if (robotDrive == null) {
-      robotDrive = new DifferentialDrive(left, right);
     }
   }
 
@@ -253,6 +249,9 @@ public DriveTrain() {
     // turningController.setToleranceBuffer(1);
     turningController.setContinuous(true);
     turningController.setSetpoint(temp);
+    
+    System.out.printf("startAngle: %5.2f, Yaw: %5.2f, setPoint: %5.2f, "
+    		+ startAngle, getYaw(), temp);
   }
   
   public boolean isTurnOnTarget() {

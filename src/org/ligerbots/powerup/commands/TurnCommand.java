@@ -38,9 +38,12 @@ public class TurnCommand extends Command {
       
       Robot.driveTrain.autoTurn(turnOutput);
 
-      if ((Robot.ticks % 1) == 0)
-        System.out.printf("Left to turn %5.2f degrees, Turn output: %5.2f, setPoint %5.2f\n",
-    		  			 turnOutput, Robot.driveTrain.turnError(), Robot.driveTrain.getSetpoint());
+      if ((Robot.ticks % 5) == 0) {
+        System.out.printf("Left to turn %5.2f degrees, Turn output: %5.2f, setPoint %5.2f\n turnError: %5.2f, setPoint: %52.f",
+    		  			 turnOutput, Robot.driveTrain.turnError(), Robot.driveTrain.getSetpoint(),
+    		  			 Robot.driveTrain.turnError(), Robot.driveTrain.getSetpoint());
+      }
+      
       SmartDashboard.putNumber("Angle offset", Robot.driveTrain.turnError());
       SmartDashboard.putNumber("Setpoint", Robot.driveTrain.getSetpoint());
     }
