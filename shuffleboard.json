@@ -1,5 +1,5 @@
 {
-  "dividerPosition": 0.3410807669959326,
+  "dividerPosition": 0.32734274711168165,
   "tabPane": [
     {
       "title": "SmartDashboard",
@@ -248,6 +248,162 @@
               "_source0": "network_table:///SmartDashboard/Intake Speed",
               "_title": "Intake Speed"
             }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Left Encoder",
+              "_title": "Left Encoder"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Right Encoder",
+              "_title": "Right Encoder"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Robot Direction",
+              "_title": "Robot Direction"
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Angle offset",
+              "_title": "Angle offset"
+            }
+          },
+          "9,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Setpoint",
+              "_title": "Setpoint"
+            }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Turn Angle",
+              "_title": "Turn Angle"
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Turn Tolerance",
+              "_title": "Turn Tolerance"
+            }
+          },
+          "9,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Current Position X",
+              "_title": "Current Position X"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Current Position Y",
+              "_title": "Current Position Y"
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Waypoint Index",
+              "_title": "Waypoint Index"
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Angle Error",
+              "_title": "Angle Error"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Distance to Waypoint",
+              "_title": "Distance to Waypoint"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Turn Output",
+              "_title": "Turn Output"
+            }
+          },
+          "5,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Drive Distance Done",
+              "_title": "Drive Distance Done",
+              "colorWhenTrue": "#7CFC00FF",
+              "colorWhenFalse": "#8B0000FF"
+            }
           }
         }
       }
@@ -268,7 +424,6 @@
             ],
             "content": {
               "_type": "List Layout",
-              "_source0": "network_table:///LiveWindow/Ungrouped",
               "_title": "Ungrouped",
               "_children": [
                 {
@@ -355,7 +510,6 @@
             ],
             "content": {
               "_type": "List Layout",
-              "_source0": "network_table:///LiveWindow/Elevator",
               "_title": "Elevator",
               "_children": []
             }
@@ -367,8 +521,182 @@
             ],
             "content": {
               "_type": "List Layout",
+              "_title": "LEDStrip",
+              "_children": []
+            }
+          },
+          "6,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_source0": "network_table:///LiveWindow/Ungrouped",
+              "_title": "Ungrouped",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Ultrasonic[7]/Value",
+                  "_title": "Ultrasonic[7]/Value"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[0]/Value",
+                  "_title": "DigitalInput[0]/Value",
+                  "colorWhenTrue": "#7CFC00FF",
+                  "colorWhenFalse": "#8B0000FF"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [1]",
+                  "_title": "Talon SRX [1]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [2]",
+                  "_title": "Talon SRX [2]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Ultrasonic[5]/Value",
+                  "_title": "Ultrasonic[5]/Value"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Spark[0]",
+                  "_title": "Spark[0]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [7]",
+                  "_title": "Talon SRX [7]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/SpeedControllerGroup[2]",
+                  "_title": "SpeedControllerGroup[2]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/SpeedControllerGroup[1]",
+                  "_title": "SpeedControllerGroup[1]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[1]/Value",
+                  "_title": "DigitalInput[1]/Value",
+                  "colorWhenTrue": "#7CFC00FF",
+                  "colorWhenFalse": "#8B0000FF"
+                },
+                {
+                  "_type": "Differential Drivebase",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/DifferentialDrive[1]",
+                  "_title": "DifferentialDrive[1]",
+                  "numberOfWheels": 4,
+                  "wheelDiameter": 80.0,
+                  "showVectors": true
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [4]",
+                  "_title": "Talon SRX [4]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [6]",
+                  "_title": "Talon SRX [6]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [5]",
+                  "_title": "Talon SRX [5]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                },
+                {
+                  "_type": "Speed Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon SRX [3]",
+                  "_title": "Talon SRX [3]",
+                  "controllable": false,
+                  "orientation": "HORIZONTAL"
+                }
+              ]
+            }
+          },
+          "8,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_source0": "network_table:///LiveWindow/Elevator",
+              "_title": "Elevator",
+              "_children": []
+            }
+          },
+          "0,4": {
+            "size": [
+              2,
+              3
+            ],
+            "content": {
+              "_type": "List Layout",
               "_source0": "network_table:///LiveWindow/LEDStrip",
               "_title": "LEDStrip",
+              "_children": []
+            }
+          },
+          "2,4": {
+            "size": [
+              2,
+              3
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_source0": "network_table:///LiveWindow/ProximitySensor",
+              "_title": "ProximitySensor",
+              "_children": []
+            }
+          },
+          "4,4": {
+            "size": [
+              2,
+              3
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_source0": "network_table:///LiveWindow/DriveTrain",
+              "_title": "DriveTrain",
+              "_children": []
+            }
+          },
+          "6,4": {
+            "size": [
+              2,
+              3
+            ],
+            "content": {
+              "_type": "List Layout",
+              "_source0": "network_table:///LiveWindow/Intake",
+              "_title": "Intake",
               "_children": []
             }
           }

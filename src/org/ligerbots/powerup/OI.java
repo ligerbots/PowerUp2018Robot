@@ -26,6 +26,7 @@ import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
 //import org.ligerbots.powerup.commands.TurnTester;
+import org.ligerbots.powerup.commands.TurnTester;
 
 
 /**
@@ -104,16 +105,16 @@ public class OI {
     JoystickButton xBoxX = new JoystickButton(xbox, 3);
     xBoxX.whenPressed(new LEDStripCommand());
     
-//    JoystickPov povTriggerRight = new JoystickPov(xbox, Direction.EAST);
-//    povTriggerRight.whenPressed(new TurnTester(1.0));
-//    
-//    JoystickPov povTriggerLeft = new JoystickPov(xbox, Direction.WEST);
-//    povTriggerLeft.whenPressed(new TurnTester(-1.0));
+    JoystickPov povTriggerRight = new JoystickPov(xbox, Direction.EAST);
+    povTriggerRight.whenPressed(new TurnTester(1.0));
+    
+    JoystickPov povTriggerLeft = new JoystickPov(xbox, Direction.WEST);
+    povTriggerLeft.whenPressed(new TurnTester(-1.0));
     
     JoystickPov povTriggerTop = new JoystickPov(xbox, Direction.NORTH);
     povTriggerTop.whenPressed(new DriveDistance(10.0, 0.5, 1.0));
 
-    JoystickPov povTriggerBottom = new JoystickPov(xbox, Direction.NORTH);
+    JoystickPov povTriggerBottom = new JoystickPov(xbox, Direction.SOUTH);
     povTriggerBottom.whenPressed(new DriveDistance(-10.0, 0.5, 1.0));
 
     
