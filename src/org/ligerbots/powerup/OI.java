@@ -16,6 +16,7 @@ import java.util.Arrays;
 
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.Robot.StartingPosition;
+import org.ligerbots.powerup.commands.BadDriveDistance;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
@@ -115,7 +116,7 @@ public class OI {
     povTriggerTop.whenPressed(new DriveDistance(10.0, 0.5, 1.0));
 
     JoystickPov povTriggerBottom = new JoystickPov(xbox, Direction.SOUTH);
-    povTriggerBottom.whenPressed(new DriveDistance(-10.0, 0.5, 1.0));
+    povTriggerBottom.whenPressed(new BadDriveDistance(10.0));
     
     System.out.println("OI constructed");
 

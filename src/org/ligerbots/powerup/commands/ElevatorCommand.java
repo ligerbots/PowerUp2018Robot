@@ -20,6 +20,7 @@ public class ElevatorCommand extends Command {
     
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+	requires(Robot.elevator);
     oi = Robot.oi;
     elevator = Robot.elevator;
   }
@@ -40,7 +41,7 @@ public class ElevatorCommand extends Command {
           SmartDashboard.putBoolean("holding", false);
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
-            if (elevator.getLimitSwitch(true) && !(elevator.getPosition() > 95)) {
+            if (!(elevator.getPosition() > 95)) {
               if (elevator.getPosition() >= 64) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.

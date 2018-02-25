@@ -142,6 +142,11 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("DriveI", 0.004);
     SmartDashboard.putNumber("DriveD", 0.06);
     
+    
+    SmartDashboard.putNumber("Drive P", 0.1);
+    SmartDashboard.putNumber("Drive I", 0.0001);
+    SmartDashboard.putNumber("Drive D", 0.05);
+    
     // For TurnTester command
     SmartDashboard.putNumber("Turn Angle", 20.0);
     SmartDashboard.putNumber("Turn Tolerance", 1.0);
@@ -193,8 +198,8 @@ public class Robot extends IterativeRobot {
 
     alliance = DriverStation.getInstance().getAlliance();
 	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
-	do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
-	while (gameData.length() == 0);
+	//do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
+	//while (gameData.length() == 0);
 
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);
@@ -251,7 +256,6 @@ public class Robot extends IterativeRobot {
     //    SmartDashboard.putNumber("DriveD", 0.05);
     driveCommand.start();
     ledStripCommand.start();
-    if (elevator.isPresent()) elevatorCommand.start();
 
   }
 

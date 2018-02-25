@@ -44,12 +44,11 @@ public class DriveDistance extends Command {
       startingLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       startingRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       startAngle = Robot.driveTrain.getAngle();
-      double p = SmartDashboard.getNumber("DriveP", 1);
-      double i = SmartDashboard.getNumber("DriveI", 0);
-      double d = SmartDashboard.getNumber("DriveD", 0.05);
-      Robot.driveTrain.configClosedLoop(p, i, d);
+      double p = SmartDashboard.getNumber("Drive P", 3.0);
+      double i = SmartDashboard.getNumber("Drive I", 2.0);
+      double d = SmartDashboard.getNumber("Drive D", 0.0);
       Robot.driveTrain.PIDDrive(offsetInches);
-
+      Robot.driveTrain.configClosedLoop(p, i, d);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -72,7 +71,7 @@ public class DriveDistance extends Command {
       
       if ((Robot.ticks % 5) == 0)
     	  System.out.printf("Drive Distance distance travelled: %5.2f, PID Left: %5.2f PID Right: %5.2f\n",
-    			  delta, Robot.driveTrain.getClosedLoopError(DriveSide.LEFT), Robot.driveTrain.getClosedLoopError(DriveSide.RIGHT) );        
+    			  delta, Robot.driveTrain.getClosedLoopError(DriveSide.LEFT), Robot.driveTrain.getClosedLoopError(DriveSide.RIGHT));        
      // Robot.driveTrain.allDrive(Math.signum(offsetInches), Robot.driveTrain.getTurnOutput());
     }
 

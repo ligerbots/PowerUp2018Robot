@@ -12,6 +12,7 @@ public class SimpleSwitchAuto extends CommandGroup {
 
     public SimpleSwitchAuto() {
       
+      System.out.println("Starting Simple Switch");
       
       addSequential(new AutoCommandGroup(FieldMap.wayPointsA, 0));
             
