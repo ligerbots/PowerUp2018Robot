@@ -11,6 +11,8 @@ public class TurnCommand extends Command {
   
     public double angleOffset;
     public double tolerance;
+    double startTime;
+    boolean pidTurn = false;
  
 
     public TurnCommand(double angleOffset, double tolerance) {
@@ -28,8 +30,18 @@ public class TurnCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      Robot.driveTrain.setPID(SmartDashboard.getNumber("DriveP", 1), SmartDashboard.getNumber("DriveI", 0.01), SmartDashboard.getNumber("DriveD", 0.5));
+      if (pidTurn) {
+        Robot.driveTrain.setPID(SmartDashboard.getNumber("DriveP", 1), SmartDashboard.getNumber("DriveI", 0.01), SmartDashboard.getNumber("DriveD", 0.5));
+      }
+      System.out.printf("Started turn at %5.2f seconds\n", startTime);
+    
       Robot.driveTrain.enableTurningControl(angleOffset, tolerance);
+      System.out.printf("%d: targetAngle: %5.2f degrees, Turn output: %5.2f, " +  
+          "currentAngle : %5.2f,  turnError: %5.2f\n", Robot.ticks,
+          Robot.driveTrain.getSetpoint(), Robot.driveTrain.getTurnOutput(), Robot.driveTrain.getYaw(),
+          Robot.driveTrain.turnError()
+          );      
+      startTime = Robot.time();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -39,9 +51,11 @@ public class TurnCommand extends Command {
       Robot.driveTrain.autoTurn(turnOutput);
 
       if ((Robot.ticks % 5) == 0) {
-        System.out.printf("Left to turn %5.2f degrees, Turn output: %5.2f, setPoint %5.2f\n turnError: %5.2f, setPoint: %52.f",
-    		  			 turnOutput, Robot.driveTrain.turnError(), Robot.driveTrain.getSetpoint(),
-    		  			 Robot.driveTrain.turnError(), Robot.driveTrain.getSetpoint());
+       System.out.printf("%d: targetAngle: %5.2f degrees, Turn output: %5.2f, " +  
+        					        "currentAngle : %5.2f,  turnError: %5.2f\n", Robot.ticks,
+        					        Robot.driveTrain.getSetpoint(), turnOutput, Robot.driveTrain.getYaw(),
+        					        Robot.driveTrain.turnError()
+        					        );
       }
       
       SmartDashboard.putNumber("Angle offset", Robot.driveTrain.turnError());
@@ -50,11 +64,22 @@ public class TurnCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.driveTrain.isTurnOnTarget();
+        // 2 second timeout for turning
+    	boolean timedOut;
+    	
+    	timedOut = (Robot.time() - startTime) > 2.0;
+    	if (timedOut) System.out.println("Turn stopped due to timeout");
+    	
+    	return Robot.driveTrain.isTurnOnTarget() || timedOut;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+      System.out.printf("%d: targetAngle: %5.2f degrees, Turn output: %5.2f, " +  
+        "currentAngle : %5.2f,  turnError: %5.2f\n", Robot.ticks,
+        Robot.driveTrain.getSetpoint(), Robot.driveTrain.getTurnOutput(), Robot.driveTrain.getYaw(),
+        Robot.driveTrain.turnError()
+        );           
     	System.out.println("Turn done");
     }
 

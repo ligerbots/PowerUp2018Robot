@@ -41,7 +41,6 @@ public class DrivePathCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      Robot.driveTrain.zeroPosition();
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
       //  prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);

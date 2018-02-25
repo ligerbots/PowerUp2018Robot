@@ -16,7 +16,7 @@ public class TurnTester extends Command {
     // pass 1.0 for turning right, or -1.0 for turning left
 	public TurnTester(double sign) {
     	// angle and tolerance. We actually override these from the Dashboard
-    	turnCommand = new TurnCommand(20.0, 1.0);
+    	turnCommand = new TurnCommand(sign*20.0, 1.0);
     	turnAngle = 20.0;
     	turnTolerance = 1.0;
     	this.sign = sign;
@@ -26,9 +26,10 @@ public class TurnTester extends Command {
     protected void initialize() {
     	turnAngle = SmartDashboard.getNumber("Turn Angle", turnAngle);
     	turnTolerance = SmartDashboard.getNumber("Turn Tolerance", turnTolerance);
-    	turnCommand.set(sign*turnAngle, turnTolerance);
     	System.out.printf("Turn started for %5.1f degrees, %3.1f tolerance.\n", 
-    					  turnAngle, turnTolerance);
+    	    sign*turnAngle, turnTolerance);
+    	turnCommand.set(sign*turnAngle, turnTolerance);
+    	turnCommand.initialize();
     }
 
     // Called repeatedly when this Command is scheduled to run

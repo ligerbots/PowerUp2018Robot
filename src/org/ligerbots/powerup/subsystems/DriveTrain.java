@@ -34,13 +34,18 @@ public class DriveTrain extends Subsystem {
   WPI_TalonSRX leftSlave;
   WPI_TalonSRX rightMaster;
   WPI_TalonSRX rightSlave;
-  SpeedControllerGroup left;
-  SpeedControllerGroup right;
   DifferentialDrive robotDrive;
   PIDController turningController;
-  double turnOutput = 0;
-  double angleOffset = 0;
+  double turnOutput = 0.0;
+  double startAngle;
+  double targetAngle;
+  double wrapCorrection;  // 180.0 or -180.0
+  double angleOffset = 0.0;
+  double rotation;
+  double tolerance = 0.0;
+  double previousTurnError;
   TalonID[] talons;
+  boolean pidTurn = false;
 
   public enum DriveSide {
     LEFT, RIGHT
@@ -50,7 +55,6 @@ public class DriveTrain extends Subsystem {
 
   double positionX;
   double positionY;
-  double rotation;
   double absoluteDistanceTraveled;
   int numberOfTicks = 0;
   
@@ -76,69 +80,67 @@ public class DriveTrain extends Subsystem {
 public DriveTrain() {
 	System.out.println("DriveTrain constructed");
 
-    SmartDashboard.putNumber("Elevator Up Accel", 2);
-    SmartDashboard.putNumber("Elevator Up Speed", 0.25);
+  SmartDashboard.putNumber("Elevator Up Accel", 2);
+  SmartDashboard.putNumber("Elevator Up Speed", 0.25);
 
-    
-    // This initial robot position will be overwritten by our autonomous selection
-    // we only zero it out here for practice, where we go straight teleop
-    robotPosition = new RobotPosition(0.0, 0.0, 0.0);
+  // This initial robot position will be overwritten by our autonomous selection
+  // we only zero it out here for practice, where we go straight teleop
+  robotPosition = new RobotPosition(0.0, 0.0, 0.0);
 
-    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
-    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
-    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
-    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
+  leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
+  leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+  rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
+  rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
 
-    // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+  // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-    leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-    rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+  leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
+  rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
-    // left = new SpeedControllerGroup(leftMaster, leftSlave);
-    // right = new SpeedControllerGroup(rightMaster, rightSlave);
+  // left = new SpeedControllerGroup(leftMaster, leftSlave);
+  // right = new SpeedControllerGroup(rightMaster, rightSlave);
 
-    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+  leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+  rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-    rightMaster.setSensorPhase(true);
-    leftMaster.setSensorPhase(true);
-    
-    leftMaster.configClosedloopRamp(0.3, 0);
-    rightMaster.configClosedloopRamp(0.3, 0);
+  rightMaster.setSensorPhase(true);
+  leftMaster.setSensorPhase(true);
+  
+  leftMaster.configClosedloopRamp(0.3, 0);
+  rightMaster.configClosedloopRamp(0.3, 0);
 
-    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-        .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
+  Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+      .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
-    robotDrive = new DifferentialDrive(leftMaster, rightMaster);
+  robotDrive = new DifferentialDrive(leftMaster, rightMaster);
 
-    // TODO: This should be sampled at 200Hz
-    // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
-    if (Robot.elevator.elevatorPresent) {
-    	navx = new AHRS(Port.kMXP, (byte) 50);
-    	System.out.println("NavX on MXP port.");
-    	}
-    else {
-    	navx = new AHRS(SerialPort.Port.kUSB);
-    	System.out.println("NavX on USB port.");
-    }
-   
-	turningController =
+  // TODO: This should be sampled at 200Hz
+  // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
+  if (Robot.elevator.elevatorPresent) {
+  	navx = new AHRS(Port.kMXP, (byte) 50);
+  	System.out.println("NavX on MXP port.");
+  	}
+  else {
+  	navx = new AHRS(SerialPort.Port.kUSB);
+  	System.out.println("NavX on USB port.");
+  }
+ 
+	if (pidTurn) {
+		turningController =
         new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004),
          			      SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
+	}
 
-	navx.registerCallback(
-        (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
-          updatePosition(sensorData.yaw);
- /*         turningController.setP(SmartDashboard.getNumber("DriveP", 1));
-          turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
-          turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));*/
-        }, new Object());
-
-
-	turningController =
-			new PIDController(0.05, 0.005, 0.05, navx, output -> this.turnOutput = output);
-
-    //calibrateYaw();
+	navx.registerCallback((long systemTimestamp, long sensorTimestamp,
+	                       AHRSUpdateBase sensorData, Object context) ->
+	  {
+      updatePosition(sensorData.yaw);
+	    if (pidTurn) {
+	      turningController.setP(SmartDashboard.getNumber("DriveP", 1));
+	      turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
+	      turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
+	    }
+    }, new Object());
   }
   
   public void setInitialRobotPosition(double x, double y, double angle)
@@ -163,11 +165,7 @@ public DriveTrain() {
   public void zeroEncoders() {
     leftMaster.setSelectedSensorPosition(0, 0, 0);
     rightMaster.setSelectedSensorPosition(0, 0, 0);
-
   }
-
-
-  double rampRate;
 
   public void allDrive(double throttle, double rotate) {
 
@@ -224,8 +222,8 @@ public DriveTrain() {
     //SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
 
-  // TODO: Can we refactor this to remove the "temporary" from its name?
-  double temporaryFixDegrees(double input) {
+  // presently unused
+  double mod180(double input) {
     if (input > 180) {
       return input - 360;
     } else if (input < -180) {
@@ -234,87 +232,82 @@ public DriveTrain() {
       return input;
     }
   }
-  public void enableTurningControl(double angle, double tolerance) {
-    double startAngle = this.getYaw();
-    double temp = startAngle + angle;
-    // RobotMap.TURN_P = turningController.getP();
-    // RobotMap.TURN_D = turningController.getD();
-    // RobotMap.TURN_I = turningController.getI();
-    temp = temporaryFixDegrees(temp);
-    turningController.setSetpoint(temp);
-    turningController.enable();
-    turningController.setInputRange(-180.0, 180.0);
-    turningController.setOutputRange(-1.0, 1.0);
-    turningController.setAbsoluteTolerance(tolerance);
-    // turningController.setToleranceBuffer(1);
-    turningController.setContinuous(true);
-    turningController.setSetpoint(temp);
     
-    System.out.printf("startAngle: %5.2f, Yaw: %5.2f, setPoint: %5.2f, "
-    		+ startAngle, getYaw(), temp);
+  public void enableTurningControl(double angle, double tolerance) {
+    this.angleOffset = angle;
+    this.tolerance = tolerance;
+    startAngle = getYaw();
+    targetAngle = startAngle + angle;
+    previousTurnError = Math.abs(angle);
+    
+    // We need to keep all angles between -180 and 180. Account for that here
+    // wrapCorrection will be used below in turnError to undo what we do here
+    double originalTargetAngle = targetAngle;
+    if (targetAngle > 180.0) {
+      targetAngle -= 360.0;
+      wrapCorrection = 360.0;
+    }
+    else if (targetAngle < -180.0) {
+      targetAngle += 360.0;
+      wrapCorrection = -360.0;
+    }
+    else wrapCorrection = 0.0;
+    
+    if (pidTurn) {
+        turningController.setSetpoint(targetAngle);
+        turningController.enable();
+        turningController.setInputRange(-180.0, 180.0);
+        turningController.setOutputRange(-1.0, 1.0);
+        turningController.setAbsoluteTolerance(tolerance);
+        // turningController.setToleranceBuffer(1);
+        turningController.setContinuous(true);
+    }
+
+    System.out.printf("currentAngle: %5.2f, originalTargetAngle: %5.2f, targetAngle: %5.2f, " + 
+                      "wrapCorrection: %5.2f\n",
+                      startAngle, originalTargetAngle, targetAngle, wrapCorrection);
   }
   
   public boolean isTurnOnTarget() {
 
-	  if (Math.abs(turnError()) <= 4) {
-		  ++numberOfTicks;
-		  if (numberOfTicks >= 15) {
-			  numberOfTicks = 0;
-			  return true;
-		  }
-	  }
-	  else {
-		  numberOfTicks = 0;
-	  }
-	  return false;
-    //return turningController.onTarget();
+    if (pidTurn) return turningController.onTarget();
+    
+    double turnError = Math.abs(turnError());
+    
+    if (turnError <= tolerance ||     // we're within tolerance 
+        turnError > previousTurnError+0.1)  // or if we've gone past -- don't reverse 
+    {
+		  return true;
+	  } 
+    previousTurnError = turnError;
+    return false;
   }
 
-
-  public void setPID(double p, double i, double d) {
-	  turningController.setPID(p, i, d);
-  }
-
-  public void disablePID() {
-	  turningController.disable();
-  }
-
-  public boolean isPidOn() {
-	  return turningController.isEnabled();
-  }
-  public void setAngleOffset(double angleOffset) {
-	  this.angleOffset = angleOffset;
-  }
   public double getTurnOutput() {
 	  angleOffset = turnError();
-	  //System.out.println(turnError());
+	  double sign = - Math.signum(angleOffset);  // Note the minus!
 	  
-	  if (angleOffset > 75) {
-		  return -1.0;
-	  }
-	  if (angleOffset > 45) {
-		  return -0.75;
-	  }
-	  if (angleOffset > 20) {
-		  return -0.4;
-	  }
-	  if (angleOffset > 4) {
-		  return -0.2;
-	  }
-	  if (angleOffset < -75) {
-		  return 1;
-	  }
-	  if (angleOffset < -45) {
-		  return 0.75;
-	  }
-	  if (angleOffset < -20) {
-		  return 0.4;
-	  }
-	  if (angleOffset < -4) {
-		  return 0.2;
-	  }
-	  return 0;
+	  if (Math.abs(angleOffset) > 45) return (sign * 0.7);
+    if (Math.abs(angleOffset) > 30) return (sign * 0.6);
+    if (Math.abs(angleOffset) > 15) return (sign * 0.5);
+    if (Math.abs(angleOffset) > 5) return (sign * 0.3);
+    return (sign * 0.25);
   }
+  
+  public double turnError() {
+    if (pidTurn) return turningController.getError();
+
+    double turnError = (Math.abs(targetAngle - rotation) + wrapCorrection) % 360;
+    if (turnError > 180) turnError -= 360;
+    else if (turnError < -180) turnError += 360;
+    return turnError;
+  }
+  
+  public double getSetpoint() {
+    if (pidTurn) return turningController.getSetpoint();
+    else return targetAngle;
+  }
+  
 
   public void configClosedLoop(double p, double i, double d) {
     leftMaster.config_kP(0, p, 0);
@@ -365,13 +358,22 @@ public DriveTrain() {
   //-1 to 1 input
   public void autoTurn(double speed) {
     rightMaster.set(ControlMode.PercentOutput, speed);
-    rightSlave.set(ControlMode.PercentOutput, speed);
     //rightSlave.set(ControlMode.PercentOutput, speed);
     leftMaster.set(ControlMode.PercentOutput, speed);
     //leftSlave.set(ControlMode.PercentOutput, speed);
-    leftSlave.set(ControlMode.PercentOutput, speed);
   }
 
+  public void setPID(double p, double i, double d) {
+    if (pidTurn) turningController.setPID(p, i, d);
+  }
+
+  public void disablePID() {
+    if (pidTurn) turningController.disable();
+  }
+
+  public boolean isPidOn() {
+    return pidTurn && turningController.isEnabled();
+  }
   public double getClosedLoopError(DriveSide side) {
     if (side == DriveSide.LEFT) {
       return leftMaster.getClosedLoopError(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE;
@@ -396,14 +398,15 @@ public DriveTrain() {
   }
 
   public void zeroYaw() {
-    navx.zeroYaw();
+    navx.zeroYaw();  // "Sets the user-specified yaw offset to the current yaw value reported by the sensor."
   }
 
   /**
    * Updates the dead reckoning for our current position.
    */
   public void updatePosition(double navXYaw) {
-    rotation = temporaryFixDegrees(navXYaw + rotationOffset);
+    // thus far for the 2018 game rotationOffset is always zero
+    rotation = mod180(navXYaw + rotationOffset);
 
     double encoderLeft = getEncoderDistance(DriveSide.LEFT);
     double encoderRight = getEncoderDistance(DriveSide.RIGHT);
@@ -439,20 +442,10 @@ public DriveTrain() {
   }
   
   public RobotPosition getRobotPosition() {
-	  // TODO: I know Erik did this last year, but I don't like to "new" anything after initialization
-	  // if we can help it. We should have a robotPosition attribute in this class and return it by
-	  // value here.
-	robotPosition.setRobotPosition(positionX, positionY, rotation);
+    robotPosition.setRobotPosition(positionX, positionY, rotation);
     return robotPosition;
   }
   
-  public double turnError() {
-    return turningController.getError();
-  }
-  
-  public double getSetpoint() {
-    return turningController.getSetpoint();
-  }
 
 }
 

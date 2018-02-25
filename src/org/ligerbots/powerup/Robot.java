@@ -130,6 +130,9 @@ public class Robot extends IterativeRobot {
     oi = new OI();
     
     elevatorCommand = new ElevatorCommand();
+    
+    // zero everything before we start moving
+    Robot.driveTrain.zeroPosition();
 
     // chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
