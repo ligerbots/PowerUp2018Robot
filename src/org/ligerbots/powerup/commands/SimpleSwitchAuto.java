@@ -3,6 +3,7 @@ package org.ligerbots.powerup.commands;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import java.util.Arrays;
 import org.ligerbots.powerup.FieldMap;
+import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
 
 /**
@@ -14,7 +15,7 @@ public class SimpleSwitchAuto extends CommandGroup {
       
       System.out.println("Starting Simple Switch");
       
-      addSequential(new AutoCommandGroup(FieldMap.wayPointsA, 0));
+      addSequential(new AutoCommandGroup(Arrays.asList(new FieldPosition(24, 0), new FieldPosition(24, 24), new FieldPosition(48, 24))));
             
       addSequential(new ElevatorAuto(FieldMap.switchScoringHeight, 0.2));
       
