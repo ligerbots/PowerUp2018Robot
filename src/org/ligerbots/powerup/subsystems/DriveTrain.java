@@ -136,6 +136,9 @@ public DriveTrain() {
 	  {
       updatePosition(sensorData.yaw);
 	    if (pidTurn) {
+	    	// TODO: I really don't think we want to be calling
+	    	// SmartDashboard.getNumber 3 times and setting P, I & D
+	    	// in the context of the navX callback routine
 	      turningController.setP(SmartDashboard.getNumber("DriveP", 1));
 	      turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
 	      turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
@@ -179,6 +182,7 @@ public DriveTrain() {
     else {
       leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
       rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+      // TODO: We might also need to scale the rotation speed.
       robotDrive.arcadeDrive(-throttle * SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }
   }
