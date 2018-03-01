@@ -7,6 +7,7 @@ import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.RobotPosition;
+import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 
 /**
  *
@@ -80,7 +81,7 @@ public class AlternativeDrivePathCommand extends Command {
       
       turning = !(Math.abs(Robot.driveTrain.turnError()) <= RobotMap.AUTO_ACCEEPTABLE_TURN_ERROR);
       
-      if (turning) {
+      if (turning && !driving) {
         Robot.driveTrain.allDrive(0, -Robot.driveTrain.getTurnOutput());
         //driving = false;
       }

@@ -88,6 +88,9 @@ public class FieldMap {
         wayPointsBeta.add(scaleScoringSpot[1]);
 
     };
+    
+    
+    
       
 
 

@@ -79,7 +79,7 @@ public class ElevatorCommand extends Command {
           SmartDashboard.putNumber("Elevator Position", position);
         }*/
     
-        elevator.holdPosition(oi.getElevatorThrottle() * 69.5);
+        //elevator.holdPosition(oi.getElevatorThrottle() * 69.5);
     }
 
   // Make this return true when this Command no longer needs to run execute()
