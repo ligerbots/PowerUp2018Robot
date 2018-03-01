@@ -151,6 +151,10 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("Turn Angle", 20.0);
     SmartDashboard.putNumber("Turn Tolerance", 1.0);
     
+    SmartDashboard.putNumber("Elevator P", 0.05);
+    SmartDashboard.putNumber("Elevator I", 0.001);
+    SmartDashboard.putNumber("Elevator D", 0.05);
+    
     //CameraServer.getInstance().startAutomaticCapture();
     
     gameData = "";		// zero it here in case of restart
@@ -170,10 +174,13 @@ public class Robot extends IterativeRobot {
     // Switch cmaera to Switch mode
     SmartDashboard.putString("vision/active_mode", "switch");
     
+    Robot.driveTrain.zeroPosition();
+    
   }
 
   @Override
   public void disabledPeriodic() {
+    Robot.driveTrain.zeroPosition();
     commonPeriodic();  
     Scheduler.getInstance().run();
   }
@@ -240,6 +247,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
+    elevator.setPID();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -284,6 +292,8 @@ public class Robot extends IterativeRobot {
   }
   
   public void commonPeriodic() {
+      SmartDashboard.putNumber("RobotX", Robot.driveTrain.getRobotPosition().getX());
+      SmartDashboard.putNumber("RobotY", Robot.driveTrain.getRobotPosition().getY());
 	  ticks ++;
   }
 }

@@ -1,11 +1,13 @@
 package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
 import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.RobotPosition;
+import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 
 /**
  *
@@ -20,9 +22,18 @@ public class AlternativeDrivePathCommand extends Command {
     boolean lowerQuadrants;
     double turn;
     boolean turning;
-    boolean drivingCheck;
+    boolean drivingCheck = false;
     boolean driving;
-
+    
+    double startDist;
+    
+    double startLeft;
+    double startRight;
+    
+    double leftEnc;
+    double rightEnc;
+    
+    
     public AlternativeDrivePathCommand(List<FieldPosition> waypoints) {
       this.waypoints = waypoints;
         // Use requires() here to declare subsystem dependencies
@@ -31,6 +42,8 @@ public class AlternativeDrivePathCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+      
+      
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
       
@@ -47,32 +60,59 @@ public class AlternativeDrivePathCommand extends Command {
       if (lowerQuadrants) {
         turn = angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
       } else {
-       turn =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint) - Robot.driveTrain.getRobotPosition().getDirection());
+       turn =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
       }
       
       System.out.println("Final turn: " + turn);
       
       Robot.driveTrain.enableTurningControl(turn, 0.3);
+      
+      SmartDashboard.putNumber("WaypointX", currentWaypoint.getX());
+      SmartDashboard.putNumber("WaypointY", currentWaypoint.getY());
+      SmartDashboard.putNumber("Final Turn", turn);
+      SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
+
+      startDist = currentPosition.distanceTo(currentWaypoint);
+      
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
       
+      leftEnc = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+      rightEnc = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+      
       currentPosition = Robot.driveTrain.getRobotPosition();
       
-      turning = !Robot.driveTrain.isTurnOnTarget();
+      turning = !(Math.abs(Robot.driveTrain.turnError()) <= RobotMap.AUTO_ACCEEPTABLE_TURN_ERROR);
       
       if (turning) {
-        Robot.driveTrain.autoTurn(Robot.driveTrain.getTurnOutput());
+        Robot.driveTrain.allDrive(0, -Robot.driveTrain.getTurnOutput());
+        driving = false;
       }
-        
-      if (!turning && !driving) {
+      else {
         driving = true;
-        Robot.driveTrain.PIDDrive(currentPosition.distanceTo(currentWaypoint));
       }
       
-      if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE && waypointIndex <= (waypoints.size() - 2)) {
+      if (driving && !drivingCheck) {
+        drivingCheck = true;
+        startLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+        startRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+      }
+      
+        
+      if (driving) {
+       // driving = true;
+       // Robot.driveTrain.PIDDrive(currentPosition.distanceTo(currentWaypoint));
+      //  Robot.driveTrain.enableTurningControl(0, 1);
+        Robot.driveTrain.allDrive(0.6, 0);
+      }
+      
+      if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE/* Math.abs(((startLeft - leftEnc)  + (startRight - rightEnc))) / 2 >= startDist*/ && waypointIndex <= (waypoints.size() - 2)) {
         driving = false;
+        drivingCheck = false;
+        Robot.driveTrain.allDrive(0, 0);
+        
         waypointIndex += 1;
         
         currentWaypoint = waypoints.get(waypointIndex);
@@ -91,16 +131,28 @@ public class AlternativeDrivePathCommand extends Command {
          turn =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
         }
         
+        leftEnc = Robot.driveTrain.getRawEncoderDistance(DriveSide.LEFT);
+        rightEnc = Robot.driveTrain.getRawEncoderDistance(DriveSide.RIGHT);
         
         Robot.driveTrain.enableTurningControl(turn, 0.3);
+        
+        startDist = currentPosition.distanceTo(currentWaypoint);
       }
       
+      SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
+      SmartDashboard.putNumber("Final Turn", turn);
+      SmartDashboard.putNumber("Turn Error", Robot.driveTrain.turnError());
+      SmartDashboard.putNumber("Waypoint Index", waypointIndex);
+      SmartDashboard.putNumber("Distance from waypoint", Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint));
+      SmartDashboard.putBoolean("Driving", driving);
+      SmartDashboard.putNumber("Driving Delta", Math.abs(((startLeft - leftEnc)  + (startRight - rightEnc))) / 2);
+      SmartDashboard.putBoolean("Turning", turning);
       
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return waypointIndex == (waypoints.size() - 1);
+        return waypointIndex == (waypoints.size() - 1) && currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE;
     }
 
     // Called once after isFinished returns true

@@ -45,10 +45,10 @@ public class ElevatorCommand extends Command {
               if (elevator.getPosition() >= 64) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
+                elevator.set((oi.getElevatorUp()*oi.getElevatorUp() - oi.getElevatorDown()*oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
               }
               else {
-                elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
+                elevator.set(oi.getElevatorUp()*oi.getElevatorUp() - oi.getElevatorDown()*oi.getElevatorDown());
               }
             }
             else {
@@ -62,10 +62,10 @@ public class ElevatorCommand extends Command {
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
                 
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
+                elevator.set((oi.getElevatorUp()*oi.getElevatorUp() - oi.getElevatorDown()*oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
               }
               else {
-                elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
+                elevator.set(oi.getElevatorUp()*oi.getElevatorUp() - oi.getElevatorDown()*oi.getElevatorDown());
               }
             }
             else {
