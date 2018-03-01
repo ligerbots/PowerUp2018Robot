@@ -464,7 +464,10 @@ public DriveTrain() {
     return robotPosition;
   }
   
-
+  public void setPosition (double x, double y) {
+    positionX = x;
+    positionY = y;
+  }
 }
 
 

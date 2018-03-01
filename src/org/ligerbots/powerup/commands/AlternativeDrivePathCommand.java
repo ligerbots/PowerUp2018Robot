@@ -7,7 +7,6 @@ import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.RobotPosition;
-import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 
 /**
  *
@@ -27,11 +26,8 @@ public class AlternativeDrivePathCommand extends Command {
     
     double startDist;
     
-    double startLeft;
-    double startRight;
-    
-    double leftEnc;
-    double rightEnc;
+    double saveX;
+    double saveY;
     
     
     public AlternativeDrivePathCommand(List<FieldPosition> waypoints) {
@@ -72,15 +68,13 @@ public class AlternativeDrivePathCommand extends Command {
       SmartDashboard.putNumber("Final Turn", turn);
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
 
-      startDist = currentPosition.distanceTo(currentWaypoint);
-      
+      saveX = Robot.driveTrain.getRobotPosition().getX();
+      saveY = Robot.driveTrain.getRobotPosition().getY();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
       
-      leftEnc = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
-      rightEnc = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       
       currentPosition = Robot.driveTrain.getRobotPosition();
       
@@ -88,16 +82,16 @@ public class AlternativeDrivePathCommand extends Command {
       
       if (turning) {
         Robot.driveTrain.allDrive(0, -Robot.driveTrain.getTurnOutput());
-        driving = false;
+        //driving = false;
       }
-      else {
+      else {    
         driving = true;
       }
       
       if (driving && !drivingCheck) {
         drivingCheck = true;
-        startLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
-        startRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+        Robot.driveTrain.setPosition(saveX, saveY);
+        Robot.driveTrain.getRobotPosition();
       }
       
         
@@ -131,12 +125,10 @@ public class AlternativeDrivePathCommand extends Command {
          turn =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
         }
         
-        leftEnc = Robot.driveTrain.getRawEncoderDistance(DriveSide.LEFT);
-        rightEnc = Robot.driveTrain.getRawEncoderDistance(DriveSide.RIGHT);
-        
+        saveX = Robot.driveTrain.getRobotPosition().getX();
+        saveY = Robot.driveTrain.getRobotPosition().getY();
         Robot.driveTrain.enableTurningControl(turn, 0.3);
         
-        startDist = currentPosition.distanceTo(currentWaypoint);
       }
       
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
@@ -145,7 +137,6 @@ public class AlternativeDrivePathCommand extends Command {
       SmartDashboard.putNumber("Waypoint Index", waypointIndex);
       SmartDashboard.putNumber("Distance from waypoint", Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint));
       SmartDashboard.putBoolean("Driving", driving);
-      SmartDashboard.putNumber("Driving Delta", Math.abs(((startLeft - leftEnc)  + (startRight - rightEnc))) / 2);
       SmartDashboard.putBoolean("Turning", turning);
       
     }
