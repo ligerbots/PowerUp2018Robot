@@ -110,9 +110,9 @@ public class Elevator extends Subsystem {
   
   public void setPID () {
 	  if (elevatorPresent) {
-		  elevatorMaster.config_kP(0, 0.1, 0);
-		  elevatorMaster.config_kI(0, 0.001, 0);
-		  elevatorMaster.config_kD(0, 0.05, 0);
+		  elevatorMaster.config_kP(0, SmartDashboard.getNumber("Elevator P", 0.05), 0);
+		  elevatorMaster.config_kI(0, SmartDashboard.getNumber("Elevator I", 0.001), 0);
+		  elevatorMaster.config_kD(0, SmartDashboard.getNumber("Elevator D", 0.05), 0);
 	  }
   }
    // elevatorController.setSetpoint(requestedPosition);

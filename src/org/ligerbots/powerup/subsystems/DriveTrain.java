@@ -163,8 +163,8 @@ public DriveTrain() {
   }
   
   public void zeroEncoders() {
-    leftMaster.setSelectedSensorPosition(0, 0, 0);
-    rightMaster.setSelectedSensorPosition(0, 0, 0);
+    leftSlave.setSelectedSensorPosition(0, 0, 0);
+    rightSlave.setSelectedSensorPosition(0, 0, 0);
   }
 
   public void allDrive(double throttle, double rotate) {
@@ -211,6 +211,23 @@ public DriveTrain() {
     } else {
       return (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
           * RobotMap.WHEEL_CIRCUMFERENCE;
+    }
+  }
+  
+  public int getRawEncoderDistance(DriveSide driveSide) {
+    if (driveSide == DriveSide.LEFT) {
+      return leftSlave.getSelectedSensorPosition(0);
+    } else {
+      return rightSlave.getSelectedSensorPosition(0);
+    }
+  }
+  
+  public void setEncoderDistance(DriveSide driveSide, int dist) {
+    if (driveSide == DriveSide.LEFT) {
+      leftSlave.setSelectedSensorPosition(dist, 0, 0);
+    } else {
+      rightSlave.setSelectedSensorPosition(dist, 0, 0);
+
     }
   }
 
@@ -290,8 +307,8 @@ public DriveTrain() {
 	if (Math.abs(angleOffset) > 45) return (sign * 0.8);
     if (Math.abs(angleOffset) > 30) return (sign * 0.7);
     if (Math.abs(angleOffset) > 15) return (sign * 0.6);
-    if (Math.abs(angleOffset) > 5) return (sign * 0.3);
-    return (sign * 0.25);
+    if (Math.abs(angleOffset) > 5) return (sign * 0.6);
+    return (sign * 0.6);
   }
   
   public double turnError() {
@@ -334,10 +351,10 @@ public DriveTrain() {
 	  //   rightMaster.configAllowableClosedloopError(0, 5, 0);
     leftMaster.set(ControlMode.Position,
         leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
-            -dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+            - (dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE));
     rightMaster.set(ControlMode.Position,
         rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
-            + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
+            + (dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE));
     // leftSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 *
     // RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
     // rightSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 *

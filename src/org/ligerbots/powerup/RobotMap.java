@@ -39,7 +39,7 @@ public class RobotMap {
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
   public static final int REV_BLINKIN = 1;
-  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 2;
+  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 5;
   
   public static final int ULTRASONIC_LEFT_TRIGGER = 4;
   public static final int ULTRASONIC_LEFT_ECHO = 5;
@@ -49,4 +49,10 @@ public class RobotMap {
   
   public static final int PRESSURE_GAUGE = 0;	// Analog port zero
   public static final int LED_PWM_CHANNEL = 3;
+  
+  public static final double TOP_SPEED = 1.0;
+  public static final double RAMP_DOWN_SPEED = 0.6;
+  public static final double RAMP_DOWN_DIST = 10.0;
+  public static final double AUTO_ACCEEPTABLE_TURN_ERROR = 1;
+  
 }
