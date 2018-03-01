@@ -8,6 +8,7 @@
 package org.ligerbots.powerup;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -69,6 +70,10 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   XboxController xbox;
+  
+  Joystick elevatorController;
+  
+  
 
   public OI() {
     startingPosition = new SendableChooser<>();
@@ -84,7 +89,8 @@ public class OI {
     SmartDashboard.putData("SecondAction", secondAction);
 	    
     xbox = new XboxController(0);
-    
+    elevatorController = new Joystick(1);
+        
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
     
@@ -144,7 +150,7 @@ public class OI {
     }
   }
 
-public double getThrottle() {
+  public double getThrottle() {
     return -xbox.getY(GenericHID.Hand.kLeft);
   }
   
@@ -159,5 +165,9 @@ public double getThrottle() {
 
   public double getElevatorDown() {
     return xbox.getTriggerAxis(GenericHID.Hand.kLeft);
+  }
+  
+  public double getElevatorThrottle() {
+    return elevatorController.getThrottle();
   }
 }

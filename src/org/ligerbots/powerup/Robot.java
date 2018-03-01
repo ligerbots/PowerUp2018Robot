@@ -155,6 +155,10 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("Elevator I", 0.001);
     SmartDashboard.putNumber("Elevator D", 0.05);
     
+    SmartDashboard.setPersistent("Elevator P");
+    SmartDashboard.setPersistent("Elevator I");
+    SmartDashboard.setPersistent("Elevator D");
+    
     //CameraServer.getInstance().startAutomaticCapture();
     
     gameData = "";		// zero it here in case of restart
