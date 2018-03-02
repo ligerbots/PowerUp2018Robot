@@ -19,7 +19,7 @@ public class SimpleSwitchAuto extends CommandGroup {
             
      // addSequential(new ElevatorAuto(FieldMap.switchScoringHeight, 0.2));
       
-     // addSequential(new IntakeAuto(true, 0.65, 1.0));
+      addSequential(new IntakeAuto(true, 0.65, 1.0));
 
       
         // Add Commands here:

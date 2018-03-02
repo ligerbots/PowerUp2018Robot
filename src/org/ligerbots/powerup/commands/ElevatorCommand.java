@@ -37,7 +37,7 @@ public class ElevatorCommand extends Command {
 
   // Called repeatedly when this Command is scheduled to run
   protected void execute() {
-        if (!(Math.abs(oi.getElevatorUp()) <= 0.05 && Math.abs(oi.getElevatorDown()) <= 0.05)) {
+       /* if (!(Math.abs(oi.getElevatorUp()) <= 0.05 && Math.abs(oi.getElevatorDown()) <= 0.05)) {
           SmartDashboard.putBoolean("holding", false);
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
@@ -77,7 +77,9 @@ public class ElevatorCommand extends Command {
           elevator.holdPosition(position);
           SmartDashboard.putBoolean("holding", true);
           SmartDashboard.putNumber("Elevator Position", position);
-        }
+        }*/
+    
+        //elevator.holdPosition(oi.getElevatorThrottle() * 69.5);
     }
 
   // Make this return true when this Command no longer needs to run execute()

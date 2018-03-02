@@ -310,8 +310,8 @@ public DriveTrain() {
 	  
 	if (Math.abs(angleOffset) > 45) return (sign * 0.8);
     if (Math.abs(angleOffset) > 30) return (sign * 0.7);
-    if (Math.abs(angleOffset) > 15) return (sign * 0.6);
-    if (Math.abs(angleOffset) > 5) return (sign * 0.6);
+    if (Math.abs(angleOffset) > 15) return (sign * 0.63);
+    if (Math.abs(angleOffset) > 5) return (sign * 0.61);
     return (sign * 0.6);
   }
   
@@ -468,7 +468,10 @@ public DriveTrain() {
     return robotPosition;
   }
   
-
+  public void setPosition (double x, double y) {
+    positionX = x;
+    positionY = y;
+  }
 }
 
 
