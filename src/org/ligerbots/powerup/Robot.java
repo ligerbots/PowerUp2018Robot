@@ -151,7 +151,7 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putNumber("Turn Angle", 20.0);
     SmartDashboard.putNumber("Turn Tolerance", 1.0);
     
-    SmartDashboard.putNumber("Elevator P", 0.05);
+    SmartDashboard.putNumber("Elevator P", 0.1);
     SmartDashboard.putNumber("Elevator I", 0.001);
     SmartDashboard.putNumber("Elevator D", 0.05);
     

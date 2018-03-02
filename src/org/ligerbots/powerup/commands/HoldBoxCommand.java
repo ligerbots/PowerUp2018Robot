@@ -23,7 +23,6 @@ public class HoldBoxCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
       
-      Robot.intake.setSlave(false, Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD ? 0 : 0.75);
       Robot.intake.intakeOn(false, Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD ? 0 : 0.75);
       //how is Florida mark, is the taste of betrayal sweet?
       if ((Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD) && (Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD)) {
@@ -39,12 +38,10 @@ public class HoldBoxCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	// TODO: Since isFinished always returns false, this will never execute.
-        Robot.intake.setSlave(true, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-      Robot.intake.setSlave(true, 0);
     }
 }

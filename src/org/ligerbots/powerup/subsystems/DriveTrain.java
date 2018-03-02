@@ -81,7 +81,8 @@ public DriveTrain() {
 	System.out.println("DriveTrain constructed");
 
   SmartDashboard.putNumber("Elevator Up Accel", 2);
-  SmartDashboard.putNumber("Elevator Up Speed", 0.25);
+  SmartDashboard.putNumber("Elevator Up Speed", 0.5);
+  SmartDashboard.putNumber("Elevator Up Turn", 0.75);
 
   // This initial robot position will be overwritten by our autonomous selection
   // we only zero it out here for practice, where we go straight teleop

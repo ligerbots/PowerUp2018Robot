@@ -15,9 +15,15 @@ public class SimpleSwitchAuto extends CommandGroup {
       
       System.out.println("Starting Simple Switch");
       
-      addSequential(new AlternativeDrivePathCommand(Arrays.asList(new FieldPosition(0, 24), new FieldPosition(24, 24), new FieldPosition(24, 48))));
+     // addSequential(new ElevatorAuto(0.6, 0.1));
+      
+      addParallel(new HoldBoxCommand());
+      
+      addParallel(new ElevatorAuto(30.0, 1));
+      
+      addSequential(new AlternativeDrivePathCommand(/*FieldMap.generateCatmullRomSpline*/(Arrays.asList(/*new FieldPosition(0, 0),*/ new FieldPosition(0, 36), new FieldPosition(24, 36), new FieldPosition(24, 66)/*, new FieldPosition(0, 48)*/))));
             
-     // addSequential(new ElevatorAuto(FieldMap.switchScoringHeight, 0.2));
+      //addSequential(new ElevatorAuto(1.0, 0.2));
       
       addSequential(new IntakeAuto(true, 0.65, 1.0));
 

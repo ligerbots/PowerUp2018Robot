@@ -100,7 +100,7 @@ public class AlternativeDrivePathCommand extends Command {
        // driving = true;
        // Robot.driveTrain.PIDDrive(currentPosition.distanceTo(currentWaypoint));
       //  Robot.driveTrain.enableTurningControl(0, 1);
-        Robot.driveTrain.allDrive(0.6, 0);
+        Robot.driveTrain.allDrive(0.6, -Robot.driveTrain.getTurnOutput());
       }
       
       if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE/* Math.abs(((startLeft - leftEnc)  + (startRight - rightEnc))) / 2 >= startDist*/ && waypointIndex <= (waypoints.size() - 2)) {
@@ -130,6 +130,10 @@ public class AlternativeDrivePathCommand extends Command {
         saveY = Robot.driveTrain.getRobotPosition().getY();
         Robot.driveTrain.enableTurningControl(turn, 0.3);
         
+      }
+      
+      if (waypointIndex == waypoints.size() - 1) {
+        Robot.elevator.elevatorGo = true;
       }
       
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
