@@ -36,6 +36,7 @@ public class Elevator extends Subsystem {
                                  // (maintain 0 RPM)
   double pidOutput;
   double defaultSpeed = 0.05; // How fast it should go when it is moved up or down
+  public boolean elevatorGo = false;
   
   DigitalInput topLimitSwitch;
   DigitalInput bottomLimitSwitch;

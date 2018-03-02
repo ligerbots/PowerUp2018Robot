@@ -10,6 +10,8 @@ public class ElevatorAuto extends Command {
 
     double position; //inches
     double error; //also inches
+    double sign;
+    
     public ElevatorAuto(double position, double error) {
       this.position = position;
       this.error = error;
@@ -21,12 +23,19 @@ public class ElevatorAuto extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      
+      sign = Math.signum(position - Robot.elevator.getPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      Robot.elevator.holdPosition(position);
+      if (Robot.elevator.elevatorGo) {
+        if (Math.abs(position - Robot.elevator.getPosition()) >= 25) Robot.elevator.set(1.0 * sign);
+        else if (Math.abs(position - Robot.elevator.getPosition()) >= 15) Robot.elevator.set(0.6 * sign); 
+        else if (Math.abs(position - Robot.elevator.getPosition()) >= 10) Robot.elevator.set(0.3 * sign);
+        else Robot.elevator.set(0.15 * sign);
+      }
+
+      //Robot.elevator.holdPosition(position);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -36,6 +45,7 @@ public class ElevatorAuto extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+      Robot.elevator.elevatorGo = false;
     }
 
     // Called when another command which requires one or more of the same
