@@ -17,10 +17,11 @@ public class AutoCommandGroup extends CommandGroup {
     // 0 = none, we're just moving forward
     // 1 = place the crate we started with on either the switch or the scale
     // 2 = place the first crate, then pick up and place a second
-    public AutoCommandGroup(List<FieldPosition> wayPoints, int crates) {
+    public AutoCommandGroup(List<FieldPosition> wayPoints) {
       
       // move forward 8" to get us away from the wall
-      addSequential(new DriveDistance(8.0, 1.0, 1.0));
+      System.out.println("Auto Command Group starting");
+      addSequential(new BadDriveDistance(8.0));
     	
       // Check my math
       for (FieldPosition i: wayPoints) {
@@ -33,7 +34,9 @@ public class AutoCommandGroup extends CommandGroup {
         }
         addSequential(new TurnCommand(lowerQuadrants ? angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() 
             : Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection(), 0.3));
-        addSequential(new DriveDistance(Robot.driveTrain.getRobotPosition().distanceTo(i), 1.0, 1.0));
+        addSequential(new BadDriveDistance(Robot.driveTrain.getRobotPosition().distanceTo(i)));
+        System.out.println("Final turn: " + (lowerQuadrants ? angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection()));
+
       }
       
       // no more endAngle. The waypoints are placed to make sure the robot ends up square to the platform

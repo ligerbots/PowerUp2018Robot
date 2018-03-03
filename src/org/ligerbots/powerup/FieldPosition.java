@@ -1,5 +1,7 @@
 package org.ligerbots.powerup;
 
+import org.ligerbots.powerup.FieldPosition;
+
 public class FieldPosition {
 
   double x;
@@ -20,6 +22,10 @@ public class FieldPosition {
 
   public FieldPosition multiply(double xFactor, double yFactor) {
     return new FieldPosition(x * xFactor, y * yFactor);
+  }
+  
+  public FieldPosition multiply(double mxy) {
+    return multiply(mxy, mxy);
   }
 
   public double angleTo(FieldPosition other) {

@@ -1,16 +1,19 @@
 package org.ligerbots.powerup.subsystems;
 
+import org.ligerbots.powerup.Robot;
+import org.ligerbots.powerup.RobotMap;
+import org.ligerbots.powerup.commands.ElevatorCommand;
+
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.Faults;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.ligerbots.powerup.RobotMap;
 
 /**
  *
@@ -33,6 +36,7 @@ public class Elevator extends Subsystem {
                                  // (maintain 0 RPM)
   double pidOutput;
   double defaultSpeed = 0.05; // How fast it should go when it is moved up or down
+  public boolean elevatorGo = false;
   
   DigitalInput topLimitSwitch;
   DigitalInput bottomLimitSwitch;
@@ -57,7 +61,7 @@ public class Elevator extends Subsystem {
   }*/
   
   public Elevator() {
-
+	  
     topLimitSwitch = new DigitalInput(0);
     bottomLimitSwitch = new DigitalInput(1);
     elevatorMaster = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_1);
@@ -87,7 +91,13 @@ public class Elevator extends Subsystem {
  /* public void setSpeed(double requestedSpeed) {
      elevatorMaster.set(ControlMode.Velocity, requestedSpeed);
   }*/
-  public void zeroEncoder() {
+  
+  public void initDefaultCommand() {
+	if (Robot.elevatorCommand == null) Robot.elevatorCommand = new ElevatorCommand();
+    setDefaultCommand(Robot.elevatorCommand);
+  }
+
+  public void zeroEncoder() {	
 	  if (elevatorPresent) elevatorMaster.setSelectedSensorPosition(0, 0, 0);
   }
   
@@ -101,9 +111,9 @@ public class Elevator extends Subsystem {
   
   public void setPID () {
 	  if (elevatorPresent) {
-		  elevatorMaster.config_kP(0, 0.1, 0);
-		  elevatorMaster.config_kI(0, 0.001, 0);
-		  elevatorMaster.config_kD(0, 0.05, 0);
+		  elevatorMaster.config_kP(0, SmartDashboard.getNumber("Elevator P", 0.05), 0);
+		  elevatorMaster.config_kI(0, SmartDashboard.getNumber("Elevator I", 0.001), 0);
+		  elevatorMaster.config_kD(0, SmartDashboard.getNumber("Elevator D", 0.05), 0);
 	  }
   }
    // elevatorController.setSetpoint(requestedPosition);
@@ -138,11 +148,6 @@ public class Elevator extends Subsystem {
 		  SmartDashboard.putNumber("Elevator Slave Current", elevatorSlave.getOutputCurrent());
 	  }
 
-  }
-
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
   }
   
   public boolean isPresent() {

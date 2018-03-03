@@ -81,7 +81,8 @@ public DriveTrain() {
 	System.out.println("DriveTrain constructed");
 
   SmartDashboard.putNumber("Elevator Up Accel", 2);
-  SmartDashboard.putNumber("Elevator Up Speed", 0.25);
+  SmartDashboard.putNumber("Elevator Up Speed", 0.5);
+  SmartDashboard.putNumber("Elevator Up Turn", 0.75);
 
   // This initial robot position will be overwritten by our autonomous selection
   // we only zero it out here for practice, where we go straight teleop
@@ -106,8 +107,8 @@ public DriveTrain() {
   rightMaster.setSensorPhase(true);
   leftMaster.setSensorPhase(true);
   
-  leftMaster.configClosedloopRamp(0.3, 0);
-  rightMaster.configClosedloopRamp(0.3, 0);
+  //leftMaster.configClosedloopRamp(0.3, 0);
+  //rightMaster.configClosedloopRamp(0.3, 0);
 
   Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
       .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
@@ -127,8 +128,8 @@ public DriveTrain() {
  
 	if (pidTurn) {
 		turningController =
-        new PIDController(SmartDashboard.getNumber("DriveP", 0.045), SmartDashboard.getNumber("DriveI", 0.004),
-         			      SmartDashboard.getNumber("DriveD", 0.06), navx, output -> this.turnOutput = output);
+        new PIDController(SmartDashboard.getNumber("DriveP", 1.0), SmartDashboard.getNumber("DriveI", 0.000),
+         			      SmartDashboard.getNumber("DriveD", 0.0), navx, output -> this.turnOutput = output);
 	}
 
 	navx.registerCallback((long systemTimestamp, long sensorTimestamp,
@@ -163,8 +164,8 @@ public DriveTrain() {
   }
   
   public void zeroEncoders() {
-    leftMaster.setSelectedSensorPosition(0, 0, 0);
-    rightMaster.setSelectedSensorPosition(0, 0, 0);
+    leftSlave.setSelectedSensorPosition(0, 0, 0);
+    rightSlave.setSelectedSensorPosition(0, 0, 0);
   }
 
   public void allDrive(double throttle, double rotate) {
@@ -179,7 +180,7 @@ public DriveTrain() {
     else {
       leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
       rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
-      robotDrive.arcadeDrive(-throttle * SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
+      robotDrive.arcadeDrive(-throttle * SmartDashboard.getNumber("Elevator Up Speed", 0.5), -rotate * SmartDashboard.getNumber("Elevator Up Turn", 0.75));
     }
   }
 
@@ -213,12 +214,29 @@ public DriveTrain() {
           * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
+  
+  public int getRawEncoderDistance(DriveSide driveSide) {
+    if (driveSide == DriveSide.LEFT) {
+      return leftSlave.getSelectedSensorPosition(0);
+    } else {
+      return rightSlave.getSelectedSensorPosition(0);
+    }
+  }
+  
+  public void setEncoderDistance(DriveSide driveSide, int dist) {
+    if (driveSide == DriveSide.LEFT) {
+      leftSlave.setSelectedSensorPosition(dist, 0, 0);
+    } else {
+      rightSlave.setSelectedSensorPosition(dist, 0, 0);
+
+    }
+  }
 
   public void printEncoder() {
     SmartDashboard.putNumber("Left Encoder",
-        leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
+        leftSlave.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
     SmartDashboard.putNumber("Right Encoder",
-        rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
+        rightSlave.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
     //SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
 
@@ -284,22 +302,23 @@ public DriveTrain() {
   }
 
   public double getTurnOutput() {
-	  angleOffset = turnError();
-	  double sign = - Math.signum(angleOffset);  // Note the minus!
+  angleOffset = turnError();
+  double sign = - Math.signum(angleOffset);  // Note the minus!
 	  
-	  if (Math.abs(angleOffset) > 45) return (sign * 0.7);
-    if (Math.abs(angleOffset) > 30) return (sign * 0.6);
-    if (Math.abs(angleOffset) > 15) return (sign * 0.5);
-    if (Math.abs(angleOffset) > 5) return (sign * 0.3);
-    return (sign * 0.25);
+	if (Math.abs(angleOffset) > 45) return (sign * 0.8);
+    if (Math.abs(angleOffset) > 30) return (sign * 0.7);
+    if (Math.abs(angleOffset) > 15) return (sign * 0.63);
+    if (Math.abs(angleOffset) > 5) return (sign * 0.61);
+    return (sign * 0.6);
   }
   
   public double turnError() {
     if (pidTurn) return turningController.getError();
 
-    double turnError = (Math.abs(targetAngle - rotation) + wrapCorrection) % 360;
+    double turnError = (Math.abs((targetAngle - rotation) + wrapCorrection))% 360;
     if (turnError > 180) turnError -= 360;
     else if (turnError < -180) turnError += 360;
+    turnError *= Math.signum(angleOffset);
     return turnError;
   }
   
@@ -327,16 +346,16 @@ public DriveTrain() {
 
   public void PIDDrive(double dist) {
 
-    leftMaster.setSelectedSensorPosition(0, 0, 0);
-    rightMaster.setSelectedSensorPosition(0, 0, 0);
- //   leftMaster.configAllowableClosedloopError(0, 5, 0);
- //   rightMaster.configAllowableClosedloopError(0, 5, 0);
+    //leftMaster.setSelectedSensorPosition(0, 0, 0);
+    //rightMaster.setSelectedSensorPosition(0, 0, 0);
+	  //   leftMaster.configAllowableClosedloopError(0, 5, 0);
+	  //   rightMaster.configAllowableClosedloopError(0, 5, 0);
     leftMaster.set(ControlMode.Position,
-        /*leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE*/
-            -dist * 1024.0 * 1.25 / RobotMap.WHEEL_CIRCUMFERENCE);
+        leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
+            - (dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE));
     rightMaster.set(ControlMode.Position,
-        /*rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
-            +*/ dist * 1024.0 * 1.25 / RobotMap.WHEEL_CIRCUMFERENCE);
+        rightMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
+            + (dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE));
     // leftSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 *
     // RobotMap.WHEEL_CIRCUMFERENCE + dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE);
     // rightSlave.set(ControlMode.Position, leftMaster.getSelectedSensorPosition(0) / 1024.0 *
@@ -446,7 +465,10 @@ public DriveTrain() {
     return robotPosition;
   }
   
-
+  public void setPosition (double x, double y) {
+    positionX = x;
+    positionY = y;
+  }
 }
 
 
