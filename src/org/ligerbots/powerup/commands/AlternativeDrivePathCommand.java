@@ -69,6 +69,9 @@ public class AlternativeDrivePathCommand extends Command {
       SmartDashboard.putNumber("Final Turn", turn);
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
 
+      System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
+	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
+
       saveX = Robot.driveTrain.getRobotPosition().getX();
       saveY = Robot.driveTrain.getRobotPosition().getY();
     }
@@ -144,6 +147,10 @@ public class AlternativeDrivePathCommand extends Command {
       SmartDashboard.putBoolean("Driving", driving);
       SmartDashboard.putBoolean("Turning", turning);
       
+      if ((Robot.ticks % 5) == 0)
+      System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
+	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
