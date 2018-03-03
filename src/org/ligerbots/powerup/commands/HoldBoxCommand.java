@@ -22,8 +22,13 @@ public class HoldBoxCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	
+        if ((Robot.ticks % 5) == 0)
+            System.out.println("Executing HoldBox Command");
+
+
       
-      Robot.intake.intakeOn(false, Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD ? 0 : 0.75);
+      Robot.intake.intakeOn(false, Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD ? 0.2 : 0.75);
       //how is Florida mark, is the taste of betrayal sweet?
       if ((Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD) && (Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD)) {
         System.out.println("cube is in"); //haha mark, see my programming prowess

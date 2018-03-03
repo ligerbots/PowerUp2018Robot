@@ -46,6 +46,7 @@ public class DriveTrain extends Subsystem {
   double previousTurnError;
   TalonID[] talons;
   boolean pidTurn = false;
+  double limitedThrottle;
 
   public enum DriveSide {
     LEFT, RIGHT
@@ -175,16 +176,21 @@ public DriveTrain() {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
 	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
-    if (Robot.elevator.getPosition() < 50) {
+    if (Robot.elevator.getPosition() < 40) {
       leftMaster.configOpenloopRamp(0, 0);
       rightMaster.configOpenloopRamp(0, 0);
       robotDrive.arcadeDrive(-throttle, -rotate);
     }
     else {
-      leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
-      rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+//      leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+//      rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
       // TODO: We might also need to scale the rotation speed.
-      robotDrive.arcadeDrive(-throttle * SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
+
+	  //(,0);
+    	limitedThrottle = -throttle * (1- ((Math.min(Robot.elevator.getPosition(),70)-40)/60.0));
+	  robotDrive.arcadeDrive(limitedThrottle, -rotate);
+	  SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
+	  //SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }
   }
 

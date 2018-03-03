@@ -15,6 +15,8 @@ public class ElevatorCommand extends Command {
   double position;
   Elevator elevator;
   OI oi;
+  private long waitStartTicks = 0;
+  private boolean waiting = false;
 
   public ElevatorCommand() {
     
@@ -39,6 +41,7 @@ public class ElevatorCommand extends Command {
   protected void execute() {
         if (!(Math.abs(oi.getElevatorUp()) <= 0.05 && Math.abs(oi.getElevatorDown()) <= 0.05)) {
           SmartDashboard.putBoolean("holding", false);
+          waiting = false;
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
             if (!(elevator.getPosition() > 95)) {
@@ -74,10 +77,17 @@ public class ElevatorCommand extends Command {
           }
         }
         else {
-          elevator.holdPosition(position);
-          SmartDashboard.putBoolean("holding", true);
-          SmartDashboard.putNumber("Elevator Position", position);
+        	if (!waiting) {
+        		waiting = true;
+        		waitStartTicks = Robot.ticks;
+        	} else {
+        		if (Robot.ticks - waitStartTicks > SmartDashboard.getNumber("Hold Wait Ticks", 0)) {
+                    elevator.holdPosition(position);
+                    SmartDashboard.putBoolean("holding", true);
+        		}
+        	}
         }
+        SmartDashboard.putNumber("Elevator Position", position);
     }
 
   // Make this return true when this Command no longer needs to run execute()
