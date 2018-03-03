@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.ligerbots.powerup.RobotPosition;
+import org.ligerbots.powerup.RobotPosition.Action;
 import org.ligerbots.powerup.FieldPosition;
 
 /*
@@ -41,10 +42,10 @@ public class FieldMap {
     // reached in a straight line from any starting position. In practice, some might not
     // work so well. We depend on the user to not choose a waypoint that would drive
     // clear across the field, or that is likely to collide with an alliance partner
-    public static ArrayList<FieldPosition> wayPointsA = new ArrayList<FieldPosition>();
-    public static ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
-    public static ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
-    public static ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
+    public static ArrayList<RobotPosition> wayPointsA = new ArrayList<RobotPosition>();
+    public static ArrayList<RobotPosition> wayPointsB = new ArrayList<RobotPosition>();
+    public static ArrayList<RobotPosition> wayPointsAlpha = new ArrayList<RobotPosition>();
+    public static ArrayList<RobotPosition> wayPointsBeta = new ArrayList<RobotPosition>();
 
     
     FieldMap () {
@@ -56,12 +57,12 @@ public class FieldMap {
         startPositions[5] = new RobotPosition(rW2, -96.0, 0.0);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new RobotPosition(139.5-rW2, 54.8, 0.0);
-        switchScoringSpot[1] = new RobotPosition(167.3, 76.0+rL2, -90.0);
+        switchScoringSpot[0] = new RobotPosition(139.5-rW2, 54.8, 0.0, Action.PUT_ON_SWITCH);
+        switchScoringSpot[1] = new RobotPosition(167.3, 76.0+rL2, -90.0, Action.PUT_ON_SWITCH);
         //switchScoringSpot[2] = new RobotPosition(209.9+rW2, 54.8, 180.0);
         
-        scaleScoringSpot[0] = new RobotPosition(297.3-rW2, 84.4, 0.0);
-        scaleScoringSpot[1] = new RobotPosition(323.2, 92.6+rL2, -90.0);
+        scaleScoringSpot[0] = new RobotPosition(297.3-rW2, 84.4, 0.0, Action.PUT_ON_SCALE);
+        scaleScoringSpot[1] = new RobotPosition(323.2, 92.6+rL2, -90.0, Action.PUT_ON_SCALE);
                 
         // TODO -- create waypoints corresponding to each scoring position
         //         that will ensure the robot doesn't crash into things
@@ -71,27 +72,29 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new FieldPosition(90, 54.8));
+        wayPointsA.add(new RobotPosition(90, 54.8));
         wayPointsA.add(switchScoringSpot[0]);
         
-        wayPointsB.add(new FieldPosition(143.0, 114.0));
-        wayPointsB.add(new FieldPosition(143.0+62.0, 114.0));
+        wayPointsB.add(new RobotPosition(143.0, 114.0));
+        wayPointsB.add(new RobotPosition(143.0+62.0, 114.0));
         wayPointsB.add(switchScoringSpot[1]);
         
-        wayPointsAlpha.add(new FieldPosition(120.0, 100.0));
-        wayPointsAlpha.add(new FieldPosition(185.0, 100.0));
-        wayPointsAlpha.add(new FieldPosition(240.0, 84.4));
+        wayPointsAlpha.add(new RobotPosition(120.0, 100.0));
+        wayPointsAlpha.add(new RobotPosition(185.0, 100.0));
+        wayPointsAlpha.add(new RobotPosition(240.0, 84.4));
         wayPointsAlpha.add(scaleScoringSpot[0]);
 
-        wayPointsBeta.add(new FieldPosition(120.0, -00.0));
-        wayPointsBeta.add(new FieldPosition(237.5, 135.0));
-        wayPointsBeta.add(new FieldPosition(240.0, 84.4));
-        wayPointsBeta.add(new FieldPosition(323.2, 132.6));
+        wayPointsBeta.add(new RobotPosition(120.0, -00.0));
+        wayPointsBeta.add(new RobotPosition(237.5, 135.0));
+        wayPointsBeta.add(new RobotPosition(240.0, 84.4));
+        wayPointsBeta.add(new RobotPosition(323.2, 132.6));
         wayPointsBeta.add(scaleScoringSpot[1]);
+        
+        FieldPosition x = wayPointsBeta.get(0);
 
     };
     
-    
+  
     
     public static List<FieldPosition> generateCatmullRomSpline(List<FieldPosition> controlPoints) {
       LinkedList<FieldPosition> output = new LinkedList<>();
