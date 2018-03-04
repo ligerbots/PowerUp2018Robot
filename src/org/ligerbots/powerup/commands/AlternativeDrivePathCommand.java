@@ -21,6 +21,7 @@ public class AlternativeDrivePathCommand extends Command {
     double angleToWaypoint;
     boolean lowerQuadrants;
     double turn;
+    double drive;
     boolean turning;
     boolean drivingCheck = false;
     boolean driving;
@@ -69,8 +70,8 @@ public class AlternativeDrivePathCommand extends Command {
       SmartDashboard.putNumber("Final Turn", turn);
       SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
 
-      saveX = Robot.driveTrain.getRobotPosition().getX();
-      saveY = Robot.driveTrain.getRobotPosition().getY();
+      saveX = currentPosition.getX();
+      saveY = currentPosition.getY();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -126,8 +127,8 @@ public class AlternativeDrivePathCommand extends Command {
          turn =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
         }
         
-        saveX = Robot.driveTrain.getRobotPosition().getX();
-        saveY = Robot.driveTrain.getRobotPosition().getY();
+        saveX = currentPosition.getX();
+        saveY = currentPosition.getY();
         Robot.driveTrain.enableTurningControl(turn, 0.3);
         
       }

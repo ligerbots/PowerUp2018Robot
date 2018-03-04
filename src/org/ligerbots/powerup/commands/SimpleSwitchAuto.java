@@ -21,13 +21,13 @@ public class SimpleSwitchAuto extends CommandGroup {
       
       addParallel(new ElevatorAuto(30.0, 1));
       
-      addSequential(new AlternativeDrivePathCommand(/*FieldMap.generateCatmullRomSpline*/(Arrays.asList(/*new FieldPosition(0, 0),*/ new FieldPosition(0, 36), new FieldPosition(24, 36), new FieldPosition(24, 66)/*, new FieldPosition(0, 48)*/))));
+      addSequential(new DrivePathCommand(/*FieldMap.generateCatmullRomSpline*/(Arrays.asList(/*new FieldPosition(0, 0),*/ new FieldPosition(0, 36), new FieldPosition(24, 36), new FieldPosition(24, 66)/*, new FieldPosition(24, 90)*/))));
             
       //addSequential(new ElevatorAuto(1.0, 0.2));
       
       addSequential(new IntakeAuto(true, 0.65, 1.0));
 
-      
+
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

@@ -16,23 +16,24 @@ import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 public class DrivePathCommand extends Command {
 
     List<FieldPosition> waypoints;
+    int waypointIndex = 0;
+    
     FieldPosition currentWaypoint;
     RobotPosition currentPosition;
+    
     boolean lowerQuadrants;
-    double prevLeft;
-    double prevRight;
-    double leftInches;
-    double rightInches;
-    double delta;
     double angleError;
     double angleToWaypoint;
-    double driveSpeed;
-    double angle;
-    int waypointIndex = 0;
-    boolean turn = false;
-    boolean drive = false;
-    boolean driving = false;
-    TurnCommand turnCommand;
+    
+    double startAbsDistance;
+    
+    double turn;
+    double drive;
+    
+    double rampUpDist;
+    double rampDownDist;
+    double rampUpDelta;
+    double rampDownDelta;
     
     public DrivePathCommand(List<FieldPosition> waypoints) {
       this.waypoints = waypoints;
@@ -42,10 +43,15 @@ public class DrivePathCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+      
+      startAbsDistance = Robot.driveTrain.getAbsoluteDistanceTraveled();
+      
+      rampUpDist = 24.0;
+      rampDownDist = 60.0;
+      
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
-      //  prevLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
-      //  prevRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+
       angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
       
       if (currentWaypoint.getY() - Robot.driveTrain.getRobotPosition().getY() >= 0) {
@@ -53,88 +59,69 @@ public class DrivePathCommand extends Command {
       } else {
         lowerQuadrants = true;
       }
-     
-      if (lowerQuadrants) {
-        angleError = angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
-      } else {
-       angleError =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
-      }
       
-      
-      Robot.driveTrain.enableTurningControl(angleError, 0.3);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      
-	  double distanceToWaypoint;
-      /*currentPosition.add(Math.sin(Math.toRadians(angle)) * delta, Math.cos(Math.toRadians(angle)) * delta)*/
-      currentPosition = Robot.driveTrain.getRobotPosition();
-      distanceToWaypoint = currentPosition.distanceTo(currentWaypoint);
-      
-      SmartDashboard.putNumber("Current Position X", currentPosition.getX());
-      SmartDashboard.putNumber("Current Position Y", currentPosition.getY());
-      
-      SmartDashboard.putNumber("Waypoint Index", waypointIndex);
-      SmartDashboard.putNumber("Angle Error", angleError);
-      SmartDashboard.putNumber("Distance to Waypoint", distanceToWaypoint);
-      SmartDashboard.putNumber("Turn Output", Robot.driveTrain.getTurnOutput());
-      SmartDashboard.putNumber("Yaw", Robot.driveTrain.getYaw());
-      
-      /*angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
-      angleError = (angleToWaypoint - currentPosition.getDirection() + 360) % 360;
-      if (angleError > 180) {
-        angleError -= 360;
-      }*/
-      
-    /*  angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
-      if (currentWaypoint.getY() - Robot.driveTrain.getRobotPosition().getY() >= 0) {
-        lowerQuadrants = false;
-      } else {
-        lowerQuadrants = true;
-      }
      
       if (lowerQuadrants) {
         angleError = angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
       } else {
-       angleError =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
-      }*/
+       angleError = Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
+      }
       
-      if (Math.abs(Robot.driveTrain.turnError()) > 4.0 && !driving) {
-        System.out.println("Angle Error: " + Math.abs(Robot.driveTrain.turnError()) + "    Turn: " + turn);
-        drive = false;
-        turn = true;
+      turn = angleError * 0.01 + Math.signum(angleError) * 0.4;
+      
+      double rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
+      double rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
+      
+      if (Math.abs(angleError) >= 30) {
+        drive = 0.0;
       } else {
-        drive = true;
-        turn = false;
+        if (rampDownDelta < rampDownDist) {
+          drive = (rampDownDelta * (0.5 - 0.1) / rampDownDist)
+              + 0.35;
+        } else if (rampUpDelta < rampUpDist) {
+          drive = (Math.abs(rampUpDelta) * (0.5 - 0.1) / rampUpDist) + 0.4;
+        }
+
       }
       
-      if (!turn && !driving) {
-    	System.out.print("Starting drive " + currentPosition.toString());
-    	System.out.println(" to " + -distanceToWaypoint);
-    	
-        Robot.driveTrain.PIDDrive(-distanceToWaypoint);
-        driving = true;
-      }
+      Robot.driveTrain.allDrive(drive, turn);
       
-      if (turn) {
-        Robot.driveTrain.autoTurn(Robot.driveTrain.getTurnOutput());
-      }
+      SmartDashboard.putNumber("Drive Speed", drive);
+      SmartDashboard.putNumber("Turn Speed", turn);
+      SmartDashboard.putNumber("Angle Error", angleError);
+      SmartDashboard.putNumber("Waypoint Index", waypointIndex);
+
       
-      if (distanceToWaypoint < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) {
-        turn = false;
-        drive = false;
-        driving = false;
+      if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE && waypointIndex <= (waypoints.size() - 2)) {
+        Robot.driveTrain.allDrive(0, 0);
+        
         waypointIndex += 1;
+        
         currentWaypoint = waypoints.get(waypointIndex);
-        angleToWaypoint = 90 - currentPosition.angleTo(currentWaypoint);
-        angleError = (angleToWaypoint - currentPosition.getDirection() + 360) % 360;
-        Robot.driveTrain.enableTurningControl(angleError, 1);
-        System.out.println("New Waypoint");
+        
+        angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
+        
+        if (currentWaypoint.getY() - Robot.driveTrain.getRobotPosition().getY() >= 0) {
+          lowerQuadrants = false;
+        } else {
+          lowerQuadrants = true;
+        }
+       
+        if (lowerQuadrants) {
+          turn = angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
+        } else {
+         turn =  Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection();
+        }        
       }
       
-      prevLeft = leftInches;
-      prevRight = rightInches;
+      if (waypointIndex == waypoints.size() - 1) {
+        Robot.elevator.elevatorGo = true;  
+      }
+	  
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -145,6 +132,7 @@ public class DrivePathCommand extends Command {
     // Called once after isFinished returns true
     protected void end() {
       Robot.driveTrain.disablePID();
+      System.out.println("Finished");
     }
     
     // Called when another command which requires one or more of the same

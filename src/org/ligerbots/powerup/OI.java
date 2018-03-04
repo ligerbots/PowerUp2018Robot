@@ -71,11 +71,15 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
   XboxController xbox;
   
+
+  
   Joystick elevatorController;
   
   
 
   public OI() {
+    
+    
     startingPosition = new SendableChooser<>();
     populateSelect(startingPosition, Robot.StartingPosition.class);
     SmartDashboard.putData("SartingPosition", startingPosition);
@@ -121,8 +125,7 @@ public class OI {
     JoystickPov povTriggerTop = new JoystickPov(xbox, Direction.NORTH);
     povTriggerTop.whenPressed(new DriveDistance(10.0, 0.5, 1.0));
 
-    JoystickPov povTriggerBottom = new JoystickPov(xbox, Direction.SOUTH);
-    povTriggerBottom.whenPressed(new BadDriveDistance(10.0));
+    
     
     System.out.println("OI constructed");
 
@@ -149,6 +152,7 @@ public class OI {
       }
     }
   }
+  
 
   public double getThrottle() {
     return -xbox.getY(GenericHID.Hand.kLeft);
@@ -161,6 +165,10 @@ public class OI {
 
   public double getElevatorUp() {
     return xbox.getTriggerAxis(GenericHID.Hand.kRight);
+  }
+  
+  public boolean getDown() {
+    return xbox.getStartButton();
   }
 
   public double getElevatorDown() {

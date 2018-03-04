@@ -469,6 +469,11 @@ public DriveTrain() {
     positionX = x;
     positionY = y;
   }
+  
+  public double getAbsoluteDistanceTraveled() {
+    return absoluteDistanceTraveled;
+  }
+
 }
 
 
