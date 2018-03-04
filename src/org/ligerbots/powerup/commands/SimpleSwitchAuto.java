@@ -2,6 +2,8 @@ package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import java.util.Arrays;
+import java.util.List;
+
 import org.ligerbots.powerup.FieldMap;
 import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
@@ -17,17 +19,17 @@ public class SimpleSwitchAuto extends CommandGroup {
       
      // addSequential(new ElevatorAuto(0.6, 0.1));
       
-      addParallel(new HoldBoxCommand());
+     // addParallel(new HoldBoxCommand());
       
-      addParallel(new ElevatorAuto(30.0, 1));
+      //addParallel(new ElevatorAuto(30.0, 1));
       
-      addSequential(new AlternativeDrivePathCommand(/*FieldMap.generateCatmullRomSpline*/(Arrays.asList(/*new FieldPosition(0, 0),*/ new FieldPosition(0, 36), new FieldPosition(24, 36), new FieldPosition(24, 66)/*, new FieldPosition(0, 48)*/))));
+      addSequential(new DrivePathCommand(Arrays.asList(new FieldPosition(10, -10))));
             
       //addSequential(new ElevatorAuto(1.0, 0.2));
       
-      addSequential(new IntakeAuto(true, 0.65, 1.0));
+      //addSequential(new IntakeAuto(true, 0.65, 1.0));
 
-      
+
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

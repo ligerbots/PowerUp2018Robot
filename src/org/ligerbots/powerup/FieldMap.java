@@ -12,6 +12,10 @@ import org.ligerbots.powerup.FieldPosition;
  * 
  * To understand this map, refer to the diagram at
  * http://team.ligerbots.com/home/2018/2018-game-info
+ * 
+ * ALL THE COORDINATES HERE ARE Y, X !!!!!!!!!!!!!
+ * not x,y -- because we got the coordinate system confused.
+ * 
  */
 
 public class FieldMap {
@@ -26,7 +30,7 @@ public class FieldMap {
     public static final double rW2 = robotWidth/2.0;
     public static final double rL2 = robotLength/2.0;
     
-    public RobotPosition[] startPositions = new RobotPosition[5];   // position 0 is not used! (because the diagrom is 1-based)
+    public RobotPosition[] startPositions = new RobotPosition[6];   // position 0 is not used! (because the diagrom is 1-based)
     
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
@@ -42,27 +46,27 @@ public class FieldMap {
     // reached in a straight line from any starting position. In practice, some might not
     // work so well. We depend on the user to not choose a waypoint that would drive
     // clear across the field, or that is likely to collide with an alliance partner
-    public static ArrayList<RobotPosition> wayPointsA = new ArrayList<RobotPosition>();
-    public static ArrayList<RobotPosition> wayPointsB = new ArrayList<RobotPosition>();
+    public static ArrayList<FieldPosition> wayPointsA = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
     public static ArrayList<RobotPosition> wayPointsAlpha = new ArrayList<RobotPosition>();
     public static ArrayList<RobotPosition> wayPointsBeta = new ArrayList<RobotPosition>();
 
     
     FieldMap () {
         // start positions are in terms of the robot center
-        startPositions[1] = new RobotPosition(rW2, 117.6, 0.0);  // 1
-        startPositions[2] = new RobotPosition(rW2, 81.0, 0.0);   // 2
-        startPositions[3] = new RobotPosition(rW2, -7.6, 0.0);   // 3
-        startPositions[4] = new RobotPosition(rW2, -54.0, 0.0);  // 4
-        startPositions[5] = new RobotPosition(rW2, -96.0, 0.0);  // 5
+        startPositions[1] = new RobotPosition(117.6, rL2, 0.0);  // 1
+        startPositions[2] = new RobotPosition(81.0, rL2, 0.0);   // 2
+        startPositions[3] = new RobotPosition(-7.6, rL2, 0.0);   // 3
+        startPositions[4] = new RobotPosition(-54.0, rL2, 0.0);  // 4
+        startPositions[5] = new RobotPosition(-96.0, rL2, 0.0);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new RobotPosition(139.5-rW2, 54.8, 0.0, Action.PUT_ON_SWITCH);
-        switchScoringSpot[1] = new RobotPosition(167.3, 76.0+rL2, -90.0, Action.PUT_ON_SWITCH);
+        switchScoringSpot[0] = new RobotPosition(54.8, 139.5-rL2, 0.0, Action.PUT_ON_SWITCH);
+        switchScoringSpot[1] = new RobotPosition(76.0+rL2, 165.0, -90.0, Action.PUT_ON_SWITCH);
         //switchScoringSpot[2] = new RobotPosition(209.9+rW2, 54.8, 180.0);
         
-        scaleScoringSpot[0] = new RobotPosition(297.3-rW2, 84.4, 0.0, Action.PUT_ON_SCALE);
-        scaleScoringSpot[1] = new RobotPosition(323.2, 92.6+rL2, -90.0, Action.PUT_ON_SCALE);
+        scaleScoringSpot[0] = new RobotPosition(84.4, 297.3-rW2, 0.0, Action.PUT_ON_SCALE);
+        scaleScoringSpot[1] = new RobotPosition(92.6+rL2, 323.2, -90.0, Action.PUT_ON_SCALE);
                 
         // TODO -- create waypoints corresponding to each scoring position
         //         that will ensure the robot doesn't crash into things
@@ -72,22 +76,22 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new RobotPosition(90, 54.8));
+        wayPointsA.add(new RobotPosition(54.8, 90));
         wayPointsA.add(switchScoringSpot[0]);
         
-        wayPointsB.add(new RobotPosition(143.0, 114.0));
-        wayPointsB.add(new RobotPosition(143.0+62.0, 114.0));
+        wayPointsB.add(new RobotPosition(126.0, 120.0));
+        wayPointsB.add(new RobotPosition(126.0, 167.0));
         wayPointsB.add(switchScoringSpot[1]);
         
-        wayPointsAlpha.add(new RobotPosition(120.0, 100.0));
-        wayPointsAlpha.add(new RobotPosition(185.0, 100.0));
-        wayPointsAlpha.add(new RobotPosition(240.0, 84.4));
+        wayPointsAlpha.add(new RobotPosition(100.0, 120.0));
+        wayPointsAlpha.add(new RobotPosition(100.0, 185.0));
+        wayPointsAlpha.add(new RobotPosition(84.4, 240.0));
         wayPointsAlpha.add(scaleScoringSpot[0]);
 
-        wayPointsBeta.add(new RobotPosition(120.0, -00.0));
-        wayPointsBeta.add(new RobotPosition(237.5, 135.0));
-        wayPointsBeta.add(new RobotPosition(240.0, 84.4));
-        wayPointsBeta.add(new RobotPosition(323.2, 132.6));
+        wayPointsBeta.add(new RobotPosition(-0.0, 120.0));
+        wayPointsBeta.add(new RobotPosition(135.0, 237.5));
+        wayPointsBeta.add(new RobotPosition(84.4, 240.0));
+        wayPointsBeta.add(new RobotPosition(132.6, 323.2));
         wayPointsBeta.add(scaleScoringSpot[1]);
         
         FieldPosition x = wayPointsBeta.get(0);

@@ -16,21 +16,18 @@ public class RobotPosition extends FieldPosition {
     protected double direction;
     Action action;
 
-    @SuppressWarnings("parametername")
     public RobotPosition(double x, double y) {
       super(x, y);
       this.direction = 0.0;
       action = Action.NOTHING;
     }
     
-    @SuppressWarnings("parametername")
   public RobotPosition(double x, double y, double direction) {
     super(x, y);
     this.direction = direction;
     action = Action.NOTHING;
   }
   
-  @SuppressWarnings("parametername")
   public RobotPosition(double x, double y, double direction, Action action) {
     super(x, y);
     this.direction = direction;

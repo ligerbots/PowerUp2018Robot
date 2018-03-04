@@ -57,6 +57,7 @@ public class Robot extends IterativeRobot {
   public static LEDStrip ledstrip;
   public static LEDStripCommand ledStripCommand;
   public static ProximitySensor proximitySensor;
+  public static FieldMap fieldMap;
   
   public enum StartingPosition {
 	One("1"),
@@ -120,7 +121,9 @@ public class Robot extends IterativeRobot {
   public void robotInit() {
     
     intake = new Intake();
-    elevator = new Elevator();	 // init this before DriveTrain for now
+    elevator = new Elevator();
+    fieldMap = new FieldMap();
+// init this before DriveTrain for now
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     ledstrip = new LEDStrip();
@@ -132,7 +135,7 @@ public class Robot extends IterativeRobot {
     elevatorCommand = new ElevatorCommand();
     
     // zero everything before we start moving
-    Robot.driveTrain.zeroPosition();
+	Robot.driveTrain.zeroYaw();
 
     // chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
@@ -177,14 +180,11 @@ public class Robot extends IterativeRobot {
 
     // Switch cmaera to Switch mode
     SmartDashboard.putString("vision/active_mode", "switch");
-    
-    Robot.driveTrain.zeroPosition();
-    
+   
   }
 
   @Override
   public void disabledPeriodic() {
-    Robot.driveTrain.zeroPosition();
     commonPeriodic();  
     Scheduler.getInstance().run();
   }
@@ -206,6 +206,8 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
+    Robot.driveTrain.setPosition(/*fieldMap.startPositions[1].x, fieldMap.startPositions[1].y*/0,0);
+	Robot.driveTrain.zeroYaw();
 
     alliance = DriverStation.getInstance().getAlliance();
 	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
