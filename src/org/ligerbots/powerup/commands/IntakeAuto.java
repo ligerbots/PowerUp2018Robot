@@ -13,29 +13,41 @@ public class IntakeAuto extends Command {
     double speed;
     
     double startTime;
+    
+    double height;
+    
+    boolean check = false;
   
-    public IntakeAuto(boolean reverse, double speed, double time) {
+    public IntakeAuto(boolean reverse, double speed, double time, double height) {
+      requires (Robot.intake);
       this.reverse = reverse;
       this.speed = speed;
       this.time = time;
+      this.height = height;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      startTime = Robot.time();
       
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      Robot.intake.intakeOn(reverse, speed);
+      if (Robot.elevator.getPosition() >= height && !check) {
+        startTime = Robot.time();
+        check = true;
+      }
+      if (Robot.elevator.getPosition() >= height) {
+        Robot.intake.intakeOn(reverse, speed);
+      }
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Robot.time() - startTime) >= time;
+        if (!check) return false;
+        else return (Robot.time() - startTime) >= time;
     }
 
     // Called once after isFinished returns true

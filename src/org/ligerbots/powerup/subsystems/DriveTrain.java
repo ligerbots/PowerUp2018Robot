@@ -160,7 +160,7 @@ public DriveTrain() {
   public double getRoll() {
  return navx.getRoll();
   }
-
+  
   public void talonCurrent() {
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
         .forEach((WPI_TalonSRX talon) -> SmartDashboard
@@ -315,11 +315,11 @@ public DriveTrain() {
   angleOffset = turnError();
   double sign = - Math.signum(angleOffset);  // Note the minus!
 	  
-	if (Math.abs(angleOffset) > 45) return (sign * 0.8);
-    if (Math.abs(angleOffset) > 30) return (sign * 0.7);
-    if (Math.abs(angleOffset) > 15) return (sign * 0.6);
-    if (Math.abs(angleOffset) > 5) return (sign * 0.55);
-    return (sign * 0.54);
+	if (Math.abs(angleOffset) > 45) return (sign * 0.9);
+    if (Math.abs(angleOffset) > 30) return (sign * 0.8);
+    if (Math.abs(angleOffset) > 15) return (sign * 0.7);
+    if (Math.abs(angleOffset) > 5) return (sign * 0.675);
+    return (sign * 0.67);
   }
   
   public double turnError() {

@@ -19,15 +19,15 @@ public class SimpleSwitchAuto extends CommandGroup {
       
      // addSequential(new ElevatorAuto(0.6, 0.1));
       
-     // addParallel(new HoldBoxCommand());
+      addParallel(new HoldBoxCommand());
       
-      //addParallel(new ElevatorAuto(30.0, 1));
+      addParallel(new ElevatorAuto(69.0, 1));
       
-      addSequential(new DrivePathCommand(Arrays.asList(new FieldPosition(10, -10))));
+      addSequential(new DrivePathCommand(FieldMap.wayPointsBeta));
             
       //addSequential(new ElevatorAuto(1.0, 0.2));
       
-      //addSequential(new IntakeAuto(true, 0.65, 1.0));
+      addSequential(new IntakeAuto(true, 0.75, 1.0, 65.0));
 
 
         // Add Commands here:

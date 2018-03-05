@@ -31,9 +31,11 @@ public class ElevatorAuto extends Command {
       if (Robot.elevator.elevatorGo) {
         if (Math.abs(position - Robot.elevator.getPosition()) >= 25) Robot.elevator.set(1.0 * sign);
         else if (Math.abs(position - Robot.elevator.getPosition()) >= 15) Robot.elevator.set(0.6 * sign); 
-        else if (Math.abs(position - Robot.elevator.getPosition()) >= 10) Robot.elevator.set(0.3 * sign);
-        else Robot.elevator.set(0.15 * sign);
+        else if (Math.abs(position - Robot.elevator.getPosition()) >= 10) Robot.elevator.set(0.5 * sign);
+        else Robot.elevator.set(0.4 * sign);
       }
+      System.out.println(Robot.elevator.getPosition());
+
 
       //Robot.elevator.holdPosition(position);
     }
@@ -45,6 +47,7 @@ public class ElevatorAuto extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+      Robot.elevator.set(0);
       Robot.elevator.elevatorGo = false;
     }
 

@@ -206,8 +206,8 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("vision/active_mode", "switch");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
-    Robot.driveTrain.setPosition(/*fieldMap.startPositions[1].x, fieldMap.startPositions[1].y*/0,0);
-	Robot.driveTrain.zeroYaw();
+    Robot.driveTrain.setPosition(fieldMap.startPositions[1].x, fieldMap.startPositions[1].y);
+    Robot.driveTrain.zeroYaw();
 
     alliance = DriverStation.getInstance().getAlliance();
 	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
