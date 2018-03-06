@@ -30,7 +30,7 @@ public class FieldMap {
     public static final double rW2 = robotWidth/2.0;
     public static final double rL2 = robotLength/2.0;
     
-    public static RobotPosition[] startPositions = new RobotPosition[6];   // position 0 is not used! (because the diagrom is 1-based)
+    public static RobotPosition[] startPositions = new RobotPosition[6];   // position 0 is not used! (because the diagram is 1-based)
     
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
@@ -88,12 +88,10 @@ public class FieldMap {
         wayPointsAlpha.add(new RobotPosition(84.4, 240.0));
         wayPointsAlpha.add(scaleScoringSpot[0]);
 
-        wayPointsBeta.add(new RobotPosition(117.6, 0));
         wayPointsBeta.add(new RobotPosition(128.0, 165.0));
         wayPointsBeta.add(new RobotPosition(128.0, 240.0));
         wayPointsBeta.add(new RobotPosition(130.0, 310.0));
         wayPointsBeta.add(scaleScoringSpot[1]);
-        wayPointsBeta.add(new RobotPosition(110.0, 310.0));
 
         
         FieldPosition x = wayPointsBeta.get(0);

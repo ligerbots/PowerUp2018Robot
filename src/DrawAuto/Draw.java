@@ -18,9 +18,15 @@ public class Draw extends JPanel {
   FieldPosition startPos;
   List<FieldPosition> waypoints;
   
-  public Draw (FieldPosition startPos, List<FieldPosition> waypoints, boolean spline) {
+  public Draw (FieldPosition startPos, List<FieldPosition> waypoints, boolean spline, boolean flip) {
     this.spline = spline;
     this.waypoints = waypoints;
+    if (flip) {
+      for (int i = 0; i < this.waypoints.size(); i += 1) {
+        this.waypoints.set(i, this.waypoints.get(i).multiply(-1, 1));
+      }
+    }
+    this.waypoints.forEach(i -> System.out.println(i.getX()));
     this.startPos = startPos;
   }
   
