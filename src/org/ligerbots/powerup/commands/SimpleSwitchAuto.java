@@ -1,6 +1,7 @@
 package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,17 +20,34 @@ public class SimpleSwitchAuto extends CommandGroup {
       
      // addSequential(new ElevatorAuto(0.6, 0.1));
       
-      addParallel(new HoldBoxCommand());
+  //    addParallel(new HoldBoxCommand());
       
-      addParallel(new ElevatorAuto(69.0, 1));
+  //    addParallel(new ElevatorAuto(69.0, 1));
       
-      addSequential(new DrivePathCommand(FieldMap.wayPointsBeta));
+  //    addSequential(new DrivePathCommand(FieldMap.wayPointsBeta));
             
       //addSequential(new ElevatorAuto(1.0, 0.2));
       
-      addSequential(new IntakeAuto(true, 0.75, 1.0, 65.0));
+  //    addSequential(new IntakeAuto(true, 0.75, 1.0, 65.0));
+      
+      double[] data = SmartDashboard.getNumberArray("vision/target_info", new double[]{0.0,0.0,0.0,0.0,0.0,0.0});
+      
+      System.out.println("Turn " + Math.toDegrees(data[4]));
+      
+  //    addSequential(new TurnCommand(Math.toDegrees(data[4]), 0.3));
+      
+      addParallel(new IntakePistonCommand(true));
+      
+      System.out.println("Distance: " + data[3]);
 
-
+ //     addSequential(new BadDriveDistance(data[3]));
+      
+      
+      addSequential(new DriveToCube());
+      
+      addParallel(new IntakePistonCommand(false));
+      
+      addParallel(new HoldBoxCommand());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

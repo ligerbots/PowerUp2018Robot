@@ -179,7 +179,7 @@ public class Robot extends IterativeRobot {
   public void disabledInit() {
 
     // Switch cmaera to Switch mode
-    SmartDashboard.putString("vision/active_mode", "switch");
+    SmartDashboard.putString("vision/active_mode", "cube");
    
   }
 
@@ -203,7 +203,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
 
-	SmartDashboard.putString("vision/active_mode", "switch");
+	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
     Robot.driveTrain.setPosition(fieldMap.startPositions[1].x, fieldMap.startPositions[1].y);

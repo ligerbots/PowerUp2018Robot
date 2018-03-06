@@ -315,11 +315,11 @@ public DriveTrain() {
   angleOffset = turnError();
   double sign = - Math.signum(angleOffset);  // Note the minus!
 	  
-	if (Math.abs(angleOffset) > 45) return (sign * 0.9);
+	if (Math.abs(angleOffset) > 45) return (sign * 0.85);
     if (Math.abs(angleOffset) > 30) return (sign * 0.8);
     if (Math.abs(angleOffset) > 15) return (sign * 0.7);
-    if (Math.abs(angleOffset) > 5) return (sign * 0.675);
-    return (sign * 0.67);
+    if (Math.abs(angleOffset) > 5) return (sign * 0.6);
+    return (sign * 0.55);
   }
   
   public double turnError() {
