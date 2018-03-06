@@ -18,6 +18,8 @@ import java.util.Arrays;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.Robot.StartingPosition;
 import org.ligerbots.powerup.commands.BadDriveDistance;
+import org.ligerbots.powerup.commands.CameraSelectionCommand;
+import org.ligerbots.powerup.commands.CameraToggleCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
@@ -70,6 +72,7 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   XboxController xbox;
+  Joystick farm;
   
 
   
@@ -94,6 +97,7 @@ public class OI {
 	    
     xbox = new XboxController(0);
     elevatorController = new Joystick(1);
+    farm = new Joystick(2);
         
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
@@ -125,6 +129,23 @@ public class OI {
     JoystickPov povTriggerTop = new JoystickPov(xbox, Direction.NORTH);
     povTriggerTop.whenPressed(new DriveDistance(10.0, 0.5, 1.0));
 
+    JoystickPov povTriggerDown = new JoystickPov(xbox, Direction.SOUTH);
+    povTriggerDown.whenPressed(new CameraToggleCommand());
+
+    
+    JoystickButton farmOne = new JoystickButton(farm, 1);
+    
+    farmOne.whenPressed(new CameraSelectionCommand("driver"));
+    JoystickButton farmTwo = new JoystickButton(farm,2);
+    
+    farmTwo.whenPressed(new CameraSelectionCommand("intake"));
+    
+    JoystickButton farmThree = new JoystickButton(farm, 6);
+    
+    farmThree.whenPressed(new CameraSelectionCommand("switch"));
+    JoystickButton farmFour = new JoystickButton(farm, 7);
+    
+    farmFour.whenPressed(new CameraSelectionCommand("cube"));
     
     
     System.out.println("OI constructed");
