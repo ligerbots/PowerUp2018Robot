@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class CameraToggleCommand extends Command {
-
     public CameraToggleCommand() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -19,6 +18,7 @@ public class CameraToggleCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+      System.out.println("Camera Toggling");
     	switch (SmartDashboard.getString("vision/active_mode", "driver")) {
     	case "driver":
         	SmartDashboard.putString("vision/active_mode", "intake");
@@ -36,12 +36,11 @@ public class CameraToggleCommand extends Command {
         	SmartDashboard.putString("vision/active_mode", "driver");
         	break;
     	}
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
