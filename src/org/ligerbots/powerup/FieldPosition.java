@@ -6,10 +6,24 @@ public class FieldPosition {
 
   double x;
   double y;
+  public Action action;
+  
+  public enum Action {
+    NOTHING, 
+    ELEVATOR,
+    REVERSE
+  }
 
   public FieldPosition(double x, double y) {
     this.x = x;
     this.y = y;
+    this.action = Action.NOTHING;
+  }
+  
+  public FieldPosition(double x, double y, Action action) {
+    this.x = x;
+    this.y = y;
+    this.action = action;
   }
 
   public FieldPosition add(FieldPosition other) {

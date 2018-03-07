@@ -40,13 +40,14 @@ import org.ligerbots.powerup.subsystems.ProximitySensor;
 public class Robot extends IterativeRobot {
 
   Command autonomousCommand;
+  CommandGroup auto;
   SendableChooser<Command> chooser = new SendableChooser<>();
   public DriverStation.Alliance alliance;	// Red or Blue
   // Game data -- the field configuration
   // L
   
   public static long ticks = 0;
-  public String gameData;
+  public static String gameData;
   
   public static Intake intake;
   public static DriveTrain driveTrain;
@@ -63,7 +64,8 @@ public class Robot extends IterativeRobot {
 	One("1"),
 	Two("2"),
 	Three("3"),
-	Four("4");
+	Four("4"),
+    FIVE("5");
 	    
 	public final String name;
 	StartingPosition(String name) {
@@ -213,13 +215,13 @@ public class Robot extends IterativeRobot {
 	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
 	//do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
 	//while (gameData.length() == 0);
-
+    
+      
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);
 	
-	CommandGroup auto;
 	
-	auto = new SimpleSwitchAuto();
+	auto = new SimpleSwitchAuto(FirstAction.ScaleBeta, SecondAction.Nothing);
     
     autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
     
@@ -258,8 +260,8 @@ public class Robot extends IterativeRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (autonomousCommand != null) {
-      autonomousCommand.cancel();
+    if (auto != null) {
+      auto.cancel();
     }
     
     // Switch cmaera to Driver mode
@@ -272,6 +274,7 @@ public class Robot extends IterativeRobot {
     ledStripCommand.start();
 
   }
+  
 
   /**
    * This function is called periodically during operator control.

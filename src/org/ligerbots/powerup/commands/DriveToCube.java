@@ -21,6 +21,8 @@ public class DriveToCube extends Command {
     double turn;
     double drive;
     double driveDist;
+    
+    double[] empty = new double[] {0.0,0.0,0.0,0.0,0.0,0.0};
     double[] data;
   
     public DriveToCube() {
@@ -34,7 +36,7 @@ public class DriveToCube extends Command {
       startLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       startRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       
-      driveDist = SmartDashboard.getNumberArray("vision/target_info", new double[] {0.0,0.0,0.0,0.0,0.0,0.0})[3] - 8.0;
+      driveDist = SmartDashboard.getNumberArray("vision/target_info", empty)[3] - 8.0;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -45,7 +47,7 @@ public class DriveToCube extends Command {
       
       delta = ((currentRight - startRight) + (currentLeft - startLeft)) / 2;
      
-      data = SmartDashboard.getNumberArray("vision/target_info", new double[] {0.0,0.0,0.0,0.0,0.0,0.0});
+      data = SmartDashboard.getNumberArray("vision/target_info", empty);
 
       turn = Math.toDegrees(data[4]) * 0.01 + Math.signum(data[4]) * 0.42;
       

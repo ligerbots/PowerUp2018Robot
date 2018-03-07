@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import org.ligerbots.powerup.FieldMap;
 import org.ligerbots.powerup.FieldPosition;
 
 public class Draw extends JPanel {
@@ -84,11 +83,7 @@ public class Draw extends JPanel {
       }
       
       g.fillRect(136 + (int)(waypoints.get(waypoints.size()-1).getX() * scale) - 5, 537 - (int)(waypoints.get(waypoints.size()-1).getY() * scale) - 5, 10, 10);
-    }
-    //g.drawLine(5, 5, 10, 10);
-    
-    //g.fillRect(50, 50, 100, 100);
-    
+    }    
   }
   
   @Override

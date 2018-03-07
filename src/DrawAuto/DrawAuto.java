@@ -14,7 +14,7 @@ public class DrawAuto {
       @SuppressWarnings("unused")
       FieldMap fieldMap = new FieldMap(); 
       
-      Draw points = new Draw(FieldMap.startPositions[1], FieldMap.wayPointsBeta, false, true);
+      Draw points = new Draw(FieldMap.startPositions[5], FieldMap.wayPointsBeta, false, false);
       JFrame frame = new JFrame("Points");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.add(points);

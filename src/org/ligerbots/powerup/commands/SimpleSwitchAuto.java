@@ -8,15 +8,92 @@ import java.util.List;
 import org.ligerbots.powerup.FieldMap;
 import org.ligerbots.powerup.FieldPosition;
 import org.ligerbots.powerup.Robot;
+import org.ligerbots.powerup.Robot.FirstAction;
+import org.ligerbots.powerup.Robot.SecondAction;
 
 /**
  *
  */
 public class SimpleSwitchAuto extends CommandGroup {
 
-    public SimpleSwitchAuto() {
+    public SimpleSwitchAuto(FirstAction first, SecondAction second) {
       
-      System.out.println("Starting Simple Switch");
+      List<FieldPosition> tempWaypoints;
+      
+      addSequential(new BadDriveDistance(5.0));
+      
+      switch (first) {
+        case DriveForward:
+          addSequential(new BadDriveDistance(125.0));
+          break;
+        case SwitchA:
+          if (Robot.gameData.charAt(0) == 'L') {
+            tempWaypoints = FieldMap.wayPointsA;
+            for (int i = 0; i < tempWaypoints.size(); i += 1) {
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+            }
+          }
+          else {
+            tempWaypoints = FieldMap.wayPointsA;
+          }
+          addParallel(new HoldBoxCommand());
+          addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 1));
+          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 1.0));
+          break;
+        case SwitchB:
+          if (Robot.gameData.charAt(0) == 'L') {
+            tempWaypoints = FieldMap.wayPointsB;
+            for (int i = 0; i < tempWaypoints.size(); i += 1) {
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+            }
+          }
+          else {
+            tempWaypoints = FieldMap.wayPointsB;
+          }
+          addParallel(new HoldBoxCommand());
+          addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 1));
+          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 1.0));
+          break;
+        case ScaleAlpha:
+          if (Robot.gameData.charAt(1) == 'L') {
+            tempWaypoints = FieldMap.wayPointsAlpha;
+            for (int i = 0; i < tempWaypoints.size(); i += 1) {
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+            }
+          }
+          else {
+            tempWaypoints = FieldMap.wayPointsAlpha;
+          }
+          addParallel(new HoldBoxCommand());
+          addParallel(new ElevatorAuto(FieldMap.scaleScoringHeight, 1));
+          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.scaleScoringHeight - 1.5));
+          break;
+        case ScaleBeta:
+          if (Robot.gameData.charAt(1) == 'L') {
+            tempWaypoints = FieldMap.wayPointsBeta;
+            for (int i = 0; i < tempWaypoints.size(); i += 1) {
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+            }
+          }
+          else {
+            tempWaypoints = FieldMap.wayPointsBeta;
+          }
+          addParallel(new HoldBoxCommand());
+          addParallel(new ElevatorAuto(FieldMap.scaleScoringHeight, 1));
+          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.scaleScoringHeight - 1.5));
+          break;
+        default:
+          break;
+          
+      }
+          
+          
+          
+          System.out.println("Starting Simple Switch");
       
      // addSequential(new ElevatorAuto(0.6, 0.1));
       

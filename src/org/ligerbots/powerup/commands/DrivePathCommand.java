@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.List;
 import org.ligerbots.powerup.FieldPosition;
+import org.ligerbots.powerup.FieldPosition.Action;
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.RobotPosition;
@@ -68,8 +69,8 @@ public class DrivePathCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      
-      angleError = 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
+          
+      angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
       
       if (angleError > 180) angleError -= 360;
       else if (angleError < -180) angleError += 360;
@@ -83,13 +84,13 @@ public class DrivePathCommand extends Command {
       if (Math.abs(angleError) >= 30) {
         drive = 0.0;
       } else {
-        if (rampDownDelta < rampDownDist) {
-          drive = (rampDownDelta * (0.4) / rampDownDist)
-              + 0.45;
-        } else if (rampUpDelta < rampUpDist) {
-          drive = (Math.abs(rampUpDelta) * (0.5) / rampUpDist) + 0.6;
-        }
-
+          if (rampDownDelta < rampDownDist) {
+            drive = (rampDownDelta * (0.4) / rampDownDist)
+                + 0.45;
+          } else if (rampUpDelta < rampUpDist) {
+            drive = (Math.abs(rampUpDelta) * (0.5) / rampUpDist) + 0.6;
+          }
+          drive = (waypoints.get(waypointIndex).action == Action.REVERSE) ? drive * -1.0 : drive;
       }
       
       Robot.driveTrain.allDrive(drive, turn);
@@ -113,6 +114,7 @@ public class DrivePathCommand extends Command {
 
       if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE || Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) > oldDist)
  && waypointIndex <= (waypoints.size() - 2)) {
+        
         Robot.driveTrain.allDrive(0, 0);
         
         waypointIndex += 1;
@@ -123,15 +125,12 @@ public class DrivePathCommand extends Command {
         
         System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
 	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
-        
-        
-        oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
       }
       
       
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
 
-      if (waypointIndex == waypoints.size() - 1) {
+      if (waypoints.get(waypointIndex).action == Action.ELEVATOR) {
         Robot.elevator.elevatorGo = true;  
       }
 	  
