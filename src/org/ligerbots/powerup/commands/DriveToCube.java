@@ -49,7 +49,7 @@ public class DriveToCube extends Command {
      
       data = SmartDashboard.getNumberArray("vision/target_info", empty);
 
-      turn = Math.toDegrees(data[4]) * 0.01 + Math.signum(data[4]) * 0.42;
+      turn = Math.toDegrees(data[4]) * 0.01 + Math.signum(data[4]) * 0.42; //Robot doesn't really turn unless value is somewhere around 0.55. 0.42 seems to work
       
       if (Math.abs(Math.toDegrees(data[4])) > 20) {
         drive = 0.0;
