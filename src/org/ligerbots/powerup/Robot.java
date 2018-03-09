@@ -208,7 +208,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
-    Robot.driveTrain.setPosition(fieldMap.startPositions[1].x, fieldMap.startPositions[1].y);
+    Robot.driveTrain.setPosition(-fieldMap.startPositions[1].x, fieldMap.startPositions[1].y);
     Robot.driveTrain.zeroYaw();
 
     alliance = DriverStation.getInstance().getAlliance();
@@ -216,6 +216,7 @@ public class Robot extends IterativeRobot {
 	//do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
 	//while (gameData.length() == 0);
     
+    gameData = "LLL";
       
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);

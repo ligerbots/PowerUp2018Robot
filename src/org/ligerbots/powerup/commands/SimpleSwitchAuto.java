@@ -15,6 +15,8 @@ import org.ligerbots.powerup.Robot.SecondAction;
  *
  */
 public class SimpleSwitchAuto extends CommandGroup {
+  
+   // REMEMBER TO SWITCH SIGNS AND STUFF (if u don't know what this means for some reason don't do anything / ask Mark 
 
     public SimpleSwitchAuto(FirstAction first, SecondAction second) {
       
@@ -30,7 +32,7 @@ public class SimpleSwitchAuto extends CommandGroup {
           if (Robot.gameData.charAt(0) == 'L') {
             tempWaypoints = FieldMap.wayPointsA;
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
             }
           }
           else {
@@ -45,7 +47,7 @@ public class SimpleSwitchAuto extends CommandGroup {
           if (Robot.gameData.charAt(0) == 'L') {
             tempWaypoints = FieldMap.wayPointsB;
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
             }
           }
           else {
@@ -54,7 +56,7 @@ public class SimpleSwitchAuto extends CommandGroup {
           addParallel(new HoldBoxCommand());
           addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 1));
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 1.0));
+          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 3.0));
           break;
         case ScaleAlpha:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -75,7 +77,7 @@ public class SimpleSwitchAuto extends CommandGroup {
           if (Robot.gameData.charAt(1) == 'L') {
             tempWaypoints = FieldMap.wayPointsBeta;
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
             }
           }
           else {
@@ -106,6 +108,7 @@ public class SimpleSwitchAuto extends CommandGroup {
       //addSequential(new ElevatorAuto(1.0, 0.2));
       
   //    addSequential(new IntakeAuto(true, 0.75, 1.0, 65.0));
+          
       
       double[] data = SmartDashboard.getNumberArray("vision/target_info", new double[]{0.0,0.0,0.0,0.0,0.0,0.0});
       

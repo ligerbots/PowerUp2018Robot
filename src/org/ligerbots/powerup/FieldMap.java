@@ -80,7 +80,7 @@ public class FieldMap {
         wayPointsA.add(switchScoringSpot[0]);
         
         wayPointsB.add(new RobotPosition(126.0, 120.0));
-        wayPointsB.add(new RobotPosition(126.0, 150.0));
+        wayPointsB.add(new FieldPosition(126.0, 150.0, FieldPosition.Action.ELEVATOR));
         wayPointsB.add(switchScoringSpot[1]);
         
         wayPointsAlpha.add(new RobotPosition(100.0, 120.0));

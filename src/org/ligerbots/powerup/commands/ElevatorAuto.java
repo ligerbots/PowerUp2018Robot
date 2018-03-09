@@ -34,7 +34,7 @@ public class ElevatorAuto extends Command {
         else if (Math.abs(position - Robot.elevator.getPosition()) >= 10) Robot.elevator.set(0.5 * sign);
         else Robot.elevator.set(0.4 * sign);
       }
-      System.out.println(Robot.elevator.getPosition());
+     // System.out.println(Robot.elevator.getPosition());
 
 
       //Robot.elevator.holdPosition(position);

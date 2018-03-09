@@ -28,6 +28,8 @@ public class DrivePathCommand extends Command {
     double angleError;
     double angleToWaypoint;
     
+    boolean finished;
+    
     double startAbsDistance;
     
     double turn;
@@ -50,6 +52,7 @@ public class DrivePathCommand extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
       
+      finished = false;
       startAbsDistance = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
       rampUpDist = 24.0;
@@ -105,32 +108,41 @@ public class DrivePathCommand extends Command {
       
       if ((Robot.ticks % 4) == 0) {
 
-    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f\n",
+    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f\n",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
-    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint));
+    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist);
       }
 
       
 
-      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE || Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) > oldDist)
- && waypointIndex <= (waypoints.size() - 2)) {
+      if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
+ && waypointIndex <= (waypoints.size() - 2) || Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist >= 1.0) {
         
-        Robot.driveTrain.allDrive(0, 0);
         
-        waypointIndex += 1;
+        if (waypointIndex == waypoints.size() - 1) {
+          finished = true;
+        }
+        else {
         
-        currentWaypoint = waypoints.get(waypointIndex);
+          Robot.driveTrain.allDrive(0, 0);
+          
+          waypointIndex += 1;
+                    
+          currentWaypoint = waypoints.get(waypointIndex);
+          
+          angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
+          
+          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
+  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
+        }
         
-        angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
-        
-        System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
-	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
       }
       
       
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
 
       if (waypoints.get(waypointIndex).action == Action.ELEVATOR) {
+        System.out.println("elevator go");
         Robot.elevator.elevatorGo = true;  
       }
 	  
@@ -138,7 +150,7 @@ public class DrivePathCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return waypointIndex >= (waypoints.size() - 1) && currentPosition.distanceTo(waypoints.get(waypoints.size() - 1)) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE;
+        return (waypointIndex >= (waypoints.size() - 1) && currentPosition.distanceTo(waypoints.get(waypoints.size() - 1)) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) || finished;
     }
 
     // Called once after isFinished returns true

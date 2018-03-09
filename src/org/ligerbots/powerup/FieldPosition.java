@@ -38,6 +38,10 @@ public class FieldPosition {
     return new FieldPosition(x * xFactor, y * yFactor);
   }
   
+  public FieldPosition multiply(double xFactor, double yFactor, Action action) {
+    return new FieldPosition(x * xFactor, y * yFactor, action);
+  }
+  
   public FieldPosition multiply(double mxy) {
     return multiply(mxy, mxy);
   }
