@@ -21,7 +21,7 @@ import org.ligerbots.powerup.FieldPosition;
 public class FieldMap {
     
     public static final double scaleScoringHeight = 70.0;   // 70" is our max elevator height
-    public static final double switchScoringHeight = 18.0;
+    public static final double switchScoringHeight = 20.0;
     
     // Robot dimensions with bumpers
     public static final double robotWidth = 27.125 + 7.0;
@@ -35,7 +35,7 @@ public class FieldMap {
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
     
-    public RobotPosition[] switchScoringSpot = new RobotPosition[3];    
+    public FieldPosition[] switchScoringSpot = new FieldPosition[3];    
     public RobotPosition[] scaleScoringSpot = new RobotPosition[2]; 
 
     public RobotPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
@@ -56,12 +56,12 @@ public class FieldMap {
         // start positions are in terms of the robot center
         startPositions[1] = new RobotPosition(117.6, rL2, 0.0);  // 1
         startPositions[2] = new RobotPosition(81.0, rL2, 0.0);   // 2
-        startPositions[3] = new RobotPosition(-7.6, rL2, 0.0);   // 3
+        startPositions[3] = new RobotPosition(7.6, rL2, 0.0);   // 3
         startPositions[4] = new RobotPosition(-54.0, rL2, 0.0);  // 4
         startPositions[5] = new RobotPosition(-96.0, rL2, 0.0);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new RobotPosition(60.8, 139.5-rL2, 0.0, Action.PUT_ON_SWITCH);
+        switchScoringSpot[0] = new FieldPosition(44.8, 139.5-rL2);
         switchScoringSpot[1] = new RobotPosition(82.0+rL2, 150.0, -90.0, Action.PUT_ON_SWITCH);
         //switchScoringSpot[2] = new RobotPosition(209.9+rW2, 54.8, 180.0);
         
@@ -76,7 +76,7 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new RobotPosition(60.8, 90));
+        wayPointsA.add(new FieldPosition(44.8, 90, FieldPosition.Action.ELEVATOR));
         wayPointsA.add(switchScoringSpot[0]);
         
         wayPointsB.add(new RobotPosition(126.0, 120.0));

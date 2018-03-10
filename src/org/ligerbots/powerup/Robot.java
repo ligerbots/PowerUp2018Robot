@@ -20,6 +20,7 @@ import org.ligerbots.powerup.commands.AutoCommandGroup;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
+import org.ligerbots.powerup.commands.ElevatorAuto;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.SimpleSwitchAuto;
@@ -208,7 +209,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
-    Robot.driveTrain.setPosition(-fieldMap.startPositions[1].x, fieldMap.startPositions[1].y);
+    Robot.driveTrain.setPosition(fieldMap.startPositions[3].x, fieldMap.startPositions[3].y);
     Robot.driveTrain.zeroYaw();
 
     alliance = DriverStation.getInstance().getAlliance();
@@ -222,9 +223,11 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("Game Data", gameData);
 	
 	
-	auto = new SimpleSwitchAuto(FirstAction.ScaleBeta, SecondAction.Nothing);
+	auto = new SimpleSwitchAuto(FirstAction.SwitchA, SecondAction.Nothing);
     
-    autonomousCommand = new DrivePathCommand(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)));
+	
+	
+    autonomousCommand = new ElevatorAuto(30, 1);
     
     //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
 

@@ -11,6 +11,7 @@ public class ElevatorAuto extends Command {
     double position; //inches
     double error; //also inches
     double sign;
+    boolean go;
     
     public ElevatorAuto(double position, double error) {
       this.position = position;
@@ -18,7 +19,16 @@ public class ElevatorAuto extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
       requires (Robot.elevator);
-      
+      this.go = false;
+    }
+    
+    public ElevatorAuto(double position, double error, boolean go) {
+      this.position = position;
+      this.error = error;
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+      requires (Robot.elevator);
+      this.go = go;
     }
 
     // Called just before this Command runs the first time
@@ -28,7 +38,8 @@ public class ElevatorAuto extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      if (Robot.elevator.elevatorGo) {
+      if (Robot.elevator.elevatorGo) go = true;
+      if (go) {
         if (Math.abs(position - Robot.elevator.getPosition()) >= 25) Robot.elevator.set(1.0 * sign);
         else if (Math.abs(position - Robot.elevator.getPosition()) >= 15) Robot.elevator.set(0.6 * sign); 
         else if (Math.abs(position - Robot.elevator.getPosition()) >= 10) Robot.elevator.set(0.5 * sign);
@@ -47,8 +58,9 @@ public class ElevatorAuto extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-      Robot.elevator.set(0);
+      Robot.elevator.holdPosition(Robot.elevator.getPosition());
       Robot.elevator.elevatorGo = false;
+      go = false;
     }
 
     // Called when another command which requires one or more of the same

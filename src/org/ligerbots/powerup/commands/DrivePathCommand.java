@@ -72,6 +72,8 @@ public class DrivePathCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+      
+     // angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
           
       angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
       
@@ -79,19 +81,19 @@ public class DrivePathCommand extends Command {
       else if (angleError < -180) angleError += 360;
       
       
-      turn = angleError * 0.01 + Math.signum(angleError) * 0.45;
+      turn = angleError * 0.01 + Math.signum(angleError) * 0.5;
       
       double rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
       double rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
       
-      if (Math.abs(angleError) >= 30) {
+      if (Math.abs(angleError) >= 20) {
         drive = 0.0;
       } else {
           if (rampDownDelta < rampDownDist) {
             drive = (rampDownDelta * (0.4) / rampDownDist)
                 + 0.45;
           } else if (rampUpDelta < rampUpDist) {
-            drive = (Math.abs(rampUpDelta) * (0.5) / rampUpDist) + 0.6;
+            drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.6;
           }
           drive = (waypoints.get(waypointIndex).action == Action.REVERSE) ? drive * -1.0 : drive;
       }
@@ -106,17 +108,17 @@ public class DrivePathCommand extends Command {
       SmartDashboard.putNumber("WaypointX", currentWaypoint.getX());
       SmartDashboard.putNumber("WaypointY", currentWaypoint.getY());
       
-      if ((Robot.ticks % 4) == 0) {
+      if ((Robot.ticks % 1) == 0) {
 
-    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f\n",
+    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f\n",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
-    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist);
+    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);
       }
 
       
 
-      if (currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
- && waypointIndex <= (waypoints.size() - 2) || Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist >= 1.0) {
+      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
+ && waypointIndex <= (waypoints.size() - 2)) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.0 && Math.abs(angleError) <= 10.0)) {
         
         
         if (waypointIndex == waypoints.size() - 1) {
@@ -132,8 +134,10 @@ public class DrivePathCommand extends Command {
           
           angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
           
-          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
-  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
+          angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
+          
+          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f\n",
+  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError);
         }
         
       }
@@ -142,7 +146,6 @@ public class DrivePathCommand extends Command {
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
 
       if (waypoints.get(waypointIndex).action == Action.ELEVATOR) {
-        System.out.println("elevator go");
         Robot.elevator.elevatorGo = true;  
       }
 	  

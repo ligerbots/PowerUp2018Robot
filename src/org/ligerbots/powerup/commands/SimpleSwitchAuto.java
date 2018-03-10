@@ -23,6 +23,7 @@ public class SimpleSwitchAuto extends CommandGroup {
       List<FieldPosition> tempWaypoints;
       
       addSequential(new BadDriveDistance(5.0));
+      //addSequential(new ElevatorAuto(2.0, 1.0, true));
       
       switch (first) {
         case DriveForward:
@@ -30,7 +31,7 @@ public class SimpleSwitchAuto extends CommandGroup {
           break;
         case SwitchA:
           if (Robot.gameData.charAt(0) == 'L') {
-            tempWaypoints = FieldMap.wayPointsA;
+            tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsA.clone();
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
               tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
             }
@@ -39,7 +40,7 @@ public class SimpleSwitchAuto extends CommandGroup {
             tempWaypoints = FieldMap.wayPointsA;
           }
           addParallel(new HoldBoxCommand());
-          addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 1));
+          addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 0.3));
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 1.0));
           break;
@@ -123,11 +124,11 @@ public class SimpleSwitchAuto extends CommandGroup {
  //     addSequential(new BadDriveDistance(data[3]));
       
       
-      addSequential(new DriveToCube());
+    /*  addSequential(new DriveToCube());
       
       addParallel(new IntakePistonCommand(false));
       
-      addParallel(new HoldBoxCommand());
+      addParallel(new HoldBoxCommand());*/
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

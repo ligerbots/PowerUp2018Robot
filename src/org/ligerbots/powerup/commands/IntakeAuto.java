@@ -40,6 +40,7 @@ public class IntakeAuto extends Command {
         check = true;
       }
       if (Robot.elevator.getPosition() >= height) {
+        
         Robot.intake.intakeOn(reverse, speed);
       }
     }

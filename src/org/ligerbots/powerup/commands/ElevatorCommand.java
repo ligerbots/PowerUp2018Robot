@@ -17,6 +17,7 @@ public class ElevatorCommand extends Command {
   OI oi;
   private long waitStartTicks = 0;
   private boolean waiting = false;
+  double sign;
 
   public ElevatorCommand() {
     
@@ -82,7 +83,8 @@ public class ElevatorCommand extends Command {
         		waitStartTicks = Robot.ticks;
         	} else {
         		if (Robot.ticks - waitStartTicks > SmartDashboard.getNumber("Hold Wait Ticks", 0)) {
-                    elevator.holdPosition(position);
+        	        sign = Math.signum(position - Robot.elevator.getPosition());
+        	        Robot.elevator.set(0.1 * sign);
                     SmartDashboard.putBoolean("holding", true);
         		}
         	}
