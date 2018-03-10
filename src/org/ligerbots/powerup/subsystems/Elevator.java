@@ -27,6 +27,7 @@ public class Elevator extends Subsystem {
     SCALE, SWITCH, EXCHANGE, UP, DOWN, RESTING
   }
 
+  double desiredHeight = 0;
   WPI_TalonSRX elevatorMaster;
   WPI_TalonSRX elevatorSlave;
   StickyFaults elevatorStickyFaults;
@@ -124,6 +125,14 @@ public class Elevator extends Subsystem {
   public double getPosition() {
 	  if (elevatorPresent) return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
 	  else return 0.0;
+  }
+  
+  public double getDesiredHeight() {
+    return desiredHeight;
+  }
+  
+  public void setDesiredHeight(double height) {
+    desiredHeight = height;
   }
 
 

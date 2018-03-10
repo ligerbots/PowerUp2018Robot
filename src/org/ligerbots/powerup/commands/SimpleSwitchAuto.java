@@ -22,7 +22,9 @@ public class SimpleSwitchAuto extends CommandGroup {
       
       List<FieldPosition> tempWaypoints;
       
+      addParallel (new ElevatorAuto());
       addSequential(new BadDriveDistance(5.0));
+      
       //addSequential(new ElevatorAuto(2.0, 1.0, true));
       
       switch (first) {
@@ -33,59 +35,55 @@ public class SimpleSwitchAuto extends CommandGroup {
           if (Robot.gameData.charAt(0) == 'L') {
             tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsA.clone();
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).elevatorHeight));
             }
           }
           else {
             tempWaypoints = FieldMap.wayPointsA;
           }
           addParallel(new HoldBoxCommand());
-          addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 0.3));
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 1.0));
           break;
         case SwitchB:
           if (Robot.gameData.charAt(0) == 'L') {
-            tempWaypoints = FieldMap.wayPointsB;
+            tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsB.clone();
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).elevatorHeight));
             }
           }
           else {
             tempWaypoints = FieldMap.wayPointsB;
           }
           addParallel(new HoldBoxCommand());
-          addParallel(new ElevatorAuto(FieldMap.switchScoringHeight, 1));
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 3.0));
           break;
         case ScaleAlpha:
           if (Robot.gameData.charAt(1) == 'L') {
-            tempWaypoints = FieldMap.wayPointsAlpha;
+            tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsAlpha.clone();
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(1, -1, tempWaypoints.get(i).elevatorHeight));
             }
           }
           else {
             tempWaypoints = FieldMap.wayPointsAlpha;
           }
           addParallel(new HoldBoxCommand());
-          addParallel(new ElevatorAuto(FieldMap.scaleScoringHeight, 1));
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.scaleScoringHeight - 1.5));
           break;
         case ScaleBeta:
           if (Robot.gameData.charAt(1) == 'L') {
-            tempWaypoints = FieldMap.wayPointsBeta;
+            tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsBeta.clone();
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
-              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).action));
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).elevatorHeight));
             }
           }
           else {
             tempWaypoints = FieldMap.wayPointsBeta;
           }
           addParallel(new HoldBoxCommand());
-          addParallel(new ElevatorAuto(FieldMap.scaleScoringHeight, 1));
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.scaleScoringHeight - 1.5));
           break;
@@ -117,7 +115,7 @@ public class SimpleSwitchAuto extends CommandGroup {
       
   //    addSequential(new TurnCommand(Math.toDegrees(data[4]), 0.3));
       
-      addParallel(new IntakePistonCommand(true));
+  //    addParallel(new IntakePistonCommand(true));
       
       System.out.println("Distance: " + data[3]);
 

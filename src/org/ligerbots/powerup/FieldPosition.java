@@ -6,6 +6,7 @@ public class FieldPosition {
 
   double x;
   double y;
+  public double elevatorHeight;
   public Action action;
   
   public enum Action {
@@ -18,12 +19,22 @@ public class FieldPosition {
     this.x = x;
     this.y = y;
     this.action = Action.NOTHING;
+    this.elevatorHeight = Robot.elevator.getDesiredHeight();
   }
   
   public FieldPosition(double x, double y, Action action) {
     this.x = x;
     this.y = y;
     this.action = action;
+    this.elevatorHeight = Robot.elevator.getDesiredHeight();
+
+  }
+  
+  public FieldPosition(double x,  double y, double elevatorHeight) {
+    this.x = x;
+    this.y = y;
+    this.action = Action.NOTHING;
+    this.elevatorHeight = elevatorHeight;
   }
 
   public FieldPosition add(FieldPosition other) {
@@ -38,8 +49,8 @@ public class FieldPosition {
     return new FieldPosition(x * xFactor, y * yFactor);
   }
   
-  public FieldPosition multiply(double xFactor, double yFactor, Action action) {
-    return new FieldPosition(x * xFactor, y * yFactor, action);
+  public FieldPosition multiply(double xFactor, double yFactor, double height) {
+    return new FieldPosition(x * xFactor, y * yFactor, height);
   }
   
   public FieldPosition multiply(double mxy) {

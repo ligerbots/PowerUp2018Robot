@@ -227,7 +227,6 @@ public class Robot extends IterativeRobot {
     
 	
 	
-    autonomousCommand = new ElevatorAuto(30, 1);
     
     //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
 

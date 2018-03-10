@@ -40,7 +40,7 @@ public class BadDriveDistance extends Command {
         
         SmartDashboard.putNumber("Delta for bad", delta);
         
-    	Robot.driveTrain.allDrive(0.45, 0);
+    	Robot.driveTrain.allDrive(0.7, 0);
     }
 
     // Make this return true when this Command no longer needs to run execute()

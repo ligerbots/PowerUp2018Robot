@@ -68,10 +68,12 @@ public class DrivePathCommand extends Command {
       
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
       
+      Robot.elevator.setDesiredHeight(currentWaypoint.elevatorHeight);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+      
       
      // angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
           
@@ -108,7 +110,7 @@ public class DrivePathCommand extends Command {
       SmartDashboard.putNumber("WaypointX", currentWaypoint.getX());
       SmartDashboard.putNumber("WaypointY", currentWaypoint.getY());
       
-      if ((Robot.ticks % 1) == 0) {
+      if ((Robot.ticks % 2) == 0) {
 
     	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f\n",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
@@ -121,10 +123,12 @@ public class DrivePathCommand extends Command {
  && waypointIndex <= (waypoints.size() - 2)) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.0 && Math.abs(angleError) <= 10.0)) {
         
         
+        
         if (waypointIndex == waypoints.size() - 1) {
           finished = true;
         }
         else {
+          
         
           Robot.driveTrain.allDrive(0, 0);
           
@@ -142,12 +146,9 @@ public class DrivePathCommand extends Command {
         
       }
       
+      Robot.elevator.setDesiredHeight(currentWaypoint.elevatorHeight);
       
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
-
-      if (waypoints.get(waypointIndex).action == Action.ELEVATOR) {
-        Robot.elevator.elevatorGo = true;  
-      }
 	  
     }
 

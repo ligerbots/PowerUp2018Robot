@@ -30,7 +30,7 @@ public class FieldMap {
     public static final double rW2 = robotWidth/2.0;
     public static final double rL2 = robotLength/2.0;
     
-    public static RobotPosition[] startPositions = new RobotPosition[6];   // position 0 is not used! (because the diagram is 1-based)
+    public static FieldPosition[] startPositions = new FieldPosition[6];   // position 0 is not used! (because the diagram is 1-based)
     
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
@@ -54,14 +54,14 @@ public class FieldMap {
     
     public FieldMap () {
         // start positions are in terms of the robot center
-        startPositions[1] = new RobotPosition(117.6, rL2, 0.0);  // 1
-        startPositions[2] = new RobotPosition(81.0, rL2, 0.0);   // 2
-        startPositions[3] = new RobotPosition(7.6, rL2, 0.0);   // 3
-        startPositions[4] = new RobotPosition(-54.0, rL2, 0.0);  // 4
-        startPositions[5] = new RobotPosition(-96.0, rL2, 0.0);  // 5
+        startPositions[1] = new FieldPosition(117.6, rL2);  // 1
+        startPositions[2] = new FieldPosition(81.0, rL2);   // 2
+        startPositions[3] = new FieldPosition(7.6, rL2);   // 3
+        startPositions[4] = new FieldPosition(-54.0, rL2);  // 4
+        startPositions[5] = new FieldPosition(-96.0, rL2);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new FieldPosition(44.8, 139.5-rL2);
+        switchScoringSpot[0] = new FieldPosition(44.8, 139.5-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[1] = new RobotPosition(82.0+rL2, 150.0, -90.0, Action.PUT_ON_SWITCH);
         //switchScoringSpot[2] = new RobotPosition(209.9+rW2, 54.8, 180.0);
         
@@ -76,25 +76,24 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new FieldPosition(44.8, 90, FieldPosition.Action.ELEVATOR));
+        wayPointsA.add(new FieldPosition(44.8, 90, 4.0));
         wayPointsA.add(switchScoringSpot[0]);
         
         wayPointsB.add(new RobotPosition(126.0, 120.0));
-        wayPointsB.add(new FieldPosition(126.0, 150.0, FieldPosition.Action.ELEVATOR));
+        wayPointsB.add(new FieldPosition(126.0, 150.0, FieldMap.switchScoringHeight));
         wayPointsB.add(switchScoringSpot[1]);
         
         wayPointsAlpha.add(new RobotPosition(100.0, 120.0));
         wayPointsAlpha.add(new RobotPosition(100.0, 185.0));
-        wayPointsAlpha.add(new RobotPosition(84.4, 240.0));
+        wayPointsAlpha.add(new RobotPosition(84.4, 240.0, FieldMap.scaleScoringHeight));
         wayPointsAlpha.add(scaleScoringSpot[0]);
 
         wayPointsBeta.add(new RobotPosition(128.0, 165.0));
         wayPointsBeta.add(new RobotPosition(128.0, 240.0));
-        wayPointsBeta.add(new RobotPosition(130.0, 310.0));
+        wayPointsBeta.add(new RobotPosition(130.0, 310.0, FieldMap.scaleScoringHeight));
         wayPointsBeta.add(scaleScoringSpot[1]);
 
         
-        FieldPosition x = wayPointsBeta.get(0);
 
     };
     
