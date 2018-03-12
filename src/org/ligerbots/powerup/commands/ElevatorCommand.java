@@ -12,7 +12,7 @@ import org.ligerbots.powerup.subsystems.Elevator.ElevatorPosition;
  */
 public class ElevatorCommand extends Command {
 
-  double position;
+  public double position;
   Elevator elevator;
   OI oi;
   private long waitStartTicks = 0;
@@ -21,8 +21,6 @@ public class ElevatorCommand extends Command {
 
   public ElevatorCommand() {
     
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
 	requires(Robot.elevator);
     oi = Robot.oi;
     elevator = Robot.elevator;
@@ -34,8 +32,7 @@ public class ElevatorCommand extends Command {
     // TODO: Can't call zeroEncoder here since we don't know where it will be at the start of teleop.
     
     SmartDashboard.putNumber("Elevator Slow", 0.25);
-    elevator.zeroEncoder();
-    position = 0;
+    position = Robot.elevator.getPosition();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -78,16 +75,16 @@ public class ElevatorCommand extends Command {
           }
         }
         else {
-        	if (!waiting) {
+        	/*if (!waiting) {
         		waiting = true;
         		waitStartTicks = Robot.ticks;
         	} else {
-        		if (Robot.ticks - waitStartTicks > SmartDashboard.getNumber("Hold Wait Ticks", 0)) {
+        		if (Robot.ticks - waitStartTicks > SmartDashboard.getNumber("Hold Wait Ticks", 0)) {*/
         	        sign = Math.signum(position - Robot.elevator.getPosition());
         	        Robot.elevator.set(0.1 * sign);
                     SmartDashboard.putBoolean("holding", true);
-        		}
-        	}
+        		//}
+        	//}
         }
         SmartDashboard.putNumber("Elevator Position", position);
     }

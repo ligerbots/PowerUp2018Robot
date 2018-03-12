@@ -62,7 +62,8 @@ public class Elevator extends Subsystem {
   }*/
   
   public Elevator() {
-	  
+    
+    
     topLimitSwitch = new DigitalInput(0);
     bottomLimitSwitch = new DigitalInput(1);
     elevatorMaster = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_1);

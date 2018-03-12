@@ -14,23 +14,21 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
-
-import org.ligerbots.powerup.Robot;
-import org.ligerbots.powerup.Robot.StartingPosition;
-import org.ligerbots.powerup.commands.BadDriveDistance;
 import org.ligerbots.powerup.commands.CameraSelectionCommand;
 import org.ligerbots.powerup.commands.CameraToggleCommand;
+import org.ligerbots.powerup.commands.CompressorCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
-//import org.ligerbots.powerup.commands.LEDStripCommand;
-import org.ligerbots.powerup.triggers.JoystickPov;
-import org.ligerbots.powerup.triggers.JoystickPov.Direction;
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
 //import org.ligerbots.powerup.commands.TurnTester;
 import org.ligerbots.powerup.commands.TurnTester;
+import org.ligerbots.powerup.subsystems.Pneumatics.CompressorState;
+//import org.ligerbots.powerup.commands.LEDStripCommand;
+import org.ligerbots.powerup.triggers.JoystickPov;
+import org.ligerbots.powerup.triggers.JoystickPov.Direction;
 
 
 /**
@@ -96,8 +94,8 @@ public class OI {
     SmartDashboard.putData("SecondAction", secondAction);
 	    
     xbox = new XboxController(0);
-    elevatorController = new Joystick(1);
-    farm = new Joystick(2);
+    elevatorController = new Joystick(2);
+    farm = new Joystick(1);
         
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
@@ -116,6 +114,12 @@ public class OI {
     
     JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
     xBoxLeftJoystick.whenPressed(new IntakePistonCommand(false));
+    
+    JoystickButton xBoxSelect = new JoystickButton(xbox, 7);
+    xBoxBumperLeft.whileHeld(new CompressorCommand(CompressorState.ON));
+    
+    JoystickButton xBoxStart = new JoystickButton(xbox, 8);
+    xBoxBumperLeft.whileHeld(new CompressorCommand(CompressorState.OFF));
     
     JoystickButton xBoxX = new JoystickButton(xbox, 3);
     xBoxX.whenPressed(new LEDStripCommand());
@@ -198,5 +202,9 @@ public class OI {
   
   public double getElevatorThrottle() {
     return elevatorController.getThrottle();
+  }
+  
+  public Robot.StartingPosition getStartingPosition() {
+    return startingPosition.getSelected();
   }
 }

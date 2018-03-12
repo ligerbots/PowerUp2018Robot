@@ -30,6 +30,7 @@ import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
 import org.ligerbots.powerup.subsystems.Intake;
 import org.ligerbots.powerup.subsystems.LEDStrip;
+import org.ligerbots.powerup.subsystems.Pneumatics;
 import org.ligerbots.powerup.subsystems.ProximitySensor;
 
 /**
@@ -60,6 +61,7 @@ public class Robot extends IterativeRobot {
   public static LEDStripCommand ledStripCommand;
   public static ProximitySensor proximitySensor;
   public static FieldMap fieldMap;
+  public static Pneumatics pneumatics;
   
   public enum StartingPosition {
 	One("1"),
@@ -132,6 +134,7 @@ public class Robot extends IterativeRobot {
     ledstrip = new LEDStrip();
     ledStripCommand = new LEDStripCommand();
     proximitySensor = new ProximitySensor();
+    pneumatics = new Pneumatics();
     // Put this after all commands and subsystems have been initialized!
     oi = new OI();
     
@@ -217,13 +220,115 @@ public class Robot extends IterativeRobot {
 	//do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
 	//while (gameData.length() == 0);
     
+    FirstAction first;
+    SecondAction second;
+    
     gameData = "LLL";
+    
+    switch (oi.getStartingPosition()) {
+      case One:
+        if (Robot.gameData.charAt(0) == 'R') {
+          if (Robot.gameData.charAt(1) == 'R') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.SwitchB;
+          }
+          else {
+            first = FirstAction.SwitchB;
+            second = SecondAction.Nothing;
+          }
+        }
+        else {
+          if (Robot.gameData.charAt(1) == 'R') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.Nothing;
+          }
+          else {
+            first = FirstAction.DriveForward;
+            second = SecondAction.Nothing;
+          }
+        }
+        break;
+      case Two:
+        if (Robot.gameData.charAt(0) == 'R') {
+          if (Robot.gameData.charAt(1) == 'R') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.SwitchB;
+          }
+          else {
+            first = FirstAction.SwitchA;
+            second = SecondAction.Nothing;
+          }
+        }
+        else {
+          if (Robot.gameData.charAt(1) == 'R') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.Nothing;
+          }
+          else {
+            first = FirstAction.DriveForward;
+            second = SecondAction.Nothing;
+          }
+        }
+        break;
+      case Three:
+        first = FirstAction.SwitchA;
+        second = SecondAction.Nothing;
+        break;
+      case Four:
+        if (Robot.gameData.charAt(0) == 'L') {
+          if (Robot.gameData.charAt(1) == 'L') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.SwitchB;
+          }
+          else {
+            first = FirstAction.SwitchA;
+            second = SecondAction.Nothing;
+          }
+        }
+        else {
+          if (Robot.gameData.charAt(1) == 'L') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.Nothing;
+          }
+          else {
+            first = FirstAction.DriveForward;
+            second = SecondAction.Nothing;
+          }
+        }
+        break;
+      case FIVE:
+        if (Robot.gameData.charAt(0) == 'L') {
+          if (Robot.gameData.charAt(1) == 'L') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.SwitchB;
+          }
+          else {
+            first = FirstAction.SwitchB;
+            second = SecondAction.Nothing;
+          }
+        }
+        else {
+          if (Robot.gameData.charAt(1) == 'L') {
+            first = FirstAction.ScaleBeta;
+            second = SecondAction.Nothing;
+          }
+          else {
+            first = FirstAction.DriveForward;
+            second = SecondAction.Nothing;
+          }
+        }
+        break;
+      default:
+        first = FirstAction.DriveForward;
+        second = SecondAction.Nothing;
+        break;
+    }
       
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);
 	
 	
-	auto = new SimpleSwitchAuto(FirstAction.SwitchA, SecondAction.Nothing);
+	auto = new SimpleSwitchAuto(first, second);
     
 	
 	
@@ -275,7 +380,7 @@ public class Robot extends IterativeRobot {
     //    SmartDashboard.putNumber("DriveD", 0.05);
     driveCommand.start();
     ledStripCommand.start();
-
+    elevatorCommand.start();
   }
   
 
