@@ -42,8 +42,8 @@ public class ElevatorCommand extends Command {
           waiting = false;
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
-            if (!(elevator.getPosition() > 95)) {
-              if (elevator.getPosition() >= 64) { 
+            if (!(elevator.getPosition() > 66)) {
+              if (elevator.getPosition() >= 62) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
                 elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
@@ -58,7 +58,7 @@ public class ElevatorCommand extends Command {
           }
           else {
         	  // TODO: Need to allow it to go lower. Maybe set the "1" to "0.5" or smaller
-            if (elevator.getLimitSwitch(false) && !(elevator.getPosition() < 0.5)) {
+            if (!(elevator.getPosition() < 0.5)) {
               if (elevator.getPosition() <= 6) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
