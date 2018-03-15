@@ -28,7 +28,7 @@ public class IntakeCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	// TODO: The "0.5" should be a parameter in RobotMap settable via the Smart Dashboard
-      speed = SmartDashboard.getNumber("Intake Speed", 0.5);
+      speed = SmartDashboard.getNumber("Intake Speed", 0.7);
       Robot.intake.intakeOn(reverse, speed);
     }
 

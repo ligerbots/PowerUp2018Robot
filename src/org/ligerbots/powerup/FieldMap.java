@@ -20,7 +20,7 @@ import org.ligerbots.powerup.FieldPosition;
 
 public class FieldMap {
     
-    public static final double scaleScoringHeight = 70.0;   // 70" is our max elevator height
+    public static final double scaleScoringHeight = 62.0;   // 70" is our max elevator height
     public static final double switchScoringHeight = 20.0;
     
     // Robot dimensions with bumpers
@@ -36,10 +36,10 @@ public class FieldMap {
     // in other words, if one platform is at Y, then the other is at -Y
     
     public FieldPosition[] switchScoringSpot = new FieldPosition[3];    
-    public RobotPosition[] scaleScoringSpot = new RobotPosition[2]; 
+    public FieldPosition[] scaleScoringSpot = new FieldPosition[2]; 
 
-    public RobotPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
-    public RobotPosition scaleScoringSpotBeta;  // Acessing the platform from the outside
+    public FieldPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
+    public FieldPosition scaleScoringSpotBeta;  // Acessing the platform from the outside
     
     // Way Points are the intermediate points on the way to a particular scoring position
     // They are meant to be universal -- the first point should be something that can be
@@ -54,19 +54,20 @@ public class FieldMap {
     
     public FieldMap () {
         // start positions are in terms of the robot center
-        startPositions[1] = new FieldPosition(117.6, rL2);  // 1
-        startPositions[2] = new FieldPosition(81.0, rL2);   // 2
+        startPositions[1] = new FieldPosition(-117.6, rL2);  // 1
+        startPositions[2] = new FieldPosition(-81.0, rL2);   // 2
         startPositions[3] = new FieldPosition(7.6, rL2);   // 3
-        startPositions[4] = new FieldPosition(-54.0, rL2);  // 4
-        startPositions[5] = new FieldPosition(-96.0, rL2);  // 5
+        startPositions[4] = new FieldPosition(81.0, rL2);  // 4
+        startPositions[5] = new FieldPosition(117.6, rL2);  // 5
         
         // scoring positions are also robot center
         switchScoringSpot[0] = new FieldPosition(44.8, 139.5-rL2, FieldMap.switchScoringHeight);
-        switchScoringSpot[1] = new RobotPosition(82.0+rL2, 150.0, -90.0, Action.PUT_ON_SWITCH);
+        switchScoringSpot[1] = new FieldPosition(82.0+rL2, 150.0, FieldMap.switchScoringHeight);
         //switchScoringSpot[2] = new RobotPosition(209.9+rW2, 54.8, 180.0);
         
-        scaleScoringSpot[0] = new RobotPosition(90.4, 297.3-rW2, 0.0, Action.PUT_ON_SCALE);
-        scaleScoringSpot[1] = new RobotPosition(116.0, 310.0, -90.0, Action.PUT_ON_SCALE);
+        scaleScoringSpot[0] = new FieldPosition(90.4, 297.3-rW2, FieldMap.scaleScoringHeight);
+       // scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);
+        scaleScoringSpot[1] = new FieldPosition(116.0, 140.0, FieldMap.scaleScoringHeight);
                 
         // TODO -- create waypoints corresponding to each scoring position
         //         that will ensure the robot doesn't crash into things
@@ -79,18 +80,23 @@ public class FieldMap {
         wayPointsA.add(new FieldPosition(44.8, 90, 4.0));
         wayPointsA.add(switchScoringSpot[0]);
         
-        wayPointsB.add(new RobotPosition(126.0, 120.0));
-        wayPointsB.add(new FieldPosition(126.0, 150.0, FieldMap.switchScoringHeight));
+        wayPointsB.add(new FieldPosition(126.0, 120.0, 4.0));
+        wayPointsB.add(new FieldPosition(126.0, 150.0));
         wayPointsB.add(switchScoringSpot[1]);
         
-        wayPointsAlpha.add(new RobotPosition(100.0, 120.0));
-        wayPointsAlpha.add(new RobotPosition(100.0, 185.0));
-        wayPointsAlpha.add(new RobotPosition(84.4, 240.0, FieldMap.scaleScoringHeight));
+        wayPointsAlpha.add(new FieldPosition(100.0, 120.0, 4.0));
+        wayPointsAlpha.add(new FieldPosition(100.0, 185.0));
+        wayPointsAlpha.add(new FieldPosition(84.4, 240.0));
         wayPointsAlpha.add(scaleScoringSpot[0]);
 
-        wayPointsBeta.add(new RobotPosition(128.0, 165.0));
-        wayPointsBeta.add(new RobotPosition(128.0, 240.0));
-        wayPointsBeta.add(new RobotPosition(130.0, 310.0, FieldMap.scaleScoringHeight));
+       /* wayPointsBeta.add(new FieldPosition(128.0, 165.0, 4.0));
+        wayPointsBeta.add(new FieldPosition(128.0, 240.0));
+        wayPointsBeta.add(new FieldPosition(130.0, 310.0));
+        wayPointsBeta.add(scaleScoringSpot[1]);*/
+        
+        wayPointsBeta.add(new FieldPosition(128.0, 50.0, 4.0));
+        wayPointsBeta.add(new FieldPosition(128.0, 100.0));
+        wayPointsBeta.add(new FieldPosition(130.0, 140.0));
         wayPointsBeta.add(scaleScoringSpot[1]);
 
         

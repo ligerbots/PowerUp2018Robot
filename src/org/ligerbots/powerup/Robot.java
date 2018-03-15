@@ -23,7 +23,7 @@ import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.ElevatorAuto;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
-import org.ligerbots.powerup.commands.SimpleSwitchAuto;
+import org.ligerbots.powerup.commands.TwoCubeAuto;
 import org.ligerbots.powerup.commands.TurnCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
@@ -208,11 +208,20 @@ public class Robot extends IterativeRobot {
    */
   @Override
   public void autonomousInit() {
+	  
+	StartingPosition startPos = oi.getStartingPosition();
 
 	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
-    Robot.driveTrain.setPosition(fieldMap.startPositions[3].x, fieldMap.startPositions[3].y);
+    switch (startPos) {
+    	case One: Robot.driveTrain.setPosition(FieldMap.startPositions[1].x, FieldMap.startPositions[1].y); break;
+    	case Two: Robot.driveTrain.setPosition(FieldMap.startPositions[2].x, FieldMap.startPositions[2].y); break;
+    	case Three: Robot.driveTrain.setPosition(FieldMap.startPositions[3].x, FieldMap.startPositions[3].y); break;
+    	case Four: Robot.driveTrain.setPosition(FieldMap.startPositions[4].x, FieldMap.startPositions[4].y); break;
+    	case FIVE: Robot.driveTrain.setPosition(FieldMap.startPositions[5].x, FieldMap.startPositions[5].y); break;
+    	default: System.out.println("WHAT?!"); break;
+    }
     Robot.driveTrain.zeroYaw();
 
     alliance = DriverStation.getInstance().getAlliance();
@@ -223,14 +232,14 @@ public class Robot extends IterativeRobot {
     FirstAction first;
     SecondAction second;
     
-    gameData = "LLL";
+    gameData = "LRL";
     
-    switch (oi.getStartingPosition()) {
+    switch (startPos) {
       case One:
-        if (Robot.gameData.charAt(0) == 'R') {
-          if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.ScaleBeta;
-            second = SecondAction.SwitchB;
+        if (Robot.gameData.charAt(0) == 'L') {
+          if (Robot.gameData.charAt(1) == 'L') {
+            first = FirstAction.SwitchB; //change back later or something
+            second = SecondAction.Nothing;
           }
           else {
             first = FirstAction.SwitchB;
@@ -238,7 +247,7 @@ public class Robot extends IterativeRobot {
           }
         }
         else {
-          if (Robot.gameData.charAt(1) == 'R') {
+          if (Robot.gameData.charAt(1) == 'L') {
             first = FirstAction.ScaleBeta;
             second = SecondAction.Nothing;
           }
@@ -249,10 +258,10 @@ public class Robot extends IterativeRobot {
         }
         break;
       case Two:
-        if (Robot.gameData.charAt(0) == 'R') {
-          if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.ScaleBeta;
-            second = SecondAction.SwitchB;
+        if (Robot.gameData.charAt(0) == 'L') {
+          if (Robot.gameData.charAt(1) == 'L') {
+            first = FirstAction.SwitchB; //change back later
+            second = SecondAction.Nothing;
           }
           else {
             first = FirstAction.SwitchA;
@@ -260,7 +269,7 @@ public class Robot extends IterativeRobot {
           }
         }
         else {
-          if (Robot.gameData.charAt(1) == 'R') {
+          if (Robot.gameData.charAt(1) == 'L') {
             first = FirstAction.ScaleBeta;
             second = SecondAction.Nothing;
           }
@@ -275,10 +284,10 @@ public class Robot extends IterativeRobot {
         second = SecondAction.Nothing;
         break;
       case Four:
-        if (Robot.gameData.charAt(0) == 'L') {
-          if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.ScaleBeta;
-            second = SecondAction.SwitchB;
+        if (Robot.gameData.charAt(0) == 'R') {
+          if (Robot.gameData.charAt(1) == 'R') {
+            first = FirstAction.SwitchB; //change later
+            second = SecondAction.Nothing;
           }
           else {
             first = FirstAction.SwitchA;
@@ -286,7 +295,7 @@ public class Robot extends IterativeRobot {
           }
         }
         else {
-          if (Robot.gameData.charAt(1) == 'L') {
+          if (Robot.gameData.charAt(1) == 'R') {
             first = FirstAction.ScaleBeta;
             second = SecondAction.Nothing;
           }
@@ -297,10 +306,10 @@ public class Robot extends IterativeRobot {
         }
         break;
       case FIVE:
-        if (Robot.gameData.charAt(0) == 'L') {
-          if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.ScaleBeta;
-            second = SecondAction.SwitchB;
+        if (Robot.gameData.charAt(0) == 'R') {
+          if (Robot.gameData.charAt(1) == 'R') {
+            first = FirstAction.SwitchB; //change later
+            second = SecondAction.Nothing;
           }
           else {
             first = FirstAction.SwitchB;
@@ -308,7 +317,7 @@ public class Robot extends IterativeRobot {
           }
         }
         else {
-          if (Robot.gameData.charAt(1) == 'L') {
+          if (Robot.gameData.charAt(1) == 'R') {
             first = FirstAction.ScaleBeta;
             second = SecondAction.Nothing;
           }
@@ -328,7 +337,7 @@ public class Robot extends IterativeRobot {
 	SmartDashboard.putString("Game Data", gameData);
 	
 	
-	auto = new SimpleSwitchAuto(first, second);
+	auto = new TwoCubeAuto(first, second);
     
 	
 	

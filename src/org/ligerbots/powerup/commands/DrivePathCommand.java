@@ -55,8 +55,8 @@ public class DrivePathCommand extends Command {
       finished = false;
       startAbsDistance = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
-      rampUpDist = 24.0;
-      rampDownDist = 60.0;
+      rampUpDist = 15.0;
+      rampDownDist = 30.0;
       
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
@@ -88,7 +88,7 @@ public class DrivePathCommand extends Command {
       double rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
       double rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
       
-      if (Math.abs(angleError) >= 20) {
+      if (Math.abs(angleError) >= 15) {
         drive = 0.0;
       } else {
           if (rampDownDelta < rampDownDist) {
@@ -110,7 +110,7 @@ public class DrivePathCommand extends Command {
       SmartDashboard.putNumber("WaypointX", currentWaypoint.getX());
       SmartDashboard.putNumber("WaypointY", currentWaypoint.getY());
       
-      if ((Robot.ticks % 2) == 0) {
+      if ((Robot.ticks % 1) == 0) {
 
     	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f\n",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),

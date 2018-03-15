@@ -14,11 +14,11 @@ import org.ligerbots.powerup.Robot.SecondAction;
 /**
  *
  */
-public class SimpleSwitchAuto extends CommandGroup {
+public class TwoCubeAuto extends CommandGroup {
   
    // REMEMBER TO SWITCH SIGNS AND STUFF (if u don't know what this means for some reason don't do anything / ask Mark 
 
-    public SimpleSwitchAuto(FirstAction first, SecondAction second) {
+    public TwoCubeAuto(FirstAction first, SecondAction second) {
       
       List<FieldPosition> tempWaypoints;
       

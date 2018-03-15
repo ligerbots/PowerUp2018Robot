@@ -83,7 +83,7 @@ public class OI {
     
     startingPosition = new SendableChooser<>();
     populateSelect(startingPosition, Robot.StartingPosition.class);
-    SmartDashboard.putData("SartingPosition", startingPosition);
+    SmartDashboard.putData("StartingPosition", startingPosition);
 
     firstAction = new SendableChooser<>();
     populateSelect(firstAction, Robot.FirstAction.class);

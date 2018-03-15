@@ -29,7 +29,7 @@ public class Intake extends Subsystem {
 
     public Intake() {
     
-      SmartDashboard.putNumber("Intake Speed", 0.5);
+      SmartDashboard.putNumber("Intake Speed", 0.7);
       
       intakeMaster = new WPI_TalonSRX(RobotMap.CT_INTAKE_1);
       intakeMasterFaults = new StickyFaults();
