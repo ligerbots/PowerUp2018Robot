@@ -63,7 +63,7 @@ public class FieldMap {
         // scoring positions are also robot center
         switchScoringSpot[0] = new FieldPosition(44.8, 139.5-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[1] = new FieldPosition(82.0+rL2, 150.0, FieldMap.switchScoringHeight);
-        //switchScoringSpot[2] = new RobotPosition(209.9+rW2, 54.8, 180.0);
+        switchScoringSpot[2] = new FieldPosition(-60.0, 196.5 + rL2, FieldMap.switchScoringHeight);
         
         scaleScoringSpot[0] = new FieldPosition(90.4, 297.3-rW2, FieldMap.scaleScoringHeight);
         scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);

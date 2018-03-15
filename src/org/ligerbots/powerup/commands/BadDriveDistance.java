@@ -18,8 +18,11 @@ public class BadDriveDistance extends Command {
 	double distance; //inches
 	double delta;
 	
-    public BadDriveDistance(double distance) {
+	boolean reverse;
+	
+    public BadDriveDistance(double distance, boolean reverse) {
     	this.distance = distance;
+    	this.reverse = reverse;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
@@ -40,12 +43,12 @@ public class BadDriveDistance extends Command {
         
         SmartDashboard.putNumber("Delta for bad", delta);
         
-    	Robot.driveTrain.allDrive(0.7, 0);
+    	Robot.driveTrain.allDrive(reverse ? -0.7 : 0.7, 0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return delta >= distance;
+        return Math.abs(delta) >= distance;
     }
 
     // Called once after isFinished returns true

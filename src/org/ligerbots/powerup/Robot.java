@@ -9,22 +9,15 @@ package org.ligerbots.powerup;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.util.Arrays;
-import org.ligerbots.powerup.commands.AutoCommandGroup;
 import org.ligerbots.powerup.commands.DriveCommand;
-import org.ligerbots.powerup.commands.DriveDistance;
-import org.ligerbots.powerup.commands.DrivePathCommand;
-import org.ligerbots.powerup.commands.ElevatorAuto;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TwoCubeAuto;
-import org.ligerbots.powerup.commands.TurnCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
@@ -102,10 +95,8 @@ public class Robot extends IterativeRobot {
   
   public enum SecondAction {
     Nothing("Do Nothing"),
-	SwitchA("Switch A"),
-	SwitchB("Switch B"),
-	ScaleAlpha("Scale Alpha"),
-	ScaleBeta("Scale Beta");
+	Switch("Switch"),
+	Scale("Scale");
 
 	public final String name;
 	SecondAction(String name) {
@@ -128,19 +119,16 @@ public class Robot extends IterativeRobot {
     intake = new Intake();
     elevator = new Elevator();
     fieldMap = new FieldMap();
-// init this before DriveTrain for now
     driveTrain = new DriveTrain();
     driveCommand = new DriveCommand();
     ledstrip = new LEDStrip();
     ledStripCommand = new LEDStripCommand();
     proximitySensor = new ProximitySensor();
     pneumatics = new Pneumatics();
-    // Put this after all commands and subsystems have been initialized!
     oi = new OI();
     
     elevatorCommand = new ElevatorCommand();
     
-    // zero everything before we start moving
 	Robot.driveTrain.zeroYaw();
 
     // chooser.addDefault("Default Auto", new ExampleCommand());
@@ -226,14 +214,12 @@ public class Robot extends IterativeRobot {
 
     alliance = DriverStation.getInstance().getAlliance();
 	// http://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/826278-2018-game-data-details	
-	//do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
-	//while (gameData.length() == 0);
+	do gameData = DriverStation.getInstance().getGameSpecificMessage(); 
+	while (gameData.length() == 0);
     
     FirstAction first;
     SecondAction second;
-    
-    gameData = "LRL";
-    
+       
     switch (startPos) {
       case One:
         if (Robot.gameData.charAt(0) == 'L') {
@@ -335,28 +321,12 @@ public class Robot extends IterativeRobot {
       
 	System.out.println("Game Data: " + gameData);
 	SmartDashboard.putString("Game Data", gameData);
-	
-	
+
 	auto = new TwoCubeAuto(first, second);
     
-	
-	
-    
-    //AutoCommandGroup auto = new AutoCommandGroup(Arrays.asList(new FieldPosition(10, 0), new FieldPosition(10, 10), new FieldPosition(0,0)), 90.0);
-
-    /*
-     * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-     * switch(autoSelected) { case "My Auto": autonomousCommand = new MyAutoCommand(); break; case
-     * 
-     * "Default Auto": default: autonomousCommand = new ExampleCommand(); break; }
-     */
-
-    // schedule the autonomous command (example)
     if (auto != null) {
-     // autonomousCommand.start();
       auto.start();
     }
-    
   }
  
   
@@ -381,12 +351,10 @@ public class Robot extends IterativeRobot {
       auto.cancel();
     }
     
-    // Switch cmaera to Driver mode
+    // Switch camera to Driver mode
 	SmartDashboard.putString("vision/active_mode", "driver");
     SmartDashboard.putNumber("LEDStripKey", 0.0);
-    //    SmartDashboard.putNumber("DriveP", 1);
-    //    SmartDashboard.putNumber("DriveI", 0);
-    //    SmartDashboard.putNumber("DriveD", 0.05);
+
     driveCommand.start();
     ledStripCommand.start();
     elevatorCommand.start();
@@ -400,12 +368,9 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     commonPeriodic();  
     Scheduler.getInstance().run();
-    if ((ticks % 100) ==0) {
-//      driveTrain.logInversion();
+    if ((ticks % 20) == 0) {
       SmartDashboard.putNumber("UltrasonicLeft", Robot.proximitySensor.getDistanceLeft());
       SmartDashboard.putNumber("UltrasonicRight", Robot.proximitySensor.getDistanceRight());
-//      System.out.println("UltrasonicLeft = " + Robot.proximitySensor.getDistanceLeft());
-//      System.out.println("UltrasonicRight = " + Robot.proximitySensor.getDistanceRight());
     }
   }
 

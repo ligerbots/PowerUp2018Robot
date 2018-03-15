@@ -21,7 +21,7 @@ public class AutoCommandGroup extends CommandGroup {
       
       // move forward 8" to get us away from the wall
       System.out.println("Auto Command Group starting");
-      addSequential(new BadDriveDistance(8.0));
+      addSequential(new BadDriveDistance(8.0, false));
     	
       // Check my math
       for (FieldPosition i: wayPoints) {
@@ -34,7 +34,7 @@ public class AutoCommandGroup extends CommandGroup {
         }
         addSequential(new TurnCommand(lowerQuadrants ? angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() 
             : Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection(), 0.3));
-        addSequential(new BadDriveDistance(Robot.driveTrain.getRobotPosition().distanceTo(i)));
+        addSequential(new BadDriveDistance(Robot.driveTrain.getRobotPosition().distanceTo(i), false));
         System.out.println("Final turn: " + (lowerQuadrants ? angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : Math.signum(angleToWaypoint) * (90 - Math.abs(angleToWaypoint)) - Robot.driveTrain.getRobotPosition().getDirection()));
 
       }

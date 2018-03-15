@@ -23,13 +23,13 @@ public class TwoCubeAuto extends CommandGroup {
       List<FieldPosition> tempWaypoints;
       
       addParallel (new ElevatorAuto());
-      addSequential(new BadDriveDistance(5.0));
+      addSequential(new BadDriveDistance(5.0, false));
       
       //addSequential(new ElevatorAuto(2.0, 1.0, true));
       
       switch (first) {
         case DriveForward:
-          addSequential(new BadDriveDistance(125.0));
+          addSequential(new BadDriveDistance(115.0, false));
           break;
         case SwitchA:
           if (Robot.gameData.charAt(0) == 'L') {
@@ -91,7 +91,30 @@ public class TwoCubeAuto extends CommandGroup {
           break;
           
       }
-          
+         
+      switch (second) {
+        case Switch:
+          if (Robot.gameData.charAt(0) == Robot.gameData.charAt(1)) {
+            Robot.elevator.setDesiredHeight(1.0);
+            addSequential(new BadDriveDistance(10.0, true));
+            addSequential(new TurnCommand(180.0, 1.0));
+            addSequential(new IntakePistonCommand(true));
+            addSequential(new DriveToCube());
+            addParallel(new IntakeAuto(false, 1.0, 1.0, 0.0));
+            addSequential(new IntakePistonCommand(false));
+            Robot.elevator.setDesiredHeight(FieldMap.switchScoringHeight);
+            addSequential(new IntakeAuto(true, 0.7, 1.0, 18.0));
+          }
+          else {
+            
+          }
+        case Scale:
+          break;
+        case Nothing:
+          break;
+        default:
+          break;
+      }
           
           
           System.out.println("Starting Simple Switch");
