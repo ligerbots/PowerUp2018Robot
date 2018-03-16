@@ -19,6 +19,7 @@ import org.ligerbots.powerup.commands.CameraToggleCommand;
 import org.ligerbots.powerup.commands.CompressorCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
+import org.ligerbots.powerup.commands.ElevatorPreset;
 import org.ligerbots.powerup.commands.IntakeCommand;
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
@@ -74,7 +75,6 @@ public class OI {
   
 
   
-  Joystick elevatorController;
   
   
 
@@ -94,7 +94,6 @@ public class OI {
     SmartDashboard.putData("SecondAction", secondAction);
 	    
     xbox = new XboxController(0);
-    elevatorController = new Joystick(2);
     farm = new Joystick(1);
         
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
@@ -148,6 +147,14 @@ public class OI {
     
     farmFour.whenPressed(new CameraSelectionCommand("cube"));
     
+    JoystickButton farmTwentyTwo = new JoystickButton(farm, 22);
+    farmTwentyTwo.whenPressed(new ElevatorPreset(FieldMap.scaleScoringHeight));
+    
+    JoystickButton farmTwentyThree = new JoystickButton(farm, 23);
+    farmTwentyThree.whenPressed(new ElevatorPreset(FieldMap.switchScoringHeight));
+    
+    JoystickButton farmTwentyFour = new JoystickButton(farm, 24);
+    farmTwentyFour.whenPressed(new ElevatorPreset(1.5));
     
     System.out.println("OI constructed");
 
@@ -195,10 +202,6 @@ public class OI {
 
   public double getElevatorDown() {
     return xbox.getTriggerAxis(GenericHID.Hand.kLeft);
-  }
-  
-  public double getElevatorThrottle() {
-    return elevatorController.getThrottle();
   }
   
   public Robot.StartingPosition getStartingPosition() {

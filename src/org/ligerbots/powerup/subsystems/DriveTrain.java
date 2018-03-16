@@ -188,7 +188,7 @@ public DriveTrain() {
 
 	  //(,0);
     	limitedThrottle = -throttle * (1- ((Math.min(Robot.elevator.getPosition(),70)-40)/60.0));
-	  robotDrive.arcadeDrive(limitedThrottle, -rotate);
+	  robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.75);
 	  SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
 	  //SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }

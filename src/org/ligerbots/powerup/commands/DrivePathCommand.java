@@ -85,8 +85,8 @@ public class DrivePathCommand extends Command {
       
       turn = angleError * 0.01 + Math.signum(angleError) * 0.5;
       
-      double rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
-      double rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
+      rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
+      rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
       
       if (Math.abs(angleError) >= 15) {
         drive = 0.0;
