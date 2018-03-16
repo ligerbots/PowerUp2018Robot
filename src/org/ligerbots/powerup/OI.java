@@ -116,7 +116,7 @@ public class OI {
     xBoxLeftJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxSelect = new JoystickButton(xbox, 7);
-    xBoxBumperLeft.whenPressed(new CompressorCommand(CompressorState.TOGGLE));
+    xBoxSelect.whenPressed(new CompressorCommand(CompressorState.TOGGLE));
     
     JoystickButton xBoxX = new JoystickButton(xbox, 3);
     xBoxX.whenPressed(new LEDStripCommand());

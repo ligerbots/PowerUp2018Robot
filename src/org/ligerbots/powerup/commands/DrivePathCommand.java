@@ -120,7 +120,7 @@ public class DrivePathCommand extends Command {
       
 
       if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
- && waypointIndex <= (waypoints.size() - 2)) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.0 && Math.abs(angleError) <= 10.0)) {
+ && waypointIndex <= (waypoints.size() - 2)) && (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.0 && Math.abs(angleError) <= 10.0)) {
         
         
         

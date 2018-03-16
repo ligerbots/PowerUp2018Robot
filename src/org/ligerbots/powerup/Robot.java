@@ -25,6 +25,7 @@ import org.ligerbots.powerup.subsystems.Intake;
 import org.ligerbots.powerup.subsystems.LEDStrip;
 import org.ligerbots.powerup.subsystems.Pneumatics;
 import org.ligerbots.powerup.subsystems.ProximitySensor;
+import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -197,7 +198,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
 	  
-	StartingPosition startPos = oi.getStartingPosition();
+	StartingPosition startPos = oi.getStartingPosition();;
 
 	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
@@ -358,6 +359,7 @@ public class Robot extends IterativeRobot {
     driveCommand.start();
     ledStripCommand.start();
     elevatorCommand.start();
+    
   }
   
 
@@ -368,9 +370,12 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     commonPeriodic();  
     Scheduler.getInstance().run();
+
     if ((ticks % 20) == 0) {
-      SmartDashboard.putNumber("UltrasonicLeft", Robot.proximitySensor.getDistanceLeft());
-      SmartDashboard.putNumber("UltrasonicRight", Robot.proximitySensor.getDistanceRight());
+      System.out.println("Left: " + proximitySensor.getDistanceLeft() + "   Right: " + proximitySensor.getDistanceRight());
+
+      SmartDashboard.putNumber("UltrasonicLeft", proximitySensor.getDistanceLeft());
+      SmartDashboard.putNumber("UltrasonicRight", proximitySensor.getDistanceRight());
     }
   }
 

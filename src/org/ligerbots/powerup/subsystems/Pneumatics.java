@@ -17,7 +17,7 @@ public class Pneumatics extends Subsystem {
       ON, OFF, TOGGLE
     }
     public Pneumatics() {
-        compressor = new Compressor(org.ligerbots.powerup.RobotMap.PCM_ID);
+        compressor = new Compressor(RobotMap.PCM_ID);
         compressor.setClosedLoopControl(false);
     }
     public void initDefaultCommand() {
@@ -34,5 +34,9 @@ public class Pneumatics extends Subsystem {
       if (state == CompressorState.TOGGLE) {
         compressor.setClosedLoopControl(!(compressor.getClosedLoopControl()));
       }
+    }
+    
+    public boolean getCompressorState() {
+      return compressor.getClosedLoopControl();
     }
 }

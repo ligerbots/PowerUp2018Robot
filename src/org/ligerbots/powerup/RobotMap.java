@@ -39,7 +39,7 @@ public class RobotMap {
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
   public static final int REV_BLINKIN = 1;
-  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 1;
+  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 24;
   
   public static final int ULTRASONIC_LEFT_TRIGGER = 4;
   public static final int ULTRASONIC_LEFT_ECHO = 5;
