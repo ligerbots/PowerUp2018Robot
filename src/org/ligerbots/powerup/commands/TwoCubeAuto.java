@@ -16,7 +16,6 @@ import org.ligerbots.powerup.Robot.SecondAction;
  */
 public class TwoCubeAuto extends CommandGroup {
   
-   // REMEMBER TO SWITCH SIGNS AND STUFF (if u don't know what this means for some reason don't do anything / ask Mark 
 
     public TwoCubeAuto(FirstAction first, SecondAction second) {
       
@@ -105,9 +104,7 @@ public class TwoCubeAuto extends CommandGroup {
             Robot.elevator.setDesiredHeight(FieldMap.switchScoringHeight);
             addSequential(new IntakeAuto(true, 0.7, 1.0, 18.0));
           }
-          else {
-            
-          }
+          break;
         case Scale:
           break;
         case Nothing:

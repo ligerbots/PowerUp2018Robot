@@ -11,10 +11,10 @@ public class DrawAuto {
 
   public static void main(String[] args) {
     
-      @SuppressWarnings("unused")
+     // @SuppressWarnings("unused")
       FieldMap fieldMap = new FieldMap(); 
       
-      Draw points = new Draw(FieldMap.startPositions[3].multiply(-1, 1), FieldMap.wayPointsA, true, true);
+      Draw points = new Draw(FieldMap.startPositions[5].multiply(-1, 1), FieldMap.wayPointsAlpha, false, false);
       JFrame frame = new JFrame("Points");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.add(points);

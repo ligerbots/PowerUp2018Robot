@@ -43,6 +43,7 @@ public class OI {
   SendableChooser<Robot.SecondAction> secondAction;
   
 	
+  
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
   //// joystick.
@@ -206,5 +207,13 @@ public class OI {
   
   public Robot.StartingPosition getStartingPosition() {
     return startingPosition.getSelected();
+  }
+  
+  public Robot.FirstAction getFirstAction() {
+    return firstAction.getSelected();
+  }
+  
+  public Robot.SecondAction getSecondAction() {
+    return secondAction.getSelected();
   }
 }
