@@ -31,7 +31,7 @@ public class ElevatorCommand extends Command {
     elevator.setPID();
     // TODO: Can't call zeroEncoder here since we don't know where it will be at the start of teleop.
     
-    SmartDashboard.putNumber("Elevator Slow", 0.25);
+    SmartDashboard.putNumber("Elevator Slow", 0.4);
     position = Robot.elevator.getPosition();
   }
 
@@ -42,8 +42,8 @@ public class ElevatorCommand extends Command {
           waiting = false;
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
-            if (!(elevator.getPosition() > 66)) {
-              if (elevator.getPosition() >= 62) { 
+            if (!(elevator.getPosition() > 68)) {
+              if (elevator.getPosition() >= 64) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
                 elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));

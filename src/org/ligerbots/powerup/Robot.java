@@ -198,7 +198,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
 	  
-	StartingPosition startPos = oi.getStartingPosition();;
+	StartingPosition startPos = oi.getStartingPosition();
 
 	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
@@ -225,7 +225,7 @@ public class Robot extends IterativeRobot {
       case One:
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.SwitchB; //change back later or something
+            first = FirstAction.ScaleBeta; //change back later or something
             second = SecondAction.Nothing;
           }
           else {
@@ -247,7 +247,7 @@ public class Robot extends IterativeRobot {
       case Two:
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.SwitchB; //change back later
+            first = FirstAction.ScaleBeta; //change back later
             second = SecondAction.Nothing;
           }
           else {
@@ -273,7 +273,7 @@ public class Robot extends IterativeRobot {
       case Four:
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.SwitchB; //change later
+            first = FirstAction.ScaleBeta; //change later
             second = SecondAction.Nothing;
           }
           else {
@@ -295,7 +295,7 @@ public class Robot extends IterativeRobot {
       case FIVE:
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.SwitchB; //change later
+            first = FirstAction.ScaleBeta; //change later
             second = SecondAction.Nothing;
           }
           else {
@@ -372,8 +372,6 @@ public class Robot extends IterativeRobot {
     Scheduler.getInstance().run();
 
     if ((ticks % 20) == 0) {
-      System.out.println("Left: " + proximitySensor.getDistanceLeft() + "   Right: " + proximitySensor.getDistanceRight());
-
       SmartDashboard.putNumber("UltrasonicLeft", proximitySensor.getDistanceLeft());
       SmartDashboard.putNumber("UltrasonicRight", proximitySensor.getDistanceRight());
     }

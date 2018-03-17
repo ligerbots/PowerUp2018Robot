@@ -24,7 +24,6 @@ public class ElevatorAuto extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
       
-      System.out.println(Robot.elevator.getDesiredHeight());
       
       position = Robot.elevator.getDesiredHeight();
       sign = Math.signum(position - Robot.elevator.getPosition());

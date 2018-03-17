@@ -43,6 +43,14 @@ public class Intake extends Subsystem {
 	      intakeSlave.setInverted(true);
 	      intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
       }
+      
+      intakeMaster.configPeakCurrentLimit(10, 0);
+      intakeSlave.configPeakCurrentLimit(10, 0);
+      intakeMaster.enableCurrentLimit(true);
+      intakeSlave.enableCurrentLimit(true);
+
+
+
     }
     
     public void intakeOn(boolean reverse, double speed) {
