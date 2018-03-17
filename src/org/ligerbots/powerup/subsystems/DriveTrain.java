@@ -146,6 +146,10 @@ public DriveTrain() {
 	      turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
 	    }
     }, new Object());
+	
+	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+    .forEach(talon -> talon.configPeakCurrentLimit(45, 0));
+  
   }
   
   public void setInitialRobotPosition(double x, double y, double angle)
@@ -483,6 +487,12 @@ public DriveTrain() {
   
   public double getAbsoluteDistanceTraveled() {
     return absoluteDistanceTraveled;
+  }
+  
+  public void limitDriveCurrent(boolean enable) {
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+      .forEach(talon -> talon.enableCurrentLimit(enable));
+    
   }
 
 }

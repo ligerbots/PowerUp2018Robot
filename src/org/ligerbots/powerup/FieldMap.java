@@ -61,7 +61,7 @@ public class FieldMap {
         startPositions[5] = new FieldPosition(117.6, rL2);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new FieldPosition(44.8, 139.5-rL2, FieldMap.switchScoringHeight);
+        switchScoringSpot[0] = new FieldPosition(40.0, 139.5-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[1] = new FieldPosition(82.0+rL2, 150.0, FieldMap.switchScoringHeight);
         switchScoringSpot[2] = new FieldPosition(-60.0, 196.5 + rL2, FieldMap.switchScoringHeight);
         
@@ -76,7 +76,8 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new FieldPosition(44.8, 90, 4.0));
+        wayPointsA.add(new FieldPosition(40.0, 90, 4.0));
+        wayPointsA.add(new FieldPosition(40.0, 100));
         wayPointsA.add(switchScoringSpot[0]);
         
         wayPointsB.add(new FieldPosition(126.0, 120.0, 4.0));
