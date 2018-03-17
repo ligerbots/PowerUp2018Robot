@@ -83,7 +83,7 @@ public class DrivePathCommand extends Command {
       else if (angleError < -180) angleError += 360;
       
       
-      turn = angleError * 0.01 + Math.signum(angleError) * 0.5;
+      turn = angleError * 0.01 + Math.signum(angleError) * 0.55;
       
       rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
       rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
@@ -119,8 +119,7 @@ public class DrivePathCommand extends Command {
 
       
 
-      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
- && waypointIndex <= (waypoints.size() - 2)) && (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.0 && Math.abs(angleError) <= 10.0)) {
+      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.5 && Math.abs(angleError) <= 10.0)) {
         
         
         
