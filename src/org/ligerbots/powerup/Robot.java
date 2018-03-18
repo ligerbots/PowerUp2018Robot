@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
+import org.ligerbots.powerup.commands.IntakeAuto;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TwoCubeAuto;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
@@ -56,6 +57,9 @@ public class Robot extends IterativeRobot {
   public static ProximitySensor proximitySensor;
   public static FieldMap fieldMap;
   public static Pneumatics pneumatics;
+  
+  public static double autoStart;
+  boolean autoCheck = false;
   
   public enum StartingPosition {
 	One("1"),
@@ -108,7 +112,12 @@ public class Robot extends IterativeRobot {
 	public String toString() {
 	  return name;
 	}
-  }  
+  } 
+  
+  public enum Priority {
+    SWITCH, SCALE
+  }
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -198,6 +207,8 @@ public class Robot extends IterativeRobot {
   @Override
   public void autonomousInit() {
 	  
+    autoStart = Robot.time();
+    
 	StartingPosition startPos = oi.getStartingPosition();
 
 	SmartDashboard.putString("vision/active_mode", "cube");
@@ -225,7 +236,7 @@ public class Robot extends IterativeRobot {
       case One:
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.ScaleBeta; //change back later or something
+            first = FirstAction.SwitchB;//oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change back later or something
             second = SecondAction.Nothing;
           }
           else {
@@ -235,7 +246,7 @@ public class Robot extends IterativeRobot {
         }
         else {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.ScaleBeta;
+            first = FirstAction.DriveForward;
             second = SecondAction.Nothing;
           }
           else {
@@ -247,7 +258,7 @@ public class Robot extends IterativeRobot {
       case Two:
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.ScaleBeta; //change back later
+            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change back later
             second = SecondAction.Nothing;
           }
           else {
@@ -273,7 +284,7 @@ public class Robot extends IterativeRobot {
       case Four:
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.ScaleBeta; //change later
+            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change later
             second = SecondAction.Nothing;
           }
           else {
@@ -295,7 +306,7 @@ public class Robot extends IterativeRobot {
       case FIVE:
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.ScaleBeta; //change later
+            first = FirstAction.SwitchB;//.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change later
             second = SecondAction.Nothing;
           }
           else {
@@ -305,7 +316,7 @@ public class Robot extends IterativeRobot {
         }
         else {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.ScaleBeta;
+            first = FirstAction.DriveForward;;
             second = SecondAction.Nothing;
           }
           else {
@@ -328,6 +339,8 @@ public class Robot extends IterativeRobot {
     if (auto != null) {
       auto.start();
     }
+    
+    
   }
  
   
@@ -338,7 +351,14 @@ public class Robot extends IterativeRobot {
   public void autonomousPeriodic() {
     commonPeriodic();  
     driveTrain.printEncoder();
+   /* if (Robot.time() - autoStart >= 11.0 && !autoCheck) {
+      Scheduler.getInstance().removeAll();
+      IntakeAuto temp = new IntakeAuto(true, 0.7, 1.5, 0.0);
+      temp.start();
+      autoCheck = true;
+    }*/
     Scheduler.getInstance().run();
+    
   }
 
   @Override
@@ -389,5 +409,9 @@ public class Robot extends IterativeRobot {
       SmartDashboard.putNumber("RobotX", Robot.driveTrain.getRobotPosition().getX());
       SmartDashboard.putNumber("RobotY", Robot.driveTrain.getRobotPosition().getY());
 	  ticks ++;
+  }
+  
+  public static double autoStart() {
+    return autoStart;
   }
 }

@@ -40,6 +40,7 @@ public class OI {
   SendableChooser<Robot.StartingPosition> startingPosition;
   SendableChooser<Robot.FirstAction> firstAction;
   SendableChooser<Robot.SecondAction> secondAction;
+  SendableChooser<Robot.Priority> priority;
   
 	
   //// CREATING BUTTONS
@@ -92,6 +93,10 @@ public class OI {
     secondAction = new SendableChooser<>();
     populateSelect(secondAction, Robot.SecondAction.class);
     SmartDashboard.putData("SecondAction", secondAction);
+    
+    priority = new SendableChooser<>();
+    populateSelect(priority, Robot.Priority.class);
+    SmartDashboard.putData("Priority", priority);
 	    
     xbox = new XboxController(0);
     elevatorController = new Joystick(2);
@@ -203,5 +208,9 @@ public class OI {
   
   public Robot.StartingPosition getStartingPosition() {
     return startingPosition.getSelected();
+  }
+  
+  public Robot.Priority getPriority() {
+    return priority.getSelected();
   }
 }

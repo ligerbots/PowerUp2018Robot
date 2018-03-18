@@ -20,8 +20,9 @@ import org.ligerbots.powerup.FieldPosition;
 
 public class FieldMap {
     
-    public static final double scaleScoringHeight = 62.0;   // 70" is our max elevator height
-    public static final double switchScoringHeight = 20.0;
+
+    public static final double scaleScoringHeight = 64.0;   // 70" is our max elevator height
+    public static final double switchScoringHeight = 24;
     
     // Robot dimensions with bumpers
     public static final double robotWidth = 27.125 + 7.0;
@@ -35,11 +36,11 @@ public class FieldMap {
     // The positions for our scoring positions on all platforms is symmetric around the X axis
     // in other words, if one platform is at Y, then the other is at -Y
     
-    public FieldPosition[] switchScoringSpot = new FieldPosition[3];    
-    public FieldPosition[] scaleScoringSpot = new FieldPosition[2]; 
+    public static FieldPosition[] switchScoringSpot = new FieldPosition[3];    
+    public static FieldPosition[] scaleScoringSpot = new FieldPosition[2]; 
 
-    public FieldPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
-    public FieldPosition scaleScoringSpotBeta;  // Acessing the platform from the outside
+    public static FieldPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
+    public static FieldPosition scaleScoringSpotBeta;  // Acessing the platform from the outside
     
     // Way Points are the intermediate points on the way to a particular scoring position
     // They are meant to be universal -- the first point should be something that can be
@@ -61,9 +62,9 @@ public class FieldMap {
         startPositions[5] = new FieldPosition(117.6, rL2);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new FieldPosition(40.0, 139.5-rL2, FieldMap.switchScoringHeight);
+        switchScoringSpot[0] = new FieldPosition(40.0, 120.5-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[1] = new FieldPosition(82.0+rL2, 150.0, FieldMap.switchScoringHeight);
-        switchScoringSpot[2] = new FieldPosition(-60.0, 196.5 + rL2, FieldMap.switchScoringHeight);
+        switchScoringSpot[2] = new FieldPosition(75.0, 140.5+rL2, FieldMap.switchScoringHeight);
         
         scaleScoringSpot[0] = new FieldPosition(90.4, 297.3-rW2, FieldMap.scaleScoringHeight);
         scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);
@@ -76,8 +77,8 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new FieldPosition(40.0, 90, 4.0));
-        wayPointsA.add(new FieldPosition(40.0, 100));
+        wayPointsA.add(new FieldPosition(40.0, 80, 4.0));
+        wayPointsA.add(new FieldPosition(40.0, 90, switchScoringHeight));
         wayPointsA.add(switchScoringSpot[0]);
         
         wayPointsB.add(new FieldPosition(126.0, 120.0, 4.0));

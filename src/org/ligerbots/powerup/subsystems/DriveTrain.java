@@ -115,6 +115,9 @@ public DriveTrain() {
       .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
   robotDrive = new DifferentialDrive(leftMaster, rightMaster);
+  
+ /* leftMaster.configOpenloopRamp(0.1, 0);
+  rightMaster.configOpenloopRamp(0.1, 0);*/
 
   // TODO: This should be sampled at 200Hz
   // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
@@ -148,7 +151,15 @@ public DriveTrain() {
     }, new Object());
 	
 	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-    .forEach(talon -> talon.configPeakCurrentLimit(45, 0));
+    .forEach(talon -> talon.configContinuousCurrentLimit(45, 0));
+	
+	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+    .forEach(talon -> talon.configPeakCurrentLimit(50, 0));
+	
+	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+    .forEach(talon -> talon.enableCurrentLimit(true));
+	
+	
   
   }
   
@@ -181,8 +192,7 @@ public DriveTrain() {
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
 	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     if (Robot.elevator.getPosition() < 40) {
-      leftMaster.configOpenloopRamp(0, 0);
-      rightMaster.configOpenloopRamp(0, 0);
+      System.out.println("Throttle: " + -throttle + "    Rotate: " + -rotate);
       robotDrive.arcadeDrive(-throttle, -rotate);
     }
     else {
@@ -191,8 +201,11 @@ public DriveTrain() {
       // TODO: We might also need to scale the rotation speed.
 
 	  //(,0);
-    	limitedThrottle = -throttle * (1- ((Math.min(Robot.elevator.getPosition(),70)-40)/60.0));
-	  robotDrive.arcadeDrive(limitedThrottle, -rotate);
+
+      limitedThrottle = -throttle * (1- ((Math.min(Robot.elevator.getPosition(),70)-40)/60.0));
+      System.out.println("Limited Throttle: " + limitedThrottle + "    Rotate: " + -rotate * 0.85);
+
+	  robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.85);
 	  SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
 	  //SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }

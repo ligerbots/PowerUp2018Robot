@@ -112,15 +112,15 @@ public class DrivePathCommand extends Command {
       
       if ((Robot.ticks % 1) == 0) {
 
-    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f\n",
+    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
     			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);
       }
 
       
 
-      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
- && waypointIndex <= (waypoints.size() - 2)) && (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.0 && Math.abs(angleError) <= 10.0)) {
+      
+      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist >= 0.1 && Math.abs(angleError) <= 10.0)) {
         
         
         
@@ -140,8 +140,9 @@ public class DrivePathCommand extends Command {
           
           angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
           
-          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f\n",
-  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError);
+          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
+  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
+                    
         }
         
       }

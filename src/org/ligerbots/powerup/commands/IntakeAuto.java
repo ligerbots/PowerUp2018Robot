@@ -12,6 +12,8 @@ public class IntakeAuto extends Command {
     double time; //seconds
     double speed;
     
+    double otherStart;
+    
     double startTime;
     
     double height;
@@ -30,19 +32,24 @@ public class IntakeAuto extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      
+      otherStart = Robot.autoStart();
+      System.out.println("Intake On");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      if (Robot.elevator.getPosition() >= height && !check) {
+      if ((Robot.elevator.getPosition() >= height && !check) || Robot.time() - otherStart >= 11.0 ) {
         startTime = Robot.time();
         check = true;
       }
-      if (Robot.elevator.getPosition() >= height) {
+      if (Robot.elevator.getPosition() >= height || Robot.time() - otherStart >= 11.0 ) {
         
         Robot.intake.intakeOn(reverse, speed);
+        if (Robot.ticks % 10 == 0) {
+          System.out.println("Intake out");
+        }
       }
+      
     }
 
     // Make this return true when this Command no longer needs to run execute()
