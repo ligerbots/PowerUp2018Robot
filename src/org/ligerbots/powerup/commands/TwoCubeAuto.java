@@ -90,6 +90,20 @@ public class TwoCubeAuto extends CommandGroup {
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
+        case ScaleGamma:
+          if (Robot.gameData.charAt(1) == 'R') {
+            tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsGamma.clone();
+            for (int i = 0; i < tempWaypoints.size(); i += 1) {
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).elevatorHeight));
+            }
+          }
+          else {
+            tempWaypoints = FieldMap.wayPointsGamma;
+          }
+          addParallel(new HoldBoxCommand());
+          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
+          break;
         default:
           break;
           
@@ -99,13 +113,14 @@ public class TwoCubeAuto extends CommandGroup {
         case Switch:
           if (Robot.gameData.charAt(0) == Robot.gameData.charAt(1)) {
             addSequential(new BadDriveDistance(10.0, true));
-            addSequential(new ElevatorPreset(1, 40.0));
+            addSequential(new ElevatorPreset(0, 40.0));
             addSequential(new TurnCommand(-110.0, 1.0));
             addSequential(new IntakePistonCommand(true));
           //  addSequential(new DriveToCube());
-            addSequential(new DrivePathCommand(Arrays.asList(FieldMap.switchScoringSpot[2])));
-            addParallel(new IntakeAuto(false, 1.0, 1.0, 0.0));
+            addSequential(new DrivePathCommand(Arrays.asList(new FieldPosition(87.5, 190.0, 0.0))));
+            addSequential(new IntakeAuto(false, 1.0, 1.0, 0.0));
             addSequential(new IntakePistonCommand(false));
+            addSequential(new BadDriveDistance(6.0, true));
             //if (Math.abs(Robot.driveTrain.getRobotPosition().getX()) < 85/* && Robot.driveTrain.getRobotPosition().getY() > 160.0*/) {
               Robot.elevator.setDesiredHeight(FieldMap.switchScoringHeight);
               addSequential(new IntakeAuto(true, 0.7, 1.0, 18.0));

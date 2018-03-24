@@ -37,7 +37,7 @@ public class FieldMap {
     // in other words, if one platform is at Y, then the other is at -Y
     
     public static FieldPosition[] switchScoringSpot = new FieldPosition[3];    
-    public static FieldPosition[] scaleScoringSpot = new FieldPosition[2]; 
+    public static FieldPosition[] scaleScoringSpot = new FieldPosition[3]; 
 
     public static FieldPosition scaleScoringSpotAlpha; // The normal "inner" scoring position
     public static FieldPosition scaleScoringSpotBeta;  // Acessing the platform from the outside
@@ -51,6 +51,7 @@ public class FieldMap {
     public static ArrayList<FieldPosition> wayPointsB = new ArrayList<FieldPosition>();
     public static ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
     public static ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
+    public static ArrayList<FieldPosition> wayPointsGamma = new ArrayList<FieldPosition>();
 
     
     public FieldMap () {
@@ -64,10 +65,11 @@ public class FieldMap {
         // scoring positions are also robot center
         switchScoringSpot[0] = new FieldPosition(45.0, 115-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[1] = new FieldPosition(82.0+rL2, 150.0, FieldMap.switchScoringHeight);
-        switchScoringSpot[2] = new FieldPosition(75.0, 140.5+rL2, FieldMap.switchScoringHeight);
+        switchScoringSpot[2] = new FieldPosition(60.0, 140.5+rL2, FieldMap.switchScoringHeight);
         
         scaleScoringSpot[0] = new FieldPosition(102.0, 225.0, FieldMap.scaleScoringHeight);
         scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);
+        scaleScoringSpot[2] = new FieldPosition(-80.0, 220.0, FieldMap.scaleScoringHeight);
                 
         // TODO -- create waypoints corresponding to each scoring position
         //         that will ensure the robot doesn't crash into things
@@ -93,6 +95,11 @@ public class FieldMap {
         wayPointsBeta.add(new FieldPosition(128.0, 240.0));
         wayPointsBeta.add(new FieldPosition(130.0, 310.0));
         wayPointsBeta.add(scaleScoringSpot[1]);
+        
+        wayPointsGamma.add(new FieldPosition(117.5, 180.0, 4.0));
+        wayPointsGamma.add(new FieldPosition(-80, 180));
+        wayPointsGamma.add(scaleScoringSpot[2]);
+        
 
         
 

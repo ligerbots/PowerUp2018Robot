@@ -85,6 +85,7 @@ public class Robot extends IterativeRobot {
 	SwitchB("Switch B"),
 	ScaleAlpha("Scale Alpha"),
 	ScaleBeta("Scale Beta"),
+	ScaleGamma("Scale Gamma"),
 	Nothing("Do Nothing");
 	    
 	public final String name;
@@ -246,11 +247,11 @@ public class Robot extends IterativeRobot {
         }
         else {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.DriveForward;
+            first = FirstAction.ScaleGamma;
             second = SecondAction.Nothing;
           }
           else {
-            first = FirstAction.DriveForward;
+            first = FirstAction.ScaleGamma;
             second = SecondAction.Nothing;
           }
         }
@@ -272,7 +273,7 @@ public class Robot extends IterativeRobot {
             second = SecondAction.Nothing;
           }
           else {
-            first = FirstAction.DriveForward;
+            first = FirstAction.ScaleGamma;
             second = SecondAction.Nothing;
           }
         }
@@ -298,7 +299,7 @@ public class Robot extends IterativeRobot {
             second = SecondAction.Nothing;
           }
           else {
-            first = FirstAction.DriveForward;
+            first = FirstAction.ScaleGamma;
             second = SecondAction.Nothing;
           }
         }
@@ -316,11 +317,11 @@ public class Robot extends IterativeRobot {
         }
         else {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.DriveForward;;
+            first = FirstAction.ScaleGamma;;
             second = SecondAction.Nothing;
           }
           else {
-            first = FirstAction.DriveForward;
+            first = FirstAction.ScaleGamma;
             second = SecondAction.Nothing;
           }
         }

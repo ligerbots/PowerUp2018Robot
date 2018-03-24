@@ -240,7 +240,7 @@ public class DriveTrain extends Subsystem {
           * RobotMap.WHEEL_CIRCUMFERENCE;
     } else {
       return (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
-          * RobotMap.WHEEL_CIRCUMFERENCE * (7.0/3.0); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          * RobotMap.WHEEL_CIRCUMFERENCE; ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
   }
 
@@ -474,7 +474,7 @@ public class DriveTrain extends Subsystem {
     double deltaEncoderLeft = encoderLeft - prevEncoderLeft;
     double deltaEncoderRight = encoderRight - prevEncoderRight;
 
-    double deltaInches = deltaEncoderLeft;//(deltaEncoderLeft + deltaEncoderRight) / 2;
+    double deltaInches = (deltaEncoderLeft + deltaEncoderRight) / 2;
 
     absoluteDistanceTraveled += Math.abs(deltaInches);
 
