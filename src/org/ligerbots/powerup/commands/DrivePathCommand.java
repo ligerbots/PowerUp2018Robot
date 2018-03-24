@@ -90,18 +90,19 @@ public class DrivePathCommand extends Command {
       else if (angleError < -180) angleError += 360;
       
       
-      turn = angleError * 0.01 + Math.signum(angleError) * 0.5;
+      turn = angleError * 0.01 + Math.signum(angleError) * 0.45;
       
       double rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
       double rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
       
-      if (Math.abs(angleError) >= 15) {
+      if (Math.abs(angleError) >= 10) {
+        System.out.println("Not Driving : " + angleError);
         drive = 0.0;
       } else {
           if (rampDownDelta < rampDownDist) {
             drive = (rampDownDelta * (0.4) / rampDownDist)
-                + 0.45;
-          } else if (rampUpDelta < rampUpDist) {
+                + 0.5;
+          } else/* (rampUpDelta < rampUpDist)*/ {
             drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.6;
           }
           drive = (waypoints.get(waypointIndex).action == Action.REVERSE) ? drive * -1.0 : drive;
@@ -119,9 +120,12 @@ public class DrivePathCommand extends Command {
       
       if ((Robot.ticks % 1) == 0) {
 
-    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f",
+    	  /*System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
-    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);
+    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);*/
+        
+          System.out.printf("X: %5.2f, Y: %5.2f, Dist: %5.2f, Distance Traveled: %5.2f, Angle: %5.2f, Angle Error: %5.2f, Drive: %5.2f, Turn: %5.2f \n", Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(), dist, Math.abs(Robot.driveTrain.getAbsoluteDistanceTraveled() - waypointDist)
+              , Robot.driveTrain.getYaw(), angleError, drive, turn);
       }
 
       

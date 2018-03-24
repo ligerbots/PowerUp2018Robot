@@ -408,6 +408,9 @@ public class Robot extends IterativeRobot {
   public void commonPeriodic() {
       SmartDashboard.putNumber("RobotX", Robot.driveTrain.getRobotPosition().getX());
       SmartDashboard.putNumber("RobotY", Robot.driveTrain.getRobotPosition().getY());
+      if ((ticks % 4) == 0) {
+       //System.out.printf("X: %5.2f, Y: %5.2f \n", driveTrain.getRobotPosition().getX(), driveTrain.getRobotPosition().getY());
+      }
 	  ticks ++;
   }
   

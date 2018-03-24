@@ -137,7 +137,7 @@ public class DriveTrain extends Subsystem {
     // until we get the navX fixed, but use the elevator being present as an indication that this is
     // NOT the H-Drive bot
     if (Robot.elevator.elevatorPresent) {
-      navx = new AHRS(Port.kMXP, (byte) 50);
+      navx = new AHRS(Port.kMXP, (byte) 200);
       System.out.println("NavX on MXP port.");
     } else {
       navx = new AHRS(SerialPort.Port.kUSB);
@@ -195,7 +195,6 @@ public class DriveTrain extends Subsystem {
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
     // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     if (Robot.elevator.getPosition() < 40) {
-      System.out.println("Throttle: " + -throttle + "    Rotate: " + -rotate);
       robotDrive.arcadeDrive(-throttle, -rotate);
     } else {
       // leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
@@ -206,7 +205,6 @@ public class DriveTrain extends Subsystem {
 
       limitedThrottle =
           -throttle * (1 - ((Math.min(Robot.elevator.getPosition(), 70) - 40) / 60.0));
-      System.out.println("Limited Throttle: " + limitedThrottle + "    Rotate: " + -rotate * 0.85);
 
       robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.85);
       SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
@@ -242,7 +240,7 @@ public class DriveTrain extends Subsystem {
           * RobotMap.WHEEL_CIRCUMFERENCE;
     } else {
       return (-rightSlave.getSelectedSensorPosition(0) / 1024.0) * RobotMap.GEARING_FACTOR
-          * RobotMap.WHEEL_CIRCUMFERENCE;
+          * RobotMap.WHEEL_CIRCUMFERENCE * (7.0/3.0); ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
   }
 
@@ -476,7 +474,7 @@ public class DriveTrain extends Subsystem {
     double deltaEncoderLeft = encoderLeft - prevEncoderLeft;
     double deltaEncoderRight = encoderRight - prevEncoderRight;
 
-    double deltaInches = (deltaEncoderLeft + deltaEncoderRight) / 2;
+    double deltaInches = deltaEncoderLeft;//(deltaEncoderLeft + deltaEncoderRight) / 2;
 
     absoluteDistanceTraveled += Math.abs(deltaInches);
 
