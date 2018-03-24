@@ -42,6 +42,9 @@ public class DrivePathCommand extends Command {
     
     double oldDist;
     
+    double dist;  
+    double waypointDist;
+    
     
     public DrivePathCommand(List<FieldPosition> waypoints) {
       requires (Robot.driveTrain);
@@ -67,7 +70,10 @@ public class DrivePathCommand extends Command {
       System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
 	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
       
+      dist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
+      
+      waypointDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
       Robot.elevator.setDesiredHeight(currentWaypoint.elevatorHeight);
     }
@@ -121,7 +127,8 @@ public class DrivePathCommand extends Command {
       
 
       
-      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist >= 0.1 && Math.abs(angleError) <= 10.0)) {
+      if (dist - Math.abs(Robot.driveTrain.getAbsoluteDistanceTraveled() - waypointDist) <= RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE/*(currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE)
+       || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist >= 0.1 && Math.abs(angleError) <= 10.0)*/) {
         
         
         
@@ -129,7 +136,8 @@ public class DrivePathCommand extends Command {
           finished = true;
         }
         else {
-          
+                    
+          waypointDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
         
           Robot.driveTrain.allDrive(0, 0);
           
@@ -140,6 +148,8 @@ public class DrivePathCommand extends Command {
           angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
           
           angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
+          
+          dist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
           
           System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
   	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
