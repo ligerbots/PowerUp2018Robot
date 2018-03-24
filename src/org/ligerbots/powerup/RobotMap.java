@@ -31,6 +31,8 @@ public class RobotMap {
   public static final int CT_RIGHT_2 = 3;
   public static final int CT_ELEVATOR_1 = 2;
   public static final int CT_ELEVATOR_2 = 1;
+  public static final int CT_ELEVATOR_3 = 11;
+  public static final int CT_ELEVATOR_4 = 12;
   public static final int CT_INTAKE_1 = 7;
   public static final int CT_INTAKE_2 = 8;
   

@@ -24,7 +24,6 @@ public class IntakeCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-  //    Robot.driveTrain.limitDriveCurrent(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -55,7 +54,6 @@ public class IntakeCommand extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-     // Robot.driveTrain.limitDriveCurrent(false);
       Robot.intake.intakeOn(false, 0);
       /*
       if (!reverse) {

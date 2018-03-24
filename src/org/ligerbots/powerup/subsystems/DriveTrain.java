@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.AHRSProtocol.AHRSUpdateBase;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -16,7 +15,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
-
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.commands.DriveCommand;
@@ -39,7 +37,7 @@ public class DriveTrain extends Subsystem {
   double turnOutput = 0.0;
   double startAngle;
   double targetAngle;
-  double wrapCorrection;  // 180.0 or -180.0
+  double wrapCorrection; // 180.0 or -180.0
   double angleOffset = 0.0;
   double rotation;
   double tolerance = 0.0;
@@ -58,13 +56,13 @@ public class DriveTrain extends Subsystem {
   double positionY;
   double absoluteDistanceTraveled;
   int numberOfTicks = 0;
-  
+
   double prevEncoderLeft;
   double prevEncoderRight;
   double rotationOffset = 0;
   double lastOutputLeft = 0;
   double lastOutputRight = 0;
-  
+
   RobotPosition robotPosition;
 
   public class TalonID {
@@ -78,110 +76,115 @@ public class DriveTrain extends Subsystem {
   }
 
   @SuppressWarnings("unused")
-public DriveTrain() {
-	System.out.println("DriveTrain constructed");
+  public DriveTrain() {
+    System.out.println("DriveTrain constructed");
 
-  SmartDashboard.putNumber("Elevator Up Accel", 2);
-  SmartDashboard.putNumber("Elevator Up Speed", 0.5);
-  SmartDashboard.putNumber("Elevator Up Turn", 0.75);
+    SmartDashboard.putNumber("Elevator Up Accel", 2);
+    SmartDashboard.putNumber("Elevator Up Speed", 0.5);
+    SmartDashboard.putNumber("Elevator Up Turn", 0.75);
 
-  // This initial robot position will be overwritten by our autonomous selection
-  // we only zero it out here for practice, where we go straight teleop
-  robotPosition = new RobotPosition(0.0, 0.0, 0.0);
+    // This initial robot position will be overwritten by our autonomous selection
+    // we only zero it out here for practice, where we go straight teleop
+    robotPosition = new RobotPosition(0.0, 0.0, 0.0);
 
-  leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
-  leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
-  rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
-  rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
+    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
+    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
+    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
 
-  // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-  leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-  rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+    leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
+    rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
-  // left = new SpeedControllerGroup(leftMaster, leftSlave);
-  // right = new SpeedControllerGroup(rightMaster, rightSlave);
+    // left = new SpeedControllerGroup(leftMaster, leftSlave);
+    // right = new SpeedControllerGroup(rightMaster, rightSlave);
 
-  leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-  rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-  rightMaster.setSensorPhase(true);
-  leftMaster.setSensorPhase(true);
-  
-  //leftMaster.configClosedloopRamp(0.3, 0);
-  //rightMaster.configClosedloopRamp(0.3, 0);
+    rightMaster.setSensorPhase(true);
+    leftMaster.setSensorPhase(true);
 
-  Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-      .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
+    // leftMaster.configClosedloopRamp(0.3, 0);
+    // rightMaster.configClosedloopRamp(0.3, 0);
 
-  robotDrive = new DifferentialDrive(leftMaster, rightMaster);
-  
- /* leftMaster.configOpenloopRamp(0.1, 0);
-  rightMaster.configOpenloopRamp(0.1, 0);*/
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
-  // TODO: This should be sampled at 200Hz
-  // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
-  if (Robot.elevator.elevatorPresent) {
-  	navx = new AHRS(Port.kMXP, (byte) 50);
-  	System.out.println("NavX on MXP port.");
-  	}
-  else {
-  	navx = new AHRS(SerialPort.Port.kUSB);
-  	System.out.println("NavX on USB port.");
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.configContinuousCurrentLimit(45, 0));
+
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.configPeakCurrentLimit(50, 0));
+    
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.enableCurrentLimit(true));
+    
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.configPeakCurrentDuration(10, 0));
+    
+    
+
+    robotDrive = new DifferentialDrive(leftMaster, rightMaster);
+
+
+    /*
+     * leftMaster.configOpenloopRamp(0.1, 0); rightMaster.configOpenloopRamp(0.1, 0);
+     */
+
+    // TODO: This should be sampled at 200Hz
+    // until we get the navX fixed, but use the elevator being present as an indication that this is
+    // NOT the H-Drive bot
+    if (Robot.elevator.elevatorPresent) {
+      navx = new AHRS(Port.kMXP, (byte) 50);
+      System.out.println("NavX on MXP port.");
+    } else {
+      navx = new AHRS(SerialPort.Port.kUSB);
+      System.out.println("NavX on USB port.");
+    }
+
+    if (pidTurn) {
+      turningController = new PIDController(SmartDashboard.getNumber("DriveP", 1.0),
+          SmartDashboard.getNumber("DriveI", 0.000), SmartDashboard.getNumber("DriveD", 0.0), navx,
+          output -> this.turnOutput = output);
+    }
+
+    navx.registerCallback(
+        (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
+          updatePosition(sensorData.yaw);
+          if (pidTurn) {
+            // TODO: I really don't think we want to be calling
+            // SmartDashboard.getNumber 3 times and setting P, I & D
+            // in the context of the navX callback routine
+            turningController.setP(SmartDashboard.getNumber("DriveP", 1));
+            turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
+            turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
+          }
+        }, new Object());
+
+
+
   }
- 
-	if (pidTurn) {
-		turningController =
-        new PIDController(SmartDashboard.getNumber("DriveP", 1.0), SmartDashboard.getNumber("DriveI", 0.000),
-         			      SmartDashboard.getNumber("DriveD", 0.0), navx, output -> this.turnOutput = output);
-	}
 
-	navx.registerCallback((long systemTimestamp, long sensorTimestamp,
-	                       AHRSUpdateBase sensorData, Object context) ->
-	  {
-      updatePosition(sensorData.yaw);
-	    if (pidTurn) {
-	    	// TODO: I really don't think we want to be calling
-	    	// SmartDashboard.getNumber 3 times and setting P, I & D
-	    	// in the context of the navX callback routine
-	      turningController.setP(SmartDashboard.getNumber("DriveP", 1));
-	      turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
-	      turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
-	    }
-    }, new Object());
-	
-	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-    .forEach(talon -> talon.configContinuousCurrentLimit(45, 0));
-	
-	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-    .forEach(talon -> talon.configPeakCurrentLimit(50, 0));
-	
-	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-    .forEach(talon -> talon.enableCurrentLimit(true));
-	
-	
-  
+  public void setInitialRobotPosition(double x, double y, double angle) {
+    robotPosition.setRobotPosition(x, y, angle);
   }
-  
-  public void setInitialRobotPosition(double x, double y, double angle)
-  {
-	  robotPosition.setRobotPosition(x, y, angle);
-  }
-  
+
   public double getPitch() {
-	  return navx.getPitch();
+    return navx.getPitch();
   }
-  
+
   public double getRoll() {
- return navx.getRoll();
+    return navx.getRoll();
   }
-  
+
   public void talonCurrent() {
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
         .forEach((WPI_TalonSRX talon) -> SmartDashboard
             .putNumber(((Integer) talon.getDeviceID()).toString(), talon.getOutputCurrent()));
   }
-  
+
   public void zeroEncoders() {
     leftSlave.setSelectedSensorPosition(0, 0, 0);
     rightSlave.setSelectedSensorPosition(0, 0, 0);
@@ -190,45 +193,46 @@ public DriveTrain() {
   public void allDrive(double throttle, double rotate) {
 
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
-	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
+    // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     if (Robot.elevator.getPosition() < 40) {
       System.out.println("Throttle: " + -throttle + "    Rotate: " + -rotate);
       robotDrive.arcadeDrive(-throttle, -rotate);
-    }
-    else {
-//      leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
-//      rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+    } else {
+      // leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+      // rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
       // TODO: We might also need to scale the rotation speed.
 
-	  //(,0);
+      // (,0);
 
-      limitedThrottle = -throttle * (1- ((Math.min(Robot.elevator.getPosition(),70)-40)/60.0));
+      limitedThrottle =
+          -throttle * (1 - ((Math.min(Robot.elevator.getPosition(), 70) - 40) / 60.0));
       System.out.println("Limited Throttle: " + limitedThrottle + "    Rotate: " + -rotate * 0.85);
 
-	  robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.85);
-	  SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
-	  //SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
+      robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.85);
+      SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
+      // SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }
   }
 
   // Returns the current yaw value (in degrees, from -180 to 180)
   public double getYaw() {
-	  return navx.getYaw();
+    return navx.getYaw();
   }
 
   // Return the rate of rotation of the yaw (Z-axis) gyro, in degrees per second.
   public double getRate() {
-	  return navx.getRate();
+    return navx.getRate();
   }
 
   // Returns the total accumulated yaw angle (Z Axis, in degrees)
   // reported by the sensor since it was last zeroed. This will go beyond 360 degrees.
   public double getAngle() {
-      return navx.getAngle();
+    return navx.getAngle();
   }
 
   public void initDefaultCommand() {
-	if (Robot.driveCommand == null) Robot.driveCommand = new DriveCommand();
+    if (Robot.driveCommand == null)
+      Robot.driveCommand = new DriveCommand();
     setDefaultCommand(Robot.driveCommand);
   }
 
@@ -241,7 +245,7 @@ public DriveTrain() {
           * RobotMap.WHEEL_CIRCUMFERENCE;
     }
   }
-  
+
   public int getRawEncoderDistance(DriveSide driveSide) {
     if (driveSide == DriveSide.LEFT) {
       return leftSlave.getSelectedSensorPosition(0);
@@ -249,7 +253,7 @@ public DriveTrain() {
       return rightSlave.getSelectedSensorPosition(0);
     }
   }
-  
+
   public void setEncoderDistance(DriveSide driveSide, int dist) {
     if (driveSide == DriveSide.LEFT) {
       leftSlave.setSelectedSensorPosition(dist, 0, 0);
@@ -264,7 +268,7 @@ public DriveTrain() {
         leftSlave.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
     SmartDashboard.putNumber("Right Encoder",
         rightSlave.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE);
-    //SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
+    // SmartDashboard.putData("Drive Distance Command", new DriveDistance(512.0, 1.00, 1.0));
   }
 
   // presently unused
@@ -277,83 +281,93 @@ public DriveTrain() {
       return input;
     }
   }
-    
+
   public void enableTurningControl(double angle, double tolerance) {
     this.angleOffset = angle;
     this.tolerance = tolerance;
     startAngle = getYaw();
     targetAngle = startAngle + angle;
     previousTurnError = Math.abs(angle);
-    
+
     // We need to keep all angles between -180 and 180. Account for that here
     // wrapCorrection will be used below in turnError to undo what we do here
     double originalTargetAngle = targetAngle;
     if (targetAngle > 180.0) {
       targetAngle -= 360.0;
       wrapCorrection = 360.0;
-    }
-    else if (targetAngle < -180.0) {
+    } else if (targetAngle < -180.0) {
       targetAngle += 360.0;
       wrapCorrection = -360.0;
-    }
-    else wrapCorrection = 0.0;
-    
+    } else
+      wrapCorrection = 0.0;
+
     if (pidTurn) {
-        turningController.setSetpoint(targetAngle);
-        turningController.enable();
-        turningController.setInputRange(-180.0, 180.0);
-        turningController.setOutputRange(-1.0, 1.0);
-        turningController.setAbsoluteTolerance(tolerance);
-        // turningController.setToleranceBuffer(1);
-        turningController.setContinuous(true);
+      turningController.setSetpoint(targetAngle);
+      turningController.enable();
+      turningController.setInputRange(-180.0, 180.0);
+      turningController.setOutputRange(-1.0, 1.0);
+      turningController.setAbsoluteTolerance(tolerance);
+      // turningController.setToleranceBuffer(1);
+      turningController.setContinuous(true);
     }
 
-    System.out.printf("currentAngle: %5.2f, originalTargetAngle: %5.2f, targetAngle: %5.2f, " + 
-                      "wrapCorrection: %5.2f\n",
-                      startAngle, originalTargetAngle, targetAngle, wrapCorrection);
+    System.out.printf(
+        "currentAngle: %5.2f, originalTargetAngle: %5.2f, targetAngle: %5.2f, "
+            + "wrapCorrection: %5.2f\n",
+        startAngle, originalTargetAngle, targetAngle, wrapCorrection);
   }
-  
+
   public boolean isTurnOnTarget() {
 
-    if (pidTurn) return turningController.onTarget();
-    
+    if (pidTurn)
+      return turningController.onTarget();
+
     double turnError = Math.abs(turnError());
-    
-    if (turnError <= tolerance ||     // we're within tolerance 
-        turnError > previousTurnError+0.1)  // or if we've gone past -- don't reverse 
+
+    if (turnError <= tolerance || // we're within tolerance
+        turnError > previousTurnError + 0.1) // or if we've gone past -- don't reverse
     {
-		  return true;
-	  } 
+      return true;
+    }
     previousTurnError = turnError;
     return false;
   }
 
   public double getTurnOutput() {
-  angleOffset = turnError();
-  double sign = - Math.signum(angleOffset);  // Note the minus!
-	  
-	if (Math.abs(angleOffset) > 45) return (sign * 0.85);
-    if (Math.abs(angleOffset) > 30) return (sign * 0.8);
-    if (Math.abs(angleOffset) > 15) return (sign * 0.7);
-    if (Math.abs(angleOffset) > 5) return (sign * 0.6);
+    angleOffset = turnError();
+    double sign = -Math.signum(angleOffset); // Note the minus!
+
+    if (Math.abs(angleOffset) > 45)
+      return (sign * 0.85);
+    if (Math.abs(angleOffset) > 30)
+      return (sign * 0.8);
+    if (Math.abs(angleOffset) > 15)
+      return (sign * 0.7);
+    if (Math.abs(angleOffset) > 5)
+      return (sign * 0.6);
     return (sign * 0.55);
   }
-  
-  public double turnError() {
-    if (pidTurn) return turningController.getError();
 
-    double turnError = (Math.abs((targetAngle - rotation) + wrapCorrection))% 360;
-    if (turnError > 180) turnError -= 360;
-    else if (turnError < -180) turnError += 360;
+  public double turnError() {
+    if (pidTurn)
+      return turningController.getError();
+
+    double turnError = (Math.abs((targetAngle - rotation) + wrapCorrection)) % 360;
+    if (turnError > 180)
+      turnError -= 360;
+    else if (turnError < -180)
+      turnError += 360;
     turnError *= Math.signum(angleOffset);
     return turnError;
   }
-  
+
   public double getSetpoint() {
-    if (pidTurn) return turningController.getSetpoint();
-    else return targetAngle;
+    if (pidTurn)
+      return turningController.getSetpoint();
+    else
+      return targetAngle;
   }
-  
+
 
   public void configClosedLoop(double p, double i, double d) {
     leftMaster.config_kP(0, p, 0);
@@ -373,10 +387,10 @@ public DriveTrain() {
 
   public void PIDDrive(double dist) {
 
-    //leftMaster.setSelectedSensorPosition(0, 0, 0);
-    //rightMaster.setSelectedSensorPosition(0, 0, 0);
-	  //   leftMaster.configAllowableClosedloopError(0, 5, 0);
-	  //   rightMaster.configAllowableClosedloopError(0, 5, 0);
+    // leftMaster.setSelectedSensorPosition(0, 0, 0);
+    // rightMaster.setSelectedSensorPosition(0, 0, 0);
+    // leftMaster.configAllowableClosedloopError(0, 5, 0);
+    // rightMaster.configAllowableClosedloopError(0, 5, 0);
     leftMaster.set(ControlMode.Position,
         leftMaster.getSelectedSensorPosition(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE
             - (dist * 1024.0 / RobotMap.WHEEL_CIRCUMFERENCE));
@@ -397,29 +411,32 @@ public DriveTrain() {
     SmartDashboard.putBoolean("Right Master Inversion", rightMaster.getInverted());
     SmartDashboard.putBoolean("Left Slave Inversion", leftSlave.getInverted());
     SmartDashboard.putBoolean("Right Slave Inversion", rightSlave.getInverted());
-   // SmartDashboard.putData("DifferentialDrive", robotDrive);
+    // SmartDashboard.putData("DifferentialDrive", robotDrive);
 
   }
-  
-  //-1 to 1 input
+
+  // -1 to 1 input
   public void autoTurn(double speed) {
     rightMaster.set(ControlMode.PercentOutput, speed);
-    //rightSlave.set(ControlMode.PercentOutput, speed);
+    // rightSlave.set(ControlMode.PercentOutput, speed);
     leftMaster.set(ControlMode.PercentOutput, speed);
-    //leftSlave.set(ControlMode.PercentOutput, speed);
+    // leftSlave.set(ControlMode.PercentOutput, speed);
   }
 
   public void setPID(double p, double i, double d) {
-    if (pidTurn) turningController.setPID(p, i, d);
+    if (pidTurn)
+      turningController.setPID(p, i, d);
   }
 
   public void disablePID() {
-    if (pidTurn) turningController.disable();
+    if (pidTurn)
+      turningController.disable();
   }
 
   public boolean isPidOn() {
     return pidTurn && turningController.isEnabled();
   }
+
   public double getClosedLoopError(DriveSide side) {
     if (side == DriveSide.LEFT) {
       return leftMaster.getClosedLoopError(0) / 1024.0 * RobotMap.WHEEL_CIRCUMFERENCE;
@@ -433,18 +450,17 @@ public DriveTrain() {
    * Sets initial yaw based on where our starting position is.
    */
   public void calibrateYaw() {
-	/*
-	 * This was for only for the 2017 game, with a non-symmetrical field
-	 * 
-    if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
-      rotationOffset = -90.0;
-    } else {
-      rotationOffset = 90.0;
-    } */
+    /*
+     * This was for only for the 2017 game, with a non-symmetrical field
+     * 
+     * if (DriverStation.getInstance().getAlliance() == DriverStation.Alliance.Blue) {
+     * rotationOffset = -90.0; } else { rotationOffset = 90.0; }
+     */
   }
 
   public void zeroYaw() {
-    navx.zeroYaw();  // "Sets the user-specified yaw offset to the current yaw value reported by the sensor."
+    navx.zeroYaw(); // "Sets the user-specified yaw offset to the current yaw value reported by the
+                    // sensor."
   }
 
   /**
@@ -469,44 +485,45 @@ public DriveTrain() {
 
     prevEncoderLeft = encoderLeft;
     prevEncoderRight = encoderRight;
-    
+
     SmartDashboard.putNumber("Yaw", rotation);
-    
+
     SmartDashboard.putNumber("Left Encoder", encoderLeft);
     SmartDashboard.putNumber("Right Encoder", encoderRight);
-    SmartDashboard.putNumber("Robot Direction", navXYaw);    
-    
+    SmartDashboard.putNumber("Robot Direction", navXYaw);
+
   }
-  
+
   public void zeroPosition() {
-	  positionX = 0;
-	  positionY = 0;
-	  zeroYaw();
-	  zeroEncoders();
-	  SmartDashboard.putNumber("Robot Direction", getRobotPosition().getDirection());
-   // SmartDashboard.putNumber("Turn setPoint", turningController.getSetpoint());
+    positionX = 0;
+    positionY = 0;
+    zeroYaw();
+    zeroEncoders();
+    SmartDashboard.putNumber("Robot Direction", getRobotPosition().getDirection());
+    // SmartDashboard.putNumber("Turn setPoint", turningController.getSetpoint());
   }
-  
+
   public RobotPosition getRobotPosition() {
     robotPosition.setRobotPosition(positionX, positionY, rotation);
     return robotPosition;
   }
-  
-  public void setPosition (double x, double y) {
+
+  public void setPosition(double x, double y) {
     positionX = x;
     positionY = y;
     System.out.printf("Starting position - X: %5.2f, Y: %5.2f\n", x, y);
   }
-  
+
   public double getAbsoluteDistanceTraveled() {
     return absoluteDistanceTraveled;
   }
-  
-  public void limitDriveCurrent(boolean enable) {
-    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-      .forEach(talon -> talon.enableCurrentLimit(enable));
-    
-  }
+
+  /*
+   * public void limitDriveCurrent(boolean enable) { Arrays.asList(leftMaster, rightMaster,
+   * leftSlave, rightSlave) .forEach(talon -> talon.enableCurrentLimit(enable));
+   * 
+   * }
+   */
 
 }
 

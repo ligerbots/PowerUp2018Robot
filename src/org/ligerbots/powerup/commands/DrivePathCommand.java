@@ -44,6 +44,7 @@ public class DrivePathCommand extends Command {
     
     
     public DrivePathCommand(List<FieldPosition> waypoints) {
+      requires (Robot.driveTrain);
       this.waypoints = waypoints;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);

@@ -45,11 +45,11 @@ public class Intake extends Subsystem {
 	      intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
       }
       
-      intakeMaster.configContinuousCurrentLimit(15, 0);
+   /*   intakeMaster.configContinuousCurrentLimit(15, 0);
       intakeSlave.configContinuousCurrentLimit(15, 0);
       intakeMaster.enableCurrentLimit(true);
       intakeSlave.enableCurrentLimit(true);
-
+*/
 
 
     }
