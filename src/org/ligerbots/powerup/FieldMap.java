@@ -62,11 +62,11 @@ public class FieldMap {
         startPositions[5] = new FieldPosition(117.6, rL2);  // 5
         
         // scoring positions are also robot center
-        switchScoringSpot[0] = new FieldPosition(40.0, 115-rL2, FieldMap.switchScoringHeight);
+        switchScoringSpot[0] = new FieldPosition(45.0, 115-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[1] = new FieldPosition(82.0+rL2, 150.0, FieldMap.switchScoringHeight);
         switchScoringSpot[2] = new FieldPosition(75.0, 140.5+rL2, FieldMap.switchScoringHeight);
         
-        scaleScoringSpot[0] = new FieldPosition(90.4, 297.3-rW2, FieldMap.scaleScoringHeight);
+        scaleScoringSpot[0] = new FieldPosition(102.0, 225.0, FieldMap.scaleScoringHeight);
         scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);
                 
         // TODO -- create waypoints corresponding to each scoring position
@@ -77,17 +77,16 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
-        wayPointsA.add(new FieldPosition(40.0, 60, 4.0));
-        wayPointsA.add(new FieldPosition(40.0, 80, switchScoringHeight));
+        wayPointsA.add(new FieldPosition(45.0, 60, 4.0));
+        wayPointsA.add(new FieldPosition(45.0, 80, switchScoringHeight));
         wayPointsA.add(switchScoringSpot[0]);
         
         wayPointsB.add(new FieldPosition(126.0, 120.0, 4.0));
         wayPointsB.add(new FieldPosition(126.0, 150.0));
         wayPointsB.add(switchScoringSpot[1]);
         
-        wayPointsAlpha.add(new FieldPosition(100.0, 120.0, 4.0));
-        wayPointsAlpha.add(new FieldPosition(100.0, 185.0));
-        wayPointsAlpha.add(new FieldPosition(84.4, 240.0));
+        wayPointsAlpha.add(new FieldPosition(117.0, 120.0, 4.0));
+        wayPointsAlpha.add(new FieldPosition(117.0, 185.0, FieldMap.scaleScoringHeight));
         wayPointsAlpha.add(scaleScoringSpot[0]);
 
         wayPointsBeta.add(new FieldPosition(128.0, 165.0, 4.0));

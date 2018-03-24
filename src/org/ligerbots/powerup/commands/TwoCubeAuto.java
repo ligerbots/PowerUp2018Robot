@@ -60,7 +60,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.8, 1.5, FieldMap.switchScoringHeight - 0.5));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.switchScoringHeight - 0.5));
           break;
         case ScaleAlpha:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -74,7 +74,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.8, 1.5, FieldMap.scaleScoringHeight - 1.0));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
         case ScaleBeta:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -88,7 +88,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.8, 1.5, FieldMap.scaleScoringHeight - 1.0));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
         default:
           break;
@@ -98,11 +98,12 @@ public class TwoCubeAuto extends CommandGroup {
       switch (second) {
         case Switch:
           if (Robot.gameData.charAt(0) == Robot.gameData.charAt(1)) {
-            Robot.elevator.setDesiredHeight(1.0);
             addSequential(new BadDriveDistance(10.0, true));
-            addSequential(new TurnCommand(180.0, 1.0));
+            addSequential(new ElevatorPreset(1, 40.0));
+            addSequential(new TurnCommand(-110.0, 1.0));
             addSequential(new IntakePistonCommand(true));
-            addSequential(new DriveToCube());
+          //  addSequential(new DriveToCube());
+            addSequential(new DrivePathCommand(Arrays.asList(FieldMap.switchScoringSpot[2])));
             addParallel(new IntakeAuto(false, 1.0, 1.0, 0.0));
             addSequential(new IntakePistonCommand(false));
             //if (Math.abs(Robot.driveTrain.getRobotPosition().getX()) < 85/* && Robot.driveTrain.getRobotPosition().getY() > 160.0*/) {

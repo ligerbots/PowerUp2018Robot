@@ -236,8 +236,8 @@ public class Robot extends IterativeRobot {
       case One:
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.SwitchB;//oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change back later or something
-            second = SecondAction.Nothing;
+            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change back later or something
+            second = SecondAction.Switch;
           }
           else {
             first = FirstAction.SwitchB;
@@ -258,7 +258,7 @@ public class Robot extends IterativeRobot {
       case Two:
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change back later
+            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change back later
             second = SecondAction.Nothing;
           }
           else {
@@ -284,7 +284,7 @@ public class Robot extends IterativeRobot {
       case Four:
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change later
+            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change later
             second = SecondAction.Nothing;
           }
           else {
@@ -306,8 +306,8 @@ public class Robot extends IterativeRobot {
       case FIVE:
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.SwitchB;//.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleBeta; //change later
-            second = SecondAction.Nothing;
+            first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change later
+            second = SecondAction.Switch;
           }
           else {
             first = FirstAction.SwitchB;
@@ -409,7 +409,7 @@ public class Robot extends IterativeRobot {
       SmartDashboard.putNumber("RobotX", Robot.driveTrain.getRobotPosition().getX());
       SmartDashboard.putNumber("RobotY", Robot.driveTrain.getRobotPosition().getY());
       if ((ticks % 4) == 0) {
-       //System.out.printf("X: %5.2f, Y: %5.2f \n", driveTrain.getRobotPosition().getX(), driveTrain.getRobotPosition().getY());
+       System.out.printf("X: %5.2f, Y: %5.2f \n", driveTrain.getRobotPosition().getX(), driveTrain.getRobotPosition().getY());
       }
 	  ticks ++;
   }

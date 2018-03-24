@@ -32,6 +32,8 @@ public class DrivePathCommand extends Command {
     
     double startAbsDistance;
     
+    boolean AmericanFlag = false;
+    
     double turn;
     double drive;
     
@@ -67,8 +69,8 @@ public class DrivePathCommand extends Command {
 
       angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
       
-      System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
-	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
+      System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
+          waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
       
       dist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
@@ -101,11 +103,15 @@ public class DrivePathCommand extends Command {
       } else {
           if (rampDownDelta < rampDownDist) {
             drive = (rampDownDelta * (0.4) / rampDownDist)
-                + 0.5;
+                + 0.45;
           } else/* (rampUpDelta < rampUpDist)*/ {
-            drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.6;
+            drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.45;
           }
           drive = (waypoints.get(waypointIndex).action == Action.REVERSE) ? drive * -1.0 : drive;
+          if (!AmericanFlag) {
+            waypointDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
+            AmericanFlag = true;
+          }
       }
       
       Robot.driveTrain.allDrive(drive, turn);
@@ -149,14 +155,16 @@ public class DrivePathCommand extends Command {
                     
           currentWaypoint = waypoints.get(waypointIndex);
           
-          angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
+          angleToWaypoint = waypoints.get(waypointIndex - 1).angleTo(currentWaypoint);
           
           angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
           
-          dist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
+          dist = waypoints.get(waypointIndex - 1).distanceTo(currentWaypoint);//Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
           
           System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
   	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
+          
+          AmericanFlag = false;
                     
         }
         
