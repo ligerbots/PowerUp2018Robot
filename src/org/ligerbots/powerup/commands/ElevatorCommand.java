@@ -31,7 +31,7 @@ public class ElevatorCommand extends Command {
     elevator.setPID();
     // TODO: Can't call zeroEncoder here since we don't know where it will be at the start of teleop.
     
-    SmartDashboard.putNumber("Elevator Slow", 0.4);
+    SmartDashboard.putNumber("Elevator Slow", 0.25);
     position = Robot.elevator.getPosition();
   }
 
@@ -46,7 +46,7 @@ public class ElevatorCommand extends Command {
               if (elevator.getPosition() >= 64) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.1));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
@@ -58,12 +58,12 @@ public class ElevatorCommand extends Command {
           }
           else {
         	  // TODO: Need to allow it to go lower. Maybe set the "1" to "0.5" or smaller
-            if (!(elevator.getPosition() < 0.5)) {
-              if (elevator.getPosition() <= 6) { 
+            if (!(elevator.getPosition() < 1.5)) {
+              if (elevator.getPosition() <= 20) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
                 
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.25));
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.1));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
@@ -87,6 +87,7 @@ public class ElevatorCommand extends Command {
         	//}
         }
         SmartDashboard.putNumber("Elevator Position", position);
+        SmartDashboard.putNumber("Elevator Actual Pos", elevator.getPosition());
     }
 
   // Make this return true when this Command no longer needs to run execute()

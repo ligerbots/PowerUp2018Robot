@@ -31,6 +31,8 @@ public class RobotMap {
   public static final int CT_RIGHT_2 = 3;
   public static final int CT_ELEVATOR_1 = 2;
   public static final int CT_ELEVATOR_2 = 1;
+  public static final int CT_ELEVATOR_3 = 11;
+  public static final int CT_ELEVATOR_4 = 12;
   public static final int CT_INTAKE_1 = 7;
   public static final int CT_INTAKE_2 = 8;
   
@@ -39,7 +41,7 @@ public class RobotMap {
   public static final double GEARING_FACTOR = 1d;
   public static final double WHEEL_CIRCUMFERENCE = 3.92 * Math.PI;
   public static final int REV_BLINKIN = 1;
-  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 5.0;
+  public static final double AUTO_DRIVE_DISTANCE_TOLERANCE = 0;
   
   public static final int ULTRASONIC_LEFT_TRIGGER = 4;
   public static final int ULTRASONIC_LEFT_ECHO = 5;

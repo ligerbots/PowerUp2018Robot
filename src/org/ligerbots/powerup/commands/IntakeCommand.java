@@ -12,6 +12,7 @@ public class IntakeCommand extends Command {
 
     boolean reverse;
     double speed;
+    double reverseSpeed;
     boolean boxIn;
     
     public IntakeCommand(boolean reverse) {
@@ -23,14 +24,14 @@ public class IntakeCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-      Robot.driveTrain.limitDriveCurrent(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	// TODO: The "0.5" should be a parameter in RobotMap settable via the Smart Dashboard
       speed = SmartDashboard.getNumber("Intake Speed", 0.7);
-      Robot.intake.intakeOn(reverse, speed);
+      reverseSpeed = SmartDashboard.getNumber("Out-take Speed", 0.5);
+      Robot.intake.intakeOn(reverse, reverse ? reverseSpeed : speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -53,7 +54,6 @@ public class IntakeCommand extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-      Robot.driveTrain.limitDriveCurrent(false);
       Robot.intake.intakeOn(false, 0);
       /*
       if (!reverse) {

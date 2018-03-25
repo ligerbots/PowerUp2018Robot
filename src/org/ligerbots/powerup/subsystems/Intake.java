@@ -30,6 +30,7 @@ public class Intake extends Subsystem {
     public Intake() {
     
       SmartDashboard.putNumber("Intake Speed", 0.7);
+      SmartDashboard.putNumber("Out-take Speed", 0.5);
       
       intakeMaster = new WPI_TalonSRX(RobotMap.CT_INTAKE_1);
       intakeMasterFaults = new StickyFaults();
@@ -44,11 +45,11 @@ public class Intake extends Subsystem {
 	      intakeSlave.set(ControlMode.Follower, RobotMap.CT_INTAKE_1);
       }
       
-      intakeMaster.configPeakCurrentLimit(10, 0);
-      intakeSlave.configPeakCurrentLimit(10, 0);
+   /*   intakeMaster.configContinuousCurrentLimit(15, 0);
+      intakeSlave.configContinuousCurrentLimit(15, 0);
       intakeMaster.enableCurrentLimit(true);
       intakeSlave.enableCurrentLimit(true);
-
+*/
 
 
     }

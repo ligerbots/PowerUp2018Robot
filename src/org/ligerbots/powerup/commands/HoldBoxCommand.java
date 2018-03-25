@@ -9,6 +9,7 @@ import org.ligerbots.powerup.RobotMap;
  */
 public class HoldBoxCommand extends Command {
 
+  double startTime;
     public HoldBoxCommand() {
       requires (Robot.intake);
       requires (Robot.proximitySensor);
@@ -18,6 +19,7 @@ public class HoldBoxCommand extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+      startTime = Robot.autoStart();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -34,7 +36,7 @@ public class HoldBoxCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return Robot.time() - startTime >= 11.0;
     }
 
     // Called once after isFinished returns true
@@ -45,5 +47,6 @@ public class HoldBoxCommand extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+      System.out.println("hold done");
     }
 }

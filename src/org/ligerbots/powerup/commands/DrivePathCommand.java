@@ -32,6 +32,8 @@ public class DrivePathCommand extends Command {
     
     double startAbsDistance;
     
+    boolean AmericanFlag = false;
+    
     double turn;
     double drive;
     
@@ -42,8 +44,12 @@ public class DrivePathCommand extends Command {
     
     double oldDist;
     
+    double dist;  
+    double waypointDist;
+    
     
     public DrivePathCommand(List<FieldPosition> waypoints) {
+      requires (Robot.driveTrain);
       this.waypoints = waypoints;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -63,10 +69,13 @@ public class DrivePathCommand extends Command {
 
       angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
       
-      System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f\n",
-	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput());
+      System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
+          waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
       
+      dist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
+      
+      waypointDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
       Robot.elevator.setDesiredHeight(currentWaypoint.elevatorHeight);
     }
@@ -83,21 +92,26 @@ public class DrivePathCommand extends Command {
       else if (angleError < -180) angleError += 360;
       
       
-      turn = angleError * 0.01 + Math.signum(angleError) * 0.55;
+      turn = angleError * 0.01 + Math.signum(angleError) * 0.45;
       
       rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
       rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
       
-      if (Math.abs(angleError) >= 15) {
+      if (Math.abs(angleError) >= 10) {
+        System.out.println("Not Driving : " + angleError);
         drive = 0.0;
       } else {
           if (rampDownDelta < rampDownDist) {
             drive = (rampDownDelta * (0.4) / rampDownDist)
                 + 0.45;
-          } else if (rampUpDelta < rampUpDist) {
-            drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.6;
+          } else/* (rampUpDelta < rampUpDist)*/ {
+            drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.45;
           }
           drive = (waypoints.get(waypointIndex).action == Action.REVERSE) ? drive * -1.0 : drive;
+          if (!AmericanFlag) {
+            waypointDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
+            AmericanFlag = true;
+          }
       }
       
       Robot.driveTrain.allDrive(drive, turn);
@@ -112,14 +126,21 @@ public class DrivePathCommand extends Command {
       
       if ((Robot.ticks % 1) == 0) {
 
-    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f\n",
+    	  System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f",
     			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
-    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);
+    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);*/
+        
+          System.out.printf("X: %5.2f, Y: %5.2f, Dist: %5.2f, Distance Traveled: %5.2f, Angle: %5.2f, Angle Error: %5.2f, Drive: %5.2f, Turn: %5.2f \n", Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(), dist, Math.abs(Robot.driveTrain.getAbsoluteDistanceTraveled() - waypointDist)
+              , Robot.driveTrain.getYaw(), angleError, drive, turn);
       }
 
       
 
-      if ((currentPosition.distanceTo(currentWaypoint) < RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE) || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist > 0.5 && Math.abs(angleError) <= 10.0)) {
+      if (dist - Math.abs(Robot.driveTrain.getAbsoluteDistanceTraveled() - waypointDist) <= RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE
+/*(currentPosition.distanceTo(currentWaypoint) || 
+< RobotMap.AUTO_DRIVE_DISTANCE_TOLERANCE)
+       || (Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint) - oldDist >= 0.5
+0.1 && Math.abs(angleError) <= 10.0)*/) {
         
         
         
@@ -127,7 +148,8 @@ public class DrivePathCommand extends Command {
           finished = true;
         }
         else {
-          
+                    
+          waypointDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
         
           Robot.driveTrain.allDrive(0, 0);
           
@@ -135,12 +157,15 @@ public class DrivePathCommand extends Command {
                     
           currentWaypoint = waypoints.get(waypointIndex);
           
-          angleToWaypoint = Robot.driveTrain.getRobotPosition().angleTo(currentWaypoint);
+          angleToWaypoint = waypoints.get(waypointIndex - 1).angleTo(currentWaypoint);
           
           angleError = (waypoints.get(waypointIndex).action == Action.REVERSE) ? -90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection() : 90 - angleToWaypoint - Robot.driveTrain.getRobotPosition().getDirection();
           
-          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f\n",
-  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError);
+          System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
+  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
+          
+          AmericanFlag = false;
+                    
         }
         
       }

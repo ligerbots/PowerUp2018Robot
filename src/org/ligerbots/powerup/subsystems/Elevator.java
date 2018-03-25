@@ -30,8 +30,12 @@ public class Elevator extends Subsystem {
   double desiredHeight = 0;
   WPI_TalonSRX elevatorMaster;
   WPI_TalonSRX elevatorSlave;
+  WPI_TalonSRX elevatorFastRegular;
+  WPI_TalonSRX elevatorFastInverted;
   StickyFaults elevatorStickyFaults;
+  StickyFaults elevatorFastFaults;
   boolean elevatorPresent;
+  boolean elevatorFast;
   double tolerance = 0.05;
   double requestedPosition = 0.0;// When the elevator is not moving, the 775s should stay in place
                                  // (maintain 0 RPM)
@@ -68,9 +72,14 @@ public class Elevator extends Subsystem {
     bottomLimitSwitch = new DigitalInput(1);
     elevatorMaster = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_1);
     elevatorSlave = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_2);
+    elevatorFastRegular = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_3);
+    elevatorFastInverted = new WPI_TalonSRX(RobotMap.CT_ELEVATOR_4);
+    
     
     elevatorStickyFaults = new StickyFaults();
+    elevatorFastFaults = new StickyFaults();
     elevatorPresent = elevatorMaster.getStickyFaults(elevatorStickyFaults) == ErrorCode.OK;
+    elevatorFast = elevatorFastRegular.getStickyFaults(elevatorFastFaults) == ErrorCode.OK;
     System.out.println("Elevator master Talon is " + (elevatorPresent ? "Present" : "NOT Present"));
     if (elevatorPresent) {
 	    elevatorMaster.setNeutralMode(NeutralMode.Brake);
@@ -87,6 +96,14 @@ public class Elevator extends Subsystem {
     
     //elevatorController = new PIDController(P, I, D, elevatorMaster.getSelectedSensorPosition(0),
     //output -> pidOutput = output);
+    }
+    if (elevatorFast) {
+      elevatorFastRegular.setNeutralMode(NeutralMode.Brake);
+      elevatorFastInverted.setNeutralMode(NeutralMode.Brake);
+      elevatorFastInverted.setInverted(true);
+      elevatorFastRegular.set(ControlMode.Follower, RobotMap.CT_ELEVATOR_1);
+      elevatorFastInverted.set(ControlMode.Follower, RobotMap.CT_ELEVATOR_1);
+
     }
   }
 
@@ -124,7 +141,7 @@ public class Elevator extends Subsystem {
   
   //returns position in inches
   public double getPosition() {
-	  if (elevatorPresent) return elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
+	  if (elevatorPresent) return elevatorFast ? elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5) / 3: elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5) / 3;
 	  else return 0.0;
   }
   

@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.AHRSProtocol.AHRSUpdateBase;
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -16,7 +15,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
-
 import org.ligerbots.powerup.Robot;
 import org.ligerbots.powerup.RobotMap;
 import org.ligerbots.powerup.commands.DriveCommand;
@@ -78,91 +76,107 @@ public class DriveTrain extends Subsystem {
   }
 
   @SuppressWarnings("unused")
-public DriveTrain() {
-	System.out.println("DriveTrain constructed");
+  public DriveTrain() {
+    System.out.println("DriveTrain constructed");
 
-  SmartDashboard.putNumber("Elevator Up Accel", 2);
-  SmartDashboard.putNumber("Elevator Up Speed", 0.5);
-  SmartDashboard.putNumber("Elevator Up Turn", 0.75);
+    SmartDashboard.putNumber("Elevator Up Accel", 2);
+    SmartDashboard.putNumber("Elevator Up Speed", 0.5);
+    SmartDashboard.putNumber("Elevator Up Turn", 0.75);
 
-  // This initial robot position will be overwritten by our autonomous selection
-  // we only zero it out here for practice, where we go straight teleop
-  robotPosition = new RobotPosition(0.0, 0.0, 0.0);
+    // This initial robot position will be overwritten by our autonomous selection
+    // we only zero it out here for practice, where we go straight teleop
+    robotPosition = new RobotPosition(0.0, 0.0, 0.0);
 
-  leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
-  leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
-  rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
-  rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
+    leftMaster = new WPI_TalonSRX(RobotMap.CT_LEFT_1);
+    leftSlave = new WPI_TalonSRX(RobotMap.CT_LEFT_2);
+    rightMaster = new WPI_TalonSRX(RobotMap.CT_RIGHT_1);
+    rightSlave = new WPI_TalonSRX(RobotMap.CT_RIGHT_2);
 
-  // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    // leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-  leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
-  rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
+    leftSlave.set(ControlMode.Follower, leftMaster.getDeviceID());
+    rightSlave.set(ControlMode.Follower, rightMaster.getDeviceID());
 
-  // left = new SpeedControllerGroup(leftMaster, leftSlave);
-  // right = new SpeedControllerGroup(rightMaster, rightSlave);
+    // left = new SpeedControllerGroup(leftMaster, leftSlave);
+    // right = new SpeedControllerGroup(rightMaster, rightSlave);
 
-  leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-  rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
+    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
-  rightMaster.setSensorPhase(true);
-  leftMaster.setSensorPhase(true);
-  
-  //leftMaster.configClosedloopRamp(0.3, 0);
-  //rightMaster.configClosedloopRamp(0.3, 0);
+    rightMaster.setSensorPhase(true);
+    leftMaster.setSensorPhase(true);
 
-  Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-      .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
+    // leftMaster.configClosedloopRamp(0.3, 0);
+    // rightMaster.configClosedloopRamp(0.3, 0);
 
-  robotDrive = new DifferentialDrive(leftMaster, rightMaster);
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
-  // TODO: This should be sampled at 200Hz
-  // until we get the navX fixed, but use the elevator being present as an indication that this is NOT the H-Drive bot
-  if (Robot.elevator.elevatorPresent) {
-  	navx = new AHRS(Port.kMXP, (byte) 50);
-  	System.out.println("NavX on MXP port.");
-  	}
-  else {
-  	navx = new AHRS(SerialPort.Port.kUSB);
-  	System.out.println("NavX on USB port.");
-  }
- 
-	if (pidTurn) {
-		turningController =
-        new PIDController(SmartDashboard.getNumber("DriveP", 1.0), SmartDashboard.getNumber("DriveI", 0.000),
-         			      SmartDashboard.getNumber("DriveD", 0.0), navx, output -> this.turnOutput = output);
-	}
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.configContinuousCurrentLimit(45, 0));
 
-	navx.registerCallback((long systemTimestamp, long sensorTimestamp,
-	                       AHRSUpdateBase sensorData, Object context) ->
-	  {
-      updatePosition(sensorData.yaw);
-	    if (pidTurn) {
-	    	// TODO: I really don't think we want to be calling
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.configPeakCurrentLimit(50, 0));
+    
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.enableCurrentLimit(true));
+    
+    Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
+        .forEach(talon -> talon.configPeakCurrentDuration(10, 0));
+    
+    
+
+    robotDrive = new DifferentialDrive(leftMaster, rightMaster);
+
+
+    /*
+     * leftMaster.configOpenloopRamp(0.1, 0); rightMaster.configOpenloopRamp(0.1, 0);
+     */
+
+    // TODO: This should be sampled at 200Hz
+    // until we get the navX fixed, but use the elevator being present as an indication that this is
+    // NOT the H-Drive bot
+    if (Robot.elevator.elevatorPresent) {
+      navx = new AHRS(Port.kMXP, (byte) 200);
+      System.out.println("NavX on MXP port.");
+    } else {
+      navx = new AHRS(SerialPort.Port.kUSB);
+      System.out.println("NavX on USB port.");
+    }
+
+    if (pidTurn) {
+      turningController = new PIDController(SmartDashboard.getNumber("DriveP", 1.0),
+          SmartDashboard.getNumber("DriveI", 0.000), SmartDashboard.getNumber("DriveD", 0.0), navx,
+          output -> this.turnOutput = output);
+    }
+
+    navx.registerCallback(
+        (long systemTimestamp, long sensorTimestamp, AHRSUpdateBase sensorData, Object context) -> {
+          updatePosition(sensorData.yaw);
+          if (pidTurn) {
+            // TODO: I really don't think we want to be calling
 	    	// SmartDashboard.getNumber 3 times and setting P, I & D
 	    	// in the context of the navX callback routine
-	      turningController.setP(SmartDashboard.getNumber("DriveP", 1));
-	      turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
-	      turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
-	    }
-    }, new Object());
-	
-	Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-    .forEach(talon -> talon.configPeakCurrentLimit(45, 0));
-  
+            turningController.setP(SmartDashboard.getNumber("DriveP", 1));
+            turningController.setI(SmartDashboard.getNumber("DriveI", 0.01));
+            turningController.setD(SmartDashboard.getNumber("DriveD", 0.5));
+          }
+        }, new Object());
+
+
+
   }
   
-  public void setInitialRobotPosition(double x, double y, double angle)
-  {
-	  robotPosition.setRobotPosition(x, y, angle);
+  public void setInitialRobotPosition(double x, double y, double angle) {
+    robotPosition.setRobotPosition(x, y, angle);
   }
   
   public double getPitch() {
-	  return navx.getPitch();
+    return navx.getPitch();
   }
   
   public double getRoll() {
- return navx.getRoll();
+    return navx.getRoll();
   }
   
   public void talonCurrent() {
@@ -181,20 +195,19 @@ public DriveTrain() {
     // rampRate = SmartDashboard.getNumber("Strafe Ramp Rate", 0.3);
 	  // TODO: Add autobalancing here. Adjust throttle based on pitch and rotate based on roll.
     if (Robot.elevator.getPosition() < 40) {
-      leftMaster.configOpenloopRamp(0, 0);
-      rightMaster.configOpenloopRamp(0, 0);
       robotDrive.arcadeDrive(-throttle, -rotate);
-    }
-    else {
-//      leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
-//      rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+    } else {
+      // leftMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
+      // rightMaster.configOpenloopRamp(SmartDashboard.getNumber("Elevator Up Accel", 2), 0);
       // TODO: We might also need to scale the rotation speed.
 
 	  //(,0);
-    	limitedThrottle = -throttle * (1- ((Math.min(Robot.elevator.getPosition(),70)-40)/60.0));
-	  robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.75);
-	  SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
-	  //SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
+
+      limitedThrottle =
+          -throttle * (1 - ((Math.min(Robot.elevator.getPosition(), 70) - 40) / 60.0));
+	  robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.85);
+      SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);
+      //SmartDashboard.getNumber("Elevator Up Speed", 0.25), -rotate);
     }
   }
 
@@ -211,11 +224,12 @@ public DriveTrain() {
   // Returns the total accumulated yaw angle (Z Axis, in degrees)
   // reported by the sensor since it was last zeroed. This will go beyond 360 degrees.
   public double getAngle() {
-      return navx.getAngle();
+    return navx.getAngle();
   }
 
   public void initDefaultCommand() {
-	if (Robot.driveCommand == null) Robot.driveCommand = new DriveCommand();
+    if (Robot.driveCommand == null)
+      Robot.driveCommand = new DriveCommand();
     setDefaultCommand(Robot.driveCommand);
   }
 
@@ -295,19 +309,21 @@ public DriveTrain() {
         turningController.setContinuous(true);
     }
 
-    System.out.printf("currentAngle: %5.2f, originalTargetAngle: %5.2f, targetAngle: %5.2f, " + 
-                      "wrapCorrection: %5.2f\n",
-                      startAngle, originalTargetAngle, targetAngle, wrapCorrection);
+    System.out.printf(
+        "currentAngle: %5.2f, originalTargetAngle: %5.2f, targetAngle: %5.2f, "
+            + "wrapCorrection: %5.2f\n",
+        startAngle, originalTargetAngle, targetAngle, wrapCorrection);
   }
   
   public boolean isTurnOnTarget() {
 
-    if (pidTurn) return turningController.onTarget();
-    
+    if (pidTurn)
+      return turningController.onTarget();
+
     double turnError = Math.abs(turnError());
-    
-    if (turnError <= tolerance ||     // we're within tolerance 
-        turnError > previousTurnError+0.1)  // or if we've gone past -- don't reverse 
+
+    if (turnError <= tolerance || // we're within tolerance
+        turnError > previousTurnError + 0.1) // or if we've gone past -- don't reverse
     {
 		  return true;
 	  } 

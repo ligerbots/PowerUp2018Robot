@@ -1,6 +1,7 @@
 package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +16,8 @@ import org.ligerbots.powerup.Robot.SecondAction;
  *
  */
 public class TwoCubeAuto extends CommandGroup {
-  
+   
+   // REMEMBER TO SWITCH SIGNS AND STUFF (if u don't know what this means for some reason don't do anything / ask Mark 
 
     public TwoCubeAuto(FirstAction first, SecondAction second) {
       
@@ -42,7 +44,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 1.0));
+          addSequential(new IntakeAuto(true, 1.0, 3, FieldMap.switchScoringHeight - 1.0));
           break;
         case SwitchB:
           if (Robot.gameData.charAt(0) == 'L') {
@@ -56,7 +58,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.switchScoringHeight - 3.0));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.switchScoringHeight - 0.5));
           break;
         case ScaleAlpha:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -70,7 +72,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.scaleScoringHeight - 1.5));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
         case ScaleBeta:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -84,28 +86,51 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.75, 1.0, FieldMap.scaleScoringHeight - 1.5));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
+          break;
+        case ScaleGamma:
+          if (Robot.gameData.charAt(1) == 'R') {
+            tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsGamma.clone();
+            for (int i = 0; i < tempWaypoints.size(); i += 1) {
+              tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).elevatorHeight));
+            }
+          }
+          else {
+            tempWaypoints = FieldMap.wayPointsGamma;
+          }
+          addParallel(new HoldBoxCommand());
+          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new IntakeAuto(true, 0.6, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
         default:
           break;
           
       }
          
-      switch (second) {
+   switch (second) {
         case Switch:
           if (Robot.gameData.charAt(0) == Robot.gameData.charAt(1)) {
-            Robot.elevator.setDesiredHeight(1.0);
             addSequential(new BadDriveDistance(10.0, true));
-            addSequential(new TurnCommand(180.0, 1.0));
+            addSequential(new ElevatorPreset(0, 40.0));
+            addSequential(new TurnCommand(-110.0, 1.0));
             addSequential(new IntakePistonCommand(true));
-            addSequential(new DriveToCube());
-            addParallel(new IntakeAuto(false, 1.0, 1.0, 0.0));
+          //  addSequential(new DriveToCube());
+            addSequential(new DrivePathCommand(Arrays.asList(new FieldPosition(87.5, 190.0, 0.0))));
+            addSequential(new IntakeAuto(false, 1.0, 1.0, 0.0));
             addSequential(new IntakePistonCommand(false));
-            Robot.elevator.setDesiredHeight(FieldMap.switchScoringHeight);
-            addSequential(new IntakeAuto(true, 0.7, 1.0, 18.0));
+            addSequential(new BadDriveDistance(6.0, true));
+            //if (Math.abs(Robot.driveTrain.getRobotPosition().getX()) < 85/* && Robot.driveTrain.getRobotPosition().getY() > 160.0*/) {
+              Robot.elevator.setDesiredHeight(FieldMap.switchScoringHeight);
+              addSequential(new IntakeAuto(true, 0.7, 1.0, 18.0));
+          /*  }
+            else if (Robot.driveTrain.getRobotPosition().getY() > 165.0) {
+              addSequential(new DrivePathCommand(Robot.gameData.charAt(0) == 'R' ? Arrays.asList(new FieldPosition(75.0, 165.0), FieldMap.switchScoringSpot[2]) : Arrays.asList(new FieldPosition(-75.0, 165.0), FieldMap.switchScoringSpot[2].multiply(-1, 1))));
+            } NOT AT ALL DONE YET*/
           }
-          break;
-        case Scale:
+          else {
+            
+          }
+           case Scale:
           break;
         case Nothing:
           break;

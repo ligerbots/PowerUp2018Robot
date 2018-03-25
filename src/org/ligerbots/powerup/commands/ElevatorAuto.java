@@ -18,6 +18,7 @@ public class ElevatorAuto extends Command {
     }
     // Called just before this Command runs the first time
     protected void initialize() {
+      sign = Math.signum(position - Robot.elevator.getPosition());
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -27,11 +28,11 @@ public class ElevatorAuto extends Command {
       position = Robot.elevator.getDesiredHeight();
       sign = Math.signum(position - Robot.elevator.getPosition());
       if (Math.abs(position - Robot.elevator.getPosition()) >= 25) Robot.elevator.set(1.0 * sign);
-      else if (Math.abs(position - Robot.elevator.getPosition()) >= 15) Robot.elevator.set(0.8 * sign); 
-      else if (Math.abs(position - Robot.elevator.getPosition()) >= 10) Robot.elevator.set(0.6 * sign);
+      else if (Math.abs(position - Robot.elevator.getPosition()) >= 15) Robot.elevator.set(0.9 * sign); 
+      else if (Math.abs(position - Robot.elevator.getPosition()) >= 7) Robot.elevator.set(0.7 * sign);
       else if (Math.abs(position - Robot.elevator.getPosition()) >= 1) Robot.elevator.set(0.5 * sign);
       else Robot.elevator.set(0.1 * sign);
-     // System.out.println(Robot.elevator.getPosition());
+     // System.out.println("Desired Elevator Height: " + position);
 
 
       //Robot.elevator.holdPosition(position);

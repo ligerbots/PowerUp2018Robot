@@ -19,7 +19,6 @@ import org.ligerbots.powerup.commands.CameraToggleCommand;
 import org.ligerbots.powerup.commands.CompressorCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
-import org.ligerbots.powerup.commands.ElevatorPreset;
 import org.ligerbots.powerup.commands.IntakeCommand;
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
@@ -41,9 +40,9 @@ public class OI {
   SendableChooser<Robot.StartingPosition> startingPosition;
   SendableChooser<Robot.FirstAction> firstAction;
   SendableChooser<Robot.SecondAction> secondAction;
+  SendableChooser<Robot.Priority> priority;
   
 	
-  
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
   //// joystick.
@@ -93,6 +92,12 @@ public class OI {
     secondAction = new SendableChooser<>();
     populateSelect(secondAction, Robot.SecondAction.class);
     SmartDashboard.putData("SecondAction", secondAction);
+    
+    priority = new SendableChooser<>();
+    populateSelect(priority, Robot.Priority.class);
+    SmartDashboard.putData("Priority", priority);
+    
+
 	    
     xbox = new XboxController(0);
     farm = new Joystick(1);
@@ -215,5 +220,9 @@ public class OI {
   
   public Robot.SecondAction getSecondAction() {
     return secondAction.getSelected();
+  }
+
+  public Robot.Priority getPriority() {
+    return priority.getSelected();
   }
 }
