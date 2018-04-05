@@ -238,7 +238,7 @@ public class Robot extends IterativeRobot {
         if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
             first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change back later or something
-            second = SecondAction.Switch;
+            second = oi.getPriority() == Priority.SWITCH ? SecondAction.Nothing : SecondAction.Switch;;
           }
           else {
             first = FirstAction.SwitchB;
@@ -247,7 +247,7 @@ public class Robot extends IterativeRobot {
         }
         else {
           if (Robot.gameData.charAt(1) == 'L') {
-            first = FirstAction.ScaleGamma;
+            first = FirstAction.ScaleAlpha;
             second = SecondAction.Nothing;
           }
           else {
@@ -308,7 +308,7 @@ public class Robot extends IterativeRobot {
         if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
             first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change later
-            second = SecondAction.Switch;
+            second = oi.getPriority() == Priority.SWITCH ? SecondAction.Nothing : SecondAction.Switch;
           }
           else {
             first = FirstAction.SwitchB;
@@ -317,7 +317,7 @@ public class Robot extends IterativeRobot {
         }
         else {
           if (Robot.gameData.charAt(1) == 'R') {
-            first = FirstAction.ScaleGamma;;
+            first = FirstAction.ScaleAlpha;;
             second = SecondAction.Nothing;
           }
           else {

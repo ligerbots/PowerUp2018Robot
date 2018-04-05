@@ -38,11 +38,11 @@ public class IntakeAuto extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      if ((Robot.elevator.getPosition() >= height && !check) || Robot.time() - otherStart >= 11.0 ) {
+      if ((Robot.elevator.getPosition() >= height && !check)) {
         startTime = Robot.time();
         check = true;
       }
-      if (Robot.elevator.getPosition() >= height || Robot.time() - otherStart >= 11.0 ) {
+      if (Robot.elevator.getPosition() >= height) {
         
         Robot.intake.intakeOn(reverse, speed);
         if (Robot.ticks % 10 == 0) {

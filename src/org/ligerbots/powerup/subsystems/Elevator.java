@@ -141,7 +141,7 @@ public class Elevator extends Subsystem {
   
   //returns position in inches
   public double getPosition() {
-	  if (elevatorPresent) return elevatorFast ? elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5) / 3: elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5) / 3;
+	  if (elevatorPresent) return elevatorFast ? elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5): elevatorMaster.getSelectedSensorPosition(0) / 4096d * (Math.PI * 0.5);
 	  else return 0.0;
   }
   

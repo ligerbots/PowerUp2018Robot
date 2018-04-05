@@ -203,8 +203,7 @@ public class DriveTrain extends Subsystem {
 
       // (,0);
 
-      limitedThrottle =
-          -throttle * (1 - ((Math.min(Robot.elevator.getPosition(), 70) - 40) / 60.0));
+      limitedThrottle = -1 * Math.min(throttle, (1 - ((Math.min(Robot.elevator.getPosition(), 70) - 40) / 60.0)));
 
       robotDrive.arcadeDrive(limitedThrottle, -rotate * 0.85);
       SmartDashboard.putNumber("LimitedThrottle", limitedThrottle);

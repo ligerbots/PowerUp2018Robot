@@ -71,7 +71,7 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   XboxController xbox;
-  //Joystick farm;
+  Joystick farm;
   
 
   
@@ -98,7 +98,7 @@ public class OI {
     SmartDashboard.putData("Priority", priority);
 	    
     xbox = new XboxController(0);
-//    farm = new Joystick(1);
+    farm = new Joystick(1);
         
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
@@ -137,9 +137,9 @@ public class OI {
     povTriggerDown.whenPressed(new CameraToggleCommand());
 
     
- //   JoystickButton farmOne = new JoystickButton(farm, 1);
+    JoystickButton farmOne = new JoystickButton(farm, 1);
     
-  /*  farmOne.whenPressed(new CameraSelectionCommand("driver"));
+    farmOne.whenPressed(new CameraSelectionCommand("driver"));
     JoystickButton farmTwo = new JoystickButton(farm,2);
     
     farmTwo.whenPressed(new CameraSelectionCommand("intake"));
@@ -150,7 +150,7 @@ public class OI {
     JoystickButton farmFour = new JoystickButton(farm, 7);
     
     farmFour.whenPressed(new CameraSelectionCommand("cube"));
-    */
+    
     
     System.out.println("OI constructed");
 

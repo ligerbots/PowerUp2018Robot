@@ -36,7 +36,9 @@ public class DriveToCube extends Command {
       startLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       startRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       
-      driveDist = SmartDashboard.getNumberArray("vision/target_info", empty)[3] - 8.0;
+      driveDist = SmartDashboard.getNumberArray("vision/target_info", empty)[3] - 12.0;
+      
+      System.out.println("DRIVE DIST: " + driveDist);
     }
 
     // Called repeatedly when this Command is scheduled to run
