@@ -31,6 +31,7 @@ public class IntakePistonCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+      System.out.println("Intake Piston " + (open ? "open" : "closed") + "complete");
     }
 
     // Called when another command which requires one or more of the same

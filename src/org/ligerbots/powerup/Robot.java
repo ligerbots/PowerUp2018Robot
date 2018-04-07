@@ -16,17 +16,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
-import org.ligerbots.powerup.commands.IntakeAuto;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.TwoCubeAuto;
+import org.ligerbots.powerup.commands.WinchCommand;
 import org.ligerbots.powerup.commands.ZeroEncoderCommand;
+import org.ligerbots.powerup.subsystems.Climber;
 import org.ligerbots.powerup.subsystems.DriveTrain;
 import org.ligerbots.powerup.subsystems.Elevator;
 import org.ligerbots.powerup.subsystems.Intake;
 import org.ligerbots.powerup.subsystems.LEDStrip;
 import org.ligerbots.powerup.subsystems.Pneumatics;
 import org.ligerbots.powerup.subsystems.ProximitySensor;
-import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
+import org.ligerbots.powerup.subsystems.Ramps;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -57,6 +58,8 @@ public class Robot extends IterativeRobot {
   public static ProximitySensor proximitySensor;
   public static FieldMap fieldMap;
   public static Pneumatics pneumatics;
+  public static Climber climber;
+  public static Ramps ramps;
   
   public static double autoStart;
   boolean autoCheck = false;
@@ -136,6 +139,8 @@ public class Robot extends IterativeRobot {
     ledStripCommand = new LEDStripCommand();
     proximitySensor = new ProximitySensor();
     pneumatics = new Pneumatics();
+    climber = new Climber();
+    ramps = new Ramps();
     oi = new OI();
     
     elevatorCommand = new ElevatorCommand();
@@ -145,6 +150,9 @@ public class Robot extends IterativeRobot {
     // chooser.addDefault("Default Auto", new ExampleCommand());
     // chooser.addObject("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", chooser);
+    
+    SmartDashboard.putNumber("Winch Speed", 1.0);
+    SmartDashboard.putData(new WinchCommand(true));
     
     SmartDashboard.putNumber("DriveP", 0.045);
     SmartDashboard.putNumber("DriveI", 0.004);
@@ -251,7 +259,7 @@ public class Robot extends IterativeRobot {
             second = SecondAction.Nothing;
           }
           else {
-            first = FirstAction.ScaleGamma;
+            first = FirstAction.DriveForward;
             second = SecondAction.Nothing;
           }
         }
@@ -321,7 +329,7 @@ public class Robot extends IterativeRobot {
             second = SecondAction.Nothing;
           }
           else {
-            first = FirstAction.ScaleGamma;
+            first = FirstAction.DriveForward;
             second = SecondAction.Nothing;
           }
         }
@@ -410,7 +418,6 @@ public class Robot extends IterativeRobot {
       SmartDashboard.putNumber("RobotX", Robot.driveTrain.getRobotPosition().getX());
       SmartDashboard.putNumber("RobotY", Robot.driveTrain.getRobotPosition().getY());
       if ((ticks % 4) == 0) {
-       System.out.printf("X: %5.2f, Y: %5.2f \n", driveTrain.getRobotPosition().getX(), driveTrain.getRobotPosition().getY());
       }
 	  ticks ++;
   }

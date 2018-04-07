@@ -28,7 +28,7 @@ public class HoldBoxCommand extends Command {
 
 
       
-      Robot.intake.intakeOn(false, Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD ? 0.0 : 0.75);
+      Robot.intake.intakeOn(false, Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD ? 0.0 : 0.9);
       //how is Florida mark, is the taste of betrayal sweet?
       if ((Robot.proximitySensor.getDistanceRight() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD) && (Robot.proximitySensor.getDistanceLeft() < RobotMap.ULTRASONIC_DISTANCE_THRESHOLD)) {
       }

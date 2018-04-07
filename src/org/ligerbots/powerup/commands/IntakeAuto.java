@@ -61,6 +61,7 @@ public class IntakeAuto extends Command {
     // Called once after isFinished returns true
     protected void end() {
       Robot.intake.intakeOn(false, 0);
+      System.out.println("Intake auto complete. Current elevator height is " + Robot.elevator.getPosition());
     }
 
     // Called when another command which requires one or more of the same

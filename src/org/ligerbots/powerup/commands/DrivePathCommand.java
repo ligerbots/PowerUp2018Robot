@@ -62,7 +62,7 @@ public class DrivePathCommand extends Command {
       startAbsDistance = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
       rampUpDist = 15.0;
-      rampDownDist = 35.0;
+      rampDownDist = 30.0;
       
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
@@ -102,8 +102,8 @@ public class DrivePathCommand extends Command {
         drive = 0.0;
       } else {
           if (rampDownDelta < rampDownDist) {
-            drive = (rampDownDelta * (0.4) / rampDownDist)
-                + 0.4;
+            drive = (rampDownDelta * (0.38) / rampDownDist)
+                + 0.45;
           } else/* (rampUpDelta < rampUpDist)*/ {
             drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.45;
           }

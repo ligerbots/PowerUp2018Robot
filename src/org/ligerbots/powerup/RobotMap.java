@@ -35,6 +35,9 @@ public class RobotMap {
   public static final int CT_ELEVATOR_4 = 12;
   public static final int CT_INTAKE_1 = 7;
   public static final int CT_INTAKE_2 = 8;
+  public static final int CT_CLIMBER_1 = 11;
+  public static final int CT_CLIMBER_2 = 12;
+
   
   public static final int PCM_ID = 9;
   

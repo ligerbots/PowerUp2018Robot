@@ -15,8 +15,10 @@ public class DriveToCube extends Command {
     
     double startLeft;
     double startRight;
+    double startAbsDist;
     
     double delta;
+    double oldAbsDist;
   
     double turn;
     double drive;
@@ -35,6 +37,8 @@ public class DriveToCube extends Command {
       
       startLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       startRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
+      startAbsDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
+      
       
       driveDist = SmartDashboard.getNumberArray("vision/target_info", empty)[3] - 12.0;
       
@@ -44,10 +48,12 @@ public class DriveToCube extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
       
-      currentLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
+     /* currentLeft = Robot.driveTrain.getEncoderDistance(DriveSide.LEFT);
       currentRight = Robot.driveTrain.getEncoderDistance(DriveSide.RIGHT);
       
-      delta = ((currentRight - startRight) + (currentLeft - startLeft)) / 2;
+      delta = ((currentRight - startRight) + (currentLeft - startLeft)) / 2;*/
+      
+      oldAbsDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
      
       data = SmartDashboard.getNumberArray("vision/target_info", empty);
 
@@ -64,11 +70,12 @@ public class DriveToCube extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return delta >= driveDist;
+        return Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDist >= driveDist/* || Robot.driveTrain.getAbsoluteDistanceTraveled() - oldAbsDist <= 0.1*/;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+      System.out.println("Drive To Cube Completed");
       Robot.driveTrain.allDrive(0.0, 0.0);
     }
 

@@ -22,9 +22,12 @@ import org.ligerbots.powerup.commands.DrivePathCommand;
 import org.ligerbots.powerup.commands.IntakeCommand;
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
+import org.ligerbots.powerup.commands.RampsDeploy;
+import org.ligerbots.powerup.commands.SolenoidCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
 //import org.ligerbots.powerup.commands.TurnTester;
 import org.ligerbots.powerup.commands.TurnTester;
+import org.ligerbots.powerup.commands.WinchCommand;
 import org.ligerbots.powerup.subsystems.Pneumatics.CompressorState;
 //import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.triggers.JoystickPov;
@@ -99,6 +102,9 @@ public class OI {
 	    
     xbox = new XboxController(0);
     farm = new Joystick(1);
+    
+    JoystickButton xBoxY = new JoystickButton(xbox, 4);
+    xBoxY.whileHeld(new WinchCommand(false));
         
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
@@ -150,6 +156,12 @@ public class OI {
     JoystickButton farmFour = new JoystickButton(farm, 7);
     
     farmFour.whenPressed(new CameraSelectionCommand("cube"));
+    
+    JoystickButton farmEleven = new JoystickButton(farm, 11);
+    farmEleven.whenPressed(new RampsDeploy());
+    
+    JoystickButton farmTwentyOne = new JoystickButton(farm, 21);
+    farmTwentyOne.whenPressed(new SolenoidCommand());
     
     
     System.out.println("OI constructed");

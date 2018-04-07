@@ -1,21 +1,23 @@
 package org.ligerbots.powerup.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.ligerbots.powerup.Robot;
 
 /**
  *
  */
-public class ElevatorPreset extends Command {
+public class WinchCommand extends Command {
 
-    int desiredHeight;
-    double height;
+  
+    boolean reverse = false;
     
-    public ElevatorPreset(int desiredHeight, double height) {
+    public WinchCommand(boolean reverse) {
+      
+      requires (Robot.climber);
+      this.reverse = reverse;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-      this.desiredHeight = desiredHeight;
-      this.height = height;
     }
 
     // Called just before this Command runs the first time
@@ -24,21 +26,21 @@ public class ElevatorPreset extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-      Robot.elevator.setDesiredHeight(desiredHeight);
+      if (Robot.climber.spanishFlag) Robot.climber.set(reverse ? 0.5 : -Math.abs(SmartDashboard.getNumber("Winch Speed", 1.0)));
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.elevator.getDesiredHeight() == desiredHeight && Robot.elevator.getPosition() <= height;
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-      System.out.println("Elevator preset to " + desiredHeight + " complete. Current height is " + Robot.elevator.getPosition());
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+      Robot.climber.set(0.0);
     }
 }

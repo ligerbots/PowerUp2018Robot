@@ -74,7 +74,7 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.65, 1.5, FieldMap.scaleScoringHeight - 1.0));
+          addSequential(new IntakeAuto(true, 0.45, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
         case ScaleBeta:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -119,13 +119,8 @@ public class TwoCubeAuto extends CommandGroup {
             addSequential(new DriveToCube());
             addSequential(new IntakeAuto(false, 1.0, 1.0, 0.0));
             addSequential(new IntakePistonCommand(false));
-            //if (Math.abs(Robot.driveTrain.getRobotPosition().getX()) < 85/* && Robot.driveTrain.getRobotPosition().getY() > 160.0*/) {
-              Robot.elevator.setDesiredHeight(FieldMap.switchScoringHeight);
-              addSequential(new IntakeAuto(true, 0.7, 1.0, 18.0));
-          /*  }
-            else if (Robot.driveTrain.getRobotPosition().getY() > 165.0) {
-              addSequential(new DrivePathCommand(Robot.gameData.charAt(0) == 'R' ? Arrays.asList(new FieldPosition(75.0, 165.0), FieldMap.switchScoringSpot[2]) : Arrays.asList(new FieldPosition(-75.0, 165.0), FieldMap.switchScoringSpot[2].multiply(-1, 1))));
-            } NOT AT ALL DONE YET*/
+            addSequential(new ElevatorPreset((int) FieldMap.switchScoringHeight, 70.0));
+            addSequential(new IntakeAuto(true, 0.7, 1.0, 23.0));
           }
           else {
             
