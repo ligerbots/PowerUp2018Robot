@@ -113,16 +113,16 @@ public class DriveTrain extends Subsystem {
         .forEach((WPI_TalonSRX talon) -> talon.setNeutralMode(NeutralMode.Brake));
 
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-        .forEach(talon -> talon.configContinuousCurrentLimit(45, 0));
+        .forEach(talon -> talon.configContinuousCurrentLimit(40, 0));
 
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-        .forEach(talon -> talon.configPeakCurrentLimit(50, 0));
+        .forEach(talon -> talon.configPeakCurrentLimit(40, 0));
     
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
         .forEach(talon -> talon.enableCurrentLimit(true));
     
     Arrays.asList(leftMaster, rightMaster, leftSlave, rightSlave)
-        .forEach(talon -> talon.configPeakCurrentDuration(10, 0));
+        .forEach(talon -> talon.configPeakCurrentDuration(5, 0));
     
     
 
