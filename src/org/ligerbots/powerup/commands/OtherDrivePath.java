@@ -14,9 +14,9 @@ import org.ligerbots.powerup.subsystems.DriveTrain.DriveSide;
 /**
  *
  */
-public class DrivePathCommand extends Command {
-	
-	int i = 0;
+public class OtherDrivePath extends Command {
+    
+    int i = 0;
 
     List<FieldPosition> waypoints;
     int waypointIndex = 0;
@@ -48,7 +48,7 @@ public class DrivePathCommand extends Command {
     double waypointDist;
     
     
-    public DrivePathCommand(List<FieldPosition> waypoints) {
+    public OtherDrivePath(List<FieldPosition> waypoints) {
       requires (Robot.driveTrain);
       this.waypoints = waypoints;
         // Use requires() here to declare subsystem dependencies
@@ -95,16 +95,19 @@ public class DrivePathCommand extends Command {
       turn = Math.signum(angleError) * Math.min(Math.abs(angleError * 0.01 + Math.signum(angleError) * 0.45), 0.85);
       
       double rampUpDelta = Robot.driveTrain.getAbsoluteDistanceTraveled() - startAbsDistance;
-      double rampDownDelta = currentPosition.distanceTo(waypoints.get(waypoints.size() - 1));
+      double rampDownDelta = currentPosition.distanceTo(currentWaypoint);
       
-      if (Math.abs(angleError) >= 15) {
+      if (Math.abs(angleError) >= 20) {
         drive = 0.0;
       } else {
           if (rampDownDelta < rampDownDist) {
             drive = (rampDownDelta * (0.38) / rampDownDist)
                 + 0.45;
-          } else/* (rampUpDelta < rampUpDist)*/ {
+          } else if (rampUpDelta < rampUpDist) {
             drive = (Math.abs(rampUpDelta) * (0.4) / rampUpDist) + 0.45;
+          }
+          else {
+            drive = 1.0;
           }
           drive = (waypoints.get(waypointIndex).action == Action.REVERSE) ? drive * -1.0 : drive;
           if (!AmericanFlag) {
@@ -125,9 +128,9 @@ public class DrivePathCommand extends Command {
       
       if ((Robot.ticks % 1) == 0) {
 
-    	  /*System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f",
-    			  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
-    			  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);*/
+          /*System.out.printf("X: %5.2f  Y: %5.2f Angle: %5.2f, Distance: %5.2f, Old Distance: %5.2f, Angle Error: %5.2f",
+                  Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(),
+                  Robot.driveTrain.getYaw(), currentPosition.distanceTo(currentWaypoint), oldDist, angleError);*/
         
           System.out.printf("X: %5.2f, Y: %5.2f, Dist: %5.2f, Distance Traveled: %5.2f, Angle: %5.2f, Angle Error: %5.2f, Drive: %5.2f, Turn: %5.2f \n", Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(), dist, Math.abs(Robot.driveTrain.getAbsoluteDistanceTraveled() - waypointDist)
               , Robot.driveTrain.getYaw(), angleError, drive, turn);
@@ -161,9 +164,11 @@ public class DrivePathCommand extends Command {
           dist = waypoints.get(waypointIndex - 1).distanceTo(currentWaypoint);//Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
           
           System.out.printf("ADC: WaypointIndex = %d, WaypointX = %5.2f, WaypointY = %5.2f, FinalTurn = %5.2f, Turn Output = %5.2f, Angle Error = %5.2f, Drive Speed = %5.2f\n",
-  	  			waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
+                waypointIndex, currentWaypoint.getX(), currentWaypoint.getY(), turn, Robot.driveTrain.getTurnOutput(), angleError, drive);
           
           AmericanFlag = false;
+          
+          startAbsDistance = Robot.driveTrain.getAbsoluteDistanceTraveled();
                     
         }
         
@@ -172,7 +177,7 @@ public class DrivePathCommand extends Command {
       Robot.elevator.setDesiredHeight(currentWaypoint.elevatorHeight);
       
       oldDist = Robot.driveTrain.getRobotPosition().distanceTo(currentWaypoint);
-	  
+      
     }
 
     // Make this return true when this Command no longer needs to run execute()

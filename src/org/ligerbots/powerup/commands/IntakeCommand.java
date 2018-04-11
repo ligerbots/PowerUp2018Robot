@@ -31,6 +31,9 @@ public class IntakeCommand extends Command {
     	// TODO: The "0.5" should be a parameter in RobotMap settable via the Smart Dashboard
       speed = SmartDashboard.getNumber("Intake Speed", 0.7);
       reverseSpeed = SmartDashboard.getNumber("Out-take Speed", 0.55);
+      if (Robot.elevator.getPosition() <= 10.0) {
+        reverseSpeed = 0.4;
+      }
       Robot.intake.intakeOn(reverse, reverse ? reverseSpeed : speed);
     }
 
