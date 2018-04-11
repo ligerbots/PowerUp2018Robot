@@ -101,9 +101,6 @@ public class FieldMap {
         wayPointsGamma.add(new FieldPosition(-50, 170));
         wayPointsGamma.add(scaleScoringSpot[2]);
         
-
-        
-
     };
     
   
