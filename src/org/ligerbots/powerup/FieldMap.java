@@ -79,6 +79,7 @@ public class FieldMap {
         // There's an implicit waypoint for all robots 8" out from their starting position
         // to ensure there's enough space for them to rotate without hitting the back wall
         
+        //For splines: slope  at beginning is approximately 1
         wayPointsA.add(new FieldPosition(33.0, 50, 4.0));
         wayPointsA.add(new FieldPosition(33.0, 70, switchScoringHeight));
         wayPointsA.add(switchScoringSpot[0]);

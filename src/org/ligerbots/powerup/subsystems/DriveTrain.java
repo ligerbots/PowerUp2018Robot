@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -488,7 +489,10 @@ public class DriveTrain extends Subsystem {
     SmartDashboard.putNumber("Left Encoder", encoderLeft);
     SmartDashboard.putNumber("Right Encoder", encoderRight);
     SmartDashboard.putNumber("Robot Direction", navXYaw);
-
+    double position[] = new double[2];
+    position[0] = positionX;
+    position[1] = positionY;
+    SmartDashboard.putNumberArray("Robot Position", position);
   }
 
   public void zeroPosition() {
