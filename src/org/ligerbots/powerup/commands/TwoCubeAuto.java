@@ -45,8 +45,27 @@ public class TwoCubeAuto extends CommandGroup {
           }
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
-          addSequential(new IntakeAuto(true, 0.5, 3, FieldMap.switchScoringHeight - 1.0));
-          addSequential(new BadDriveDistance(60.0, true));
+          addSequential(new IntakeAuto(true, 0.5, 1, FieldMap.switchScoringHeight - 1.0));
+          addSequential(new BadDriveDistance(55.0, true));
+          addSequential(new IntakePistonCommand(true));
+          addSequential(new ElevatorPreset(0, 70));
+          addParallel(new HoldBoxCommand());
+          addSequential(new DriveToCube());
+          addSequential(new IntakePistonCommand(false));
+          addSequential(new BadDriveDistance(30.0, true));
+          if (Robot.gameData.charAt(0) == 'L') {
+            addSequential(new TurnCommand(Robot.gameData.charAt(0) == 'L' ? -30 : 30, 1.0));
+            addParallel(new ElevatorPreset(25, 70.0));
+            addSequential(new BadDriveDistance(30.0, false));
+         //   addSequential(new DrivePathCommand(Arrays.asList(Robot.gameData.charAt(0) == 'L' ? FieldMap.switchScoringSpot[0].multiply(-1, 1) : FieldMap.switchScoringSpot[0])));
+            addSequential(new IntakeAuto(true, 0.7, 1.0, FieldMap.switchScoringHeight - 1.0));
+          }
+          else {
+            addSequential(new TurnCommand(30, 1.0));
+            addParallel(new ElevatorPreset(25, 70.0));
+            addSequential(new BadDriveDistance(30.0, false));
+         //   addSequential(new DrivePathCommand(Arrays.asList(Robot.gameData.charAt(0) == 'L' ? FieldMap.switchScoringSpot[0].multiply(-1, 1) : FieldMap.switchScoringSpot[0])));
+          }
           break;
         case SwitchB:
           if (Robot.gameData.charAt(0) == 'L') {
@@ -75,6 +94,8 @@ public class TwoCubeAuto extends CommandGroup {
           addParallel(new HoldBoxCommand());
           addSequential(new DrivePathCommand(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.45, 1.5, FieldMap.scaleScoringHeight - 1.0));
+        /*  addParallel(new ElevatorPreset(0, 70));
+          addSequential(new BadDriveDistance(30.0, true));*/
           break;
         case ScaleBeta:
           if (Robot.gameData.charAt(1) == 'L') {
@@ -91,7 +112,7 @@ public class TwoCubeAuto extends CommandGroup {
           addSequential(new IntakeAuto(true, 0.65, 1.5, FieldMap.scaleScoringHeight - 1.0));
           break;
         case ScaleGamma:
-          if (Robot.gameData.charAt(1) == 'L') {
+          if (Robot.gameData.charAt(1) == 'R') {
             tempWaypoints = (List<FieldPosition>) FieldMap.wayPointsGamma.clone();
             for (int i = 0; i < tempWaypoints.size(); i += 1) {
               tempWaypoints.set(i, tempWaypoints.get(i).multiply(-1, 1, tempWaypoints.get(i).elevatorHeight));
@@ -114,9 +135,11 @@ public class TwoCubeAuto extends CommandGroup {
           if (Robot.gameData.charAt(0) == Robot.gameData.charAt(1)) {
             addSequential(new BadDriveDistance(10.0, true));
             addSequential(new ElevatorPreset(0, 40.0));
-            addSequential(new TurnCommand(Robot.gameData.charAt(0) == 'R' ? -110.0 : 110.0, 1.0));
+            if (first == FirstAction.ScaleAlpha) addSequential(new TurnCommand(Robot.gameData.charAt(0) == 'R' ? -110 : 110.0, 1.0));
+            else addSequential(new TurnCommand(180.0, 1.0));
             addSequential(new IntakePistonCommand(true));
             addSequential(new DriveToCube());
+            addSequential(new WaitCommand(0.25));
             addSequential(new IntakeAuto(false, 1.0, 1.0, 0.0));
             addSequential(new IntakePistonCommand(false));
             addSequential(new ElevatorPreset((int) FieldMap.switchScoringHeight, 70.0));

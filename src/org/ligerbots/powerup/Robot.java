@@ -213,12 +213,13 @@ public class Robot extends IterativeRobot {
    * the commented example) or additional comparisons to the switch structure below with additional
    * strings & commands.
    */
+  public static StartingPosition startPos;
   @Override
   public void autonomousInit() {
 	  
     autoStart = Robot.time();
     
-	StartingPosition startPos = oi.getStartingPosition();
+	startPos = oi.getStartingPosition();
 
 	SmartDashboard.putString("vision/active_mode", "cube");
     SmartDashboard.putData(new ZeroEncoderCommand());
@@ -243,10 +244,10 @@ public class Robot extends IterativeRobot {
        
     switch (startPos) {
       case One:
-        /*if (Robot.gameData.charAt(0) == 'L') {
+       /* if (Robot.gameData.charAt(0) == 'L') {
           if (Robot.gameData.charAt(1) == 'L') {
             first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change back later or something
-            second = oi.getPriority() == Priority.SWITCH ? SecondAction.Nothing : SecondAction.Switch;;
+            second = oi.getPriority() == Priority.SWITCH ? SecondAction.Nothing : SecondAction.Switch;
           }
           else {
             first = FirstAction.SwitchB;
@@ -285,7 +286,7 @@ public class Robot extends IterativeRobot {
         second = SecondAction.Nothing;
         break;
       case FIVE:
-        /*if (Robot.gameData.charAt(0) == 'R') {
+       /* if (Robot.gameData.charAt(0) == 'R') {
           if (Robot.gameData.charAt(1) == 'R') {
             first = oi.getPriority() == Priority.SWITCH ? FirstAction.SwitchB : FirstAction.ScaleAlpha; //change later
             second = oi.getPriority() == Priority.SWITCH ? SecondAction.Nothing : SecondAction.Switch;

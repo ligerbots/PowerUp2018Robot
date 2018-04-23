@@ -67,9 +67,9 @@ public class FieldMap {
         switchScoringSpot[1] = new FieldPosition(95.0, 120.0-rL2, FieldMap.switchScoringHeight);
         switchScoringSpot[2] = new FieldPosition(60.0, 140.5+rL2, FieldMap.switchScoringHeight);
         
-        scaleScoringSpot[0] = new FieldPosition(102.0, 225.0, FieldMap.scaleScoringHeight);
+        scaleScoringSpot[0] = new FieldPosition(100.0, 230.0, FieldMap.scaleScoringHeight);
         scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);
-        scaleScoringSpot[2] = new FieldPosition(-50.0, 210.0, FieldMap.scaleScoringHeight);
+        scaleScoringSpot[2] = new FieldPosition(-30.0, 198.0, FieldMap.scaleScoringHeight);
                 
         // TODO -- create waypoints corresponding to each scoring position
         //         that will ensure the robot doesn't crash into things
@@ -97,8 +97,9 @@ public class FieldMap {
         wayPointsBeta.add(new FieldPosition(130.0, 310.0));
         wayPointsBeta.add(scaleScoringSpot[1]);
         
-        wayPointsGamma.add(new FieldPosition(117.5, 170.0, 4.0));
-        wayPointsGamma.add(new FieldPosition(-50, 170));
+        wayPointsGamma.add(new FieldPosition(117.5, 175.0, 4.0));
+        wayPointsGamma.add(new FieldPosition(-15, 175.0));
+        wayPointsGamma.add(new FieldPosition(-30, 175.0, scaleScoringHeight));
         wayPointsGamma.add(scaleScoringSpot[2]);
         
     };

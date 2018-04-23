@@ -40,7 +40,7 @@ public class DriveToCube extends Command {
       startAbsDist = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
       
-      driveDist = SmartDashboard.getNumberArray("vision/target_info", empty)[3] - 12.0;
+      driveDist = SmartDashboard.getNumberArray("vision/target_info", empty)[3] - 14.0;
       
       System.out.println("DRIVE DIST: " + driveDist);
     }

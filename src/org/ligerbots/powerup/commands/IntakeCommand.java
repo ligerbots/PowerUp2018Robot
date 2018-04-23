@@ -32,7 +32,7 @@ public class IntakeCommand extends Command {
       speed = SmartDashboard.getNumber("Intake Speed", 0.7);
       reverseSpeed = SmartDashboard.getNumber("Out-take Speed", 0.55);
       if (Robot.elevator.getPosition() <= 10.0) {
-        reverseSpeed = 0.4;
+        reverseSpeed = 1.0;
       }
       Robot.intake.intakeOn(reverse, reverse ? reverseSpeed : speed);
     }

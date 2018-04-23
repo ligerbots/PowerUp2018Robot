@@ -33,9 +33,9 @@ public class Climber extends Subsystem {
       
       climberSlave.setInverted(true);
       
-      spike = new Relay(0);
+      spike = new Relay(1);
       spike.setDirection(Direction.kBoth);
-      spike.set(Value.kOff);
+      spike.set(Value.kForward);
     }
 
     public void initDefaultCommand() {
@@ -49,7 +49,7 @@ public class Climber extends Subsystem {
     
     public void solenoidOn () {
       if (belgianFlag) {
-        spike.set(Value.kOn);
+        spike.set(Value.kReverse);
         spanishFlag = true;
       }
       else {

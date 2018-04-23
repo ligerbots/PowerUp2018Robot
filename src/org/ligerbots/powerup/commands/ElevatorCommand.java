@@ -42,11 +42,11 @@ public class ElevatorCommand extends Command {
           waiting = false;
           position = elevator.getPosition();
           if (Math.signum(oi.getElevatorUp() - oi.getElevatorDown()) >= 0) {
-            if (!(elevator.getPosition() > 69)) {
-              if (elevator.getPosition() >= 66) { 
+            if (!(elevator.getPosition() > 70)) {
+              if (elevator.getPosition() >= 68) { 
             	  // TODO: In the following line, the 0.25 should be a parameter in RobotMap and
             	  // settable by the Smart Dashboard.
-                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.15));
+                elevator.set((oi.getElevatorUp() - oi.getElevatorDown()) * SmartDashboard.getNumber("Elevator Slow", 0.35));
               }
               else {
                 elevator.set(oi.getElevatorUp() - oi.getElevatorDown());
