@@ -10,5 +10,8 @@
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRE_Phoenix.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/navx_frc.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/logback-classic-1.1.9.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/logback-core-1.1.9.jar"/>
+	<classpathentry kind="var" path="USERLIBS_DIR/slf4j-api-1.7.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

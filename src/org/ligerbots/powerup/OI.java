@@ -76,7 +76,11 @@ public class OI {
   XboxController xbox;
   Joystick farm;
   
-
+  JoystickButton xBoxBumperRight;
+  JoystickButton xBoxBumperLeft;
+  
+  JoystickButton xBoxRightJoystick;
+  JoystickButton xBoxLeftJoystick;
   
   
   
@@ -112,16 +116,16 @@ public class OI {
     JoystickButton xBoxB = new JoystickButton(xbox, 2);
     xBoxB.whenPressed(new DrivePathCommand(Arrays.asList(new FieldPosition(0, 10), new FieldPosition(10, 10), new FieldPosition(0,0))));
     
-    JoystickButton xBoxBumperRight = new JoystickButton(xbox, 6);
+    xBoxBumperRight = new JoystickButton(xbox, 6);
     xBoxBumperRight.whileHeld(new IntakeCommand(false));
     
-    JoystickButton xBoxBumperLeft = new JoystickButton(xbox, 5);
+    xBoxBumperLeft = new JoystickButton(xbox, 5);
     xBoxBumperLeft.whileHeld(new IntakeCommand(true));
     
-    JoystickButton xBoxRightJoystick = new JoystickButton(xbox, 10);
+    xBoxRightJoystick = new JoystickButton(xbox, 10);
     xBoxRightJoystick.whenPressed(new IntakePistonCommand(true));
     
-    JoystickButton xBoxLeftJoystick = new JoystickButton(xbox, 9);
+    xBoxLeftJoystick = new JoystickButton(xbox, 9);
     xBoxLeftJoystick.whenPressed(new IntakePistonCommand(false));
     
     JoystickButton xBoxSelect = new JoystickButton(xbox, 7);
@@ -194,10 +198,13 @@ public class OI {
   public double getThrottle() {
     return -xbox.getY(GenericHID.Hand.kLeft);
   }
-  
 
   public double getTurn() {
     return xbox.getX(GenericHID.Hand.kRight);
+  }
+  
+  public boolean isIntakeOn () {
+    return xBoxBumperLeft.get() || xBoxBumperRight.get();
   }
 
   public double getElevatorUp() {

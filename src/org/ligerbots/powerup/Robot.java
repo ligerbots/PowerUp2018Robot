@@ -61,6 +61,8 @@ public class Robot extends IterativeRobot {
   public static Climber climber;
   public static Ramps ramps;
   
+  public static InputSnapshot currentSnapshot;
+  
   public static double autoStart;
   boolean autoCheck = false;
   
@@ -122,6 +124,29 @@ public class Robot extends IterativeRobot {
     SWITCH, SCALE
   }
   
+  public static class InputSnapshot {
+    
+    public double[] values;
+    public boolean pistons;
+    
+    public InputSnapshot(double throttle, double rotate, double elevator, double intake, boolean pistons) {
+      this.values = new double[] {throttle, rotate, elevator, intake};
+      this.pistons = pistons;
+    }
+    
+    @Override 
+    public String toString() {
+      return String.format("%5.2f,%5.2f,%5.2f,%5.2f,%b", values[0], values[1], values[2], values[3], pistons);
+    }
+    
+    public static InputSnapshot getSnapFromString (String input) {
+      String[] pieces = input.split(",");
+      return new InputSnapshot(Double.parseDouble(pieces[0]), Double.parseDouble(pieces[1]), 
+          Double.parseDouble(pieces[2]), Double.parseDouble(pieces[3]), Boolean.getBoolean(pieces[4]));
+    }
+    
+  }
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -142,6 +167,7 @@ public class Robot extends IterativeRobot {
     climber = new Climber();
     ramps = new Ramps();
     oi = new OI();
+    currentSnapshot = new InputSnapshot(0.0, 0.0, 0.0, 0.0, false);
     
     elevatorCommand = new ElevatorCommand();
     
@@ -405,5 +431,10 @@ public class Robot extends IterativeRobot {
   
   public static double autoStart() {
     return autoStart;
+  }
+  public static InputSnapshot getCurrentSnapshot() {
+    currentSnapshot.values = new double[] {oi.getThrottle(), oi.getTurn(), elevator.finalElevatorSpeed, oi.isIntakeOn() ? intake.finalIntakeSpeed : 0.0};
+    currentSnapshot.pistons = intake.open;
+    return currentSnapshot;
   }
 }

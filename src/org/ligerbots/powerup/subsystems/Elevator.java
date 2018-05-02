@@ -43,6 +43,8 @@ public class Elevator extends Subsystem {
   double defaultSpeed = 0.05; // How fast it should go when it is moved up or down
   public boolean elevatorGo = false;
   
+  public double finalElevatorSpeed = 0;
+  
   DigitalInput topLimitSwitch;
   DigitalInput bottomLimitSwitch;
   
@@ -122,6 +124,7 @@ public class Elevator extends Subsystem {
   
   public void set(double speed) {
 	  if (elevatorPresent) elevatorMaster.set(speed);
+	  finalElevatorSpeed = speed;
   }
   
   public void holdPosition(double requestedPosition) {

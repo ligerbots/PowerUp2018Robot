@@ -26,6 +26,10 @@ public class Intake extends Subsystem {
     boolean intakePresent;
     private DoubleSolenoid solenoid;
     
+    public boolean open = false;
+    
+    public double finalIntakeSpeed;
+    
 
     public Intake() {
     
@@ -62,9 +66,11 @@ public class Intake extends Subsystem {
     	if (intakePresent) {
 	        if (reverse) {
 	          intakeMaster.set(-speed);
+	          finalIntakeSpeed = -speed;
 	        }
 	        else {
 	          intakeMaster.set(speed);
+	          finalIntakeSpeed = speed;
 	        }
     	}
     }
@@ -84,9 +90,11 @@ public class Intake extends Subsystem {
     	if (intakePresent) {
 	      if (open) {
 	        solenoid.set(Value.kReverse);
+	        this.open = true;
 	      }
 	      else {
 	        solenoid.set(Value.kForward);
+	        this.open = false;
 	      }
     	}
     }

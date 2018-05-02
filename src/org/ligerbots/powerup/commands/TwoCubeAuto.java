@@ -135,16 +135,19 @@ public class TwoCubeAuto extends CommandGroup {
           if (Robot.gameData.charAt(0) == Robot.gameData.charAt(1)) {
             addSequential(new BadDriveDistance(10.0, true));
             addSequential(new ElevatorPreset(0, 40.0));
-            if (first == FirstAction.ScaleAlpha) addSequential(new TurnCommand(Robot.gameData.charAt(0) == 'R' ? -110 : 110.0, 1.0));
-            else addSequential(new TurnCommand(180.0, 1.0));
+            if (first == FirstAction.ScaleAlpha) addSequential(new TurnCommand(Robot.gameData.charAt(0) == 'R' ? -110 : 110.0, 3.0));
+            else addSequential(new TurnCommand(180.0, 3.0));
             addSequential(new IntakePistonCommand(true));
             addSequential(new DriveToCube());
             addSequential(new WaitCommand(0.25));
             addSequential(new IntakeAuto(false, 1.0, 1.0, 0.0));
             addSequential(new IntakePistonCommand(false));
             addSequential(new ElevatorPreset((int) FieldMap.switchScoringHeight, 70.0));
+            addSequential(new BadDriveDistance(2.0, false));
             addSequential(new IntakeAuto(true, 0.7, 1.0, 23.0));
+            addSequential(new BadDriveDistance(6.0, true));
           }
+          
         case Scale:
           break;
         case Nothing:
