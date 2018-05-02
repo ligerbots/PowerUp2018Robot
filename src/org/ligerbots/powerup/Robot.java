@@ -63,6 +63,8 @@ public class Robot extends IterativeRobot {
   
   public static InputSnapshot currentSnapshot;
   
+  public static FieldPosition startPosition;
+  
   public static double autoStart;
   boolean autoCheck = false;
   
@@ -242,6 +244,8 @@ public class Robot extends IterativeRobot {
   public static StartingPosition startPos;
   @Override
   public void autonomousInit() {
+    
+    driveTrain.collided = false;
 	  
     autoStart = Robot.time();
     
@@ -251,11 +255,11 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putData(new ZeroEncoderCommand());
     //autonomousCommand = new TurnCommand(90, 0.3);
     switch (startPos) {
-    	case One: Robot.driveTrain.setPosition(FieldMap.startPositions[1].x, FieldMap.startPositions[1].y); break;
-    	case Two: Robot.driveTrain.setPosition(FieldMap.startPositions[2].x, FieldMap.startPositions[2].y); break;
-    	case Three: Robot.driveTrain.setPosition(FieldMap.startPositions[3].x, FieldMap.startPositions[3].y); break;
-    	case Four: Robot.driveTrain.setPosition(FieldMap.startPositions[4].x, FieldMap.startPositions[4].y); break;
-    	case FIVE: Robot.driveTrain.setPosition(FieldMap.startPositions[5].x, FieldMap.startPositions[5].y); break;
+    	case One: Robot.driveTrain.setPosition(FieldMap.startPositions[1].x, FieldMap.startPositions[1].y); startPosition = FieldMap.startPositions[1]; break;
+    	case Two: Robot.driveTrain.setPosition(FieldMap.startPositions[2].x, FieldMap.startPositions[2].y); startPosition = FieldMap.startPositions[2]; break;
+    	case Three: Robot.driveTrain.setPosition(FieldMap.startPositions[3].x, FieldMap.startPositions[3].y); startPosition = FieldMap.startPositions[3]; break;
+    	case Four: Robot.driveTrain.setPosition(FieldMap.startPositions[4].x, FieldMap.startPositions[4].y); startPosition = FieldMap.startPositions[4]; break;
+    	case FIVE: Robot.driveTrain.setPosition(FieldMap.startPositions[5].x, FieldMap.startPositions[5].y); startPosition = FieldMap.startPositions[5]; break;
     	default: System.out.println("WHAT?!"); break;
     }
     Robot.driveTrain.zeroYaw();

@@ -47,6 +47,8 @@ public class DriveTrain extends Subsystem {
   boolean pidTurn = false;
   double limitedThrottle;
   
+  public boolean collided = false;
+  
 
   public enum DriveSide {
     LEFT, RIGHT
@@ -518,6 +520,14 @@ public class DriveTrain extends Subsystem {
 
   public double getAbsoluteDistanceTraveled() {
     return absoluteDistanceTraveled;
+  }
+  
+  public double getLinearAccelX () {
+    return navx.getWorldLinearAccelX();
+  }
+  
+  public double getLinearAccelY () {
+    return navx.getWorldLinearAccelY();
   }
 
   /*
