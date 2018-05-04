@@ -66,8 +66,8 @@ public class ComplexDrivePath extends Command {
       finished = false;
       startAbsDistance = Robot.driveTrain.getAbsoluteDistanceTraveled();
       
-      rampUpDist = 15.0;
-      rampDownDist = 30.0;
+      rampUpDist = 25.0;
+      rampDownDist = 40.0;
       
       currentPosition = Robot.driveTrain.getRobotPosition();
       currentWaypoint = waypoints.get(waypointIndex);
@@ -110,7 +110,7 @@ public class ComplexDrivePath extends Command {
       if (Robot.driveTrain.collided) state = DriveState.COLLIDED;
       else if (Math.abs(angleError) >= 10) state = DriveState.TURNING;
       else if (distToNextWaypoint <= rampDownDist && (nextAngle >= 35 || waypointIndex == waypoints.size() - 1)) state = DriveState.RAMP_DOWN;
-      else if (drive >= 0.85) state = DriveState.DRIVE;
+      else if (drive >= 0.9) state = DriveState.DRIVE;
       else state = DriveState.RAMP_UP; 
       
       switch (state) {
@@ -121,14 +121,14 @@ public class ComplexDrivePath extends Command {
             break;
         case TURNING:
             if (Math.abs(angleError) >= 20.0) drive = 0.0;
-            else drive = 0.4; //Will try to think of something better later
+            else drive = 0.2; //Will try to think of something better later
             break;
         case RAMP_DOWN:
-            if (nextAngle >= 45) drive = distToNextWaypoint/50.0 + 0.4;
-            else drive = distToNextWaypoint/50.0 + 0.6; //Should be 75
+            if (nextAngle >= 45) drive = distToNextWaypoint/60.0 + 0.3;
+            else drive = distToNextWaypoint/60.0 + 0.5; 
             break;
         case RAMP_UP:
-            drive = distToPreviousWaypoint/30.0 + 0.6;
+            drive = distToPreviousWaypoint/(rampUpDist * 2) + 0.5;
             break;
         case DRIVE:
             drive = 1.0;

@@ -18,10 +18,15 @@ public class DriveRecordedAuto extends Command {
     InputSnapshot workingSnapshot;
     String line = "";
     boolean finished = false;
-    public DriveRecordedAuto(String autoName) throws FileNotFoundException {
+    public DriveRecordedAuto(String autoName) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-      auto = new BufferedReader(new FileReader(new File(String.format("%s%s", System.getProperty("user.dir"), "\\").concat(autoName.concat(".csv")))));
+      try {
+        auto = new BufferedReader(new FileReader(new File(String.format("%s", "/home/lvuser/").concat(autoName.concat(".txt")))));
+      } catch (FileNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
 
     // Called just before this Command runs the first time

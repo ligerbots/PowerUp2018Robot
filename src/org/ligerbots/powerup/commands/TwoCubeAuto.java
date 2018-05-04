@@ -44,9 +44,9 @@ public class TwoCubeAuto extends CommandGroup {
             tempWaypoints = FieldMap.wayPointsA;
           }
           addParallel(new HoldBoxCommand());
-          addSequential(new DrivePathCommand(tempWaypoints));
+          addSequential(new ComplexDrivePath(tempWaypoints));
           addSequential(new IntakeAuto(true, 0.5, 1, FieldMap.switchScoringHeight - 1.0));
-          addSequential(new BadDriveDistance(55.0, true));
+          /*addSequential(new BadDriveDistance(55.0, true));
           addSequential(new IntakePistonCommand(true));
           addSequential(new ElevatorPreset(0, 70));
           addParallel(new HoldBoxCommand());
@@ -65,7 +65,7 @@ public class TwoCubeAuto extends CommandGroup {
             addParallel(new ElevatorPreset(25, 70.0));
             addSequential(new BadDriveDistance(30.0, false));
          //   addSequential(new DrivePathCommand(Arrays.asList(Robot.gameData.charAt(0) == 'L' ? FieldMap.switchScoringSpot[0].multiply(-1, 1) : FieldMap.switchScoringSpot[0])));
-          }
+          }*/
           break;
         case SwitchB:
           if (Robot.gameData.charAt(0) == 'L') {

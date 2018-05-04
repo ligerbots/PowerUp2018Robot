@@ -19,10 +19,12 @@ import org.ligerbots.powerup.commands.CameraToggleCommand;
 import org.ligerbots.powerup.commands.CompressorCommand;
 import org.ligerbots.powerup.commands.DriveDistance;
 import org.ligerbots.powerup.commands.DrivePathCommand;
+import org.ligerbots.powerup.commands.DriveRecordedAuto;
 import org.ligerbots.powerup.commands.IntakeCommand;
 import org.ligerbots.powerup.commands.IntakePistonCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
 import org.ligerbots.powerup.commands.RampsDeploy;
+import org.ligerbots.powerup.commands.RecordAuto;
 import org.ligerbots.powerup.commands.SolenoidCommand;
 import org.ligerbots.powerup.commands.TurnCommand;
 //import org.ligerbots.powerup.commands.TurnTester;
@@ -108,7 +110,7 @@ public class OI {
     farm = new Joystick(1);
     
     JoystickButton xBoxY = new JoystickButton(xbox, 4);
-    xBoxY.whileHeld(new WinchCommand(false));
+    xBoxY.whenPressed(new RecordAuto("Snake"));
         
     JoystickButton xBoxA = new JoystickButton(xbox, 1);
     xBoxA.whenPressed(new TurnCommand(90.0, 0.3));
@@ -132,7 +134,7 @@ public class OI {
     xBoxSelect.whenPressed(new CompressorCommand(CompressorState.TOGGLE));
     
     JoystickButton xBoxX = new JoystickButton(xbox, 3);
-    xBoxX.whenPressed(new LEDStripCommand());
+    xBoxX.whenPressed(new DriveRecordedAuto("Snake"));
     
     JoystickPov povTriggerRight = new JoystickPov(xbox, Direction.EAST);
     povTriggerRight.whenPressed(new TurnTester(1.0));
