@@ -107,10 +107,10 @@ public class ComplexDrivePath extends Command {
       if (waypointIndex != 0) distToPreviousWaypoint = currentPosition.distanceTo(waypoints.get(waypointIndex - 1));
       else distToPreviousWaypoint = currentPosition.distanceTo(Robot.startPosition);
 
-      if (Robot.driveTrain.collided) state = DriveState.COLLIDED;
+      if (Robot.driveTrain.collided) {state = DriveState.COLLIDED; System.out.println("COLLIDED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");}
       else if (Math.abs(angleError) >= 10) state = DriveState.TURNING;
-      else if (distToNextWaypoint <= rampDownDist && (nextAngle >= 35 || waypointIndex == waypoints.size() - 1)) state = DriveState.RAMP_DOWN;
-      else if (drive >= 0.9) state = DriveState.DRIVE;
+      else if ((distToNextWaypoint <= rampDownDist && nextAngle >= 35) || waypointIndex == waypoints.size() - 1) state = DriveState.RAMP_DOWN;
+      else if (Math.abs(drive) >= 0.9) state = DriveState.DRIVE;
       else state = DriveState.RAMP_UP; 
       
       switch (state) {
@@ -121,11 +121,11 @@ public class ComplexDrivePath extends Command {
             break;
         case TURNING:
             if (Math.abs(angleError) >= 20.0) drive = 0.0;
-            else drive = 0.2; //Will try to think of something better later
+            else drive = 0.3; //Will try to think of something better later
             break;
         case RAMP_DOWN:
-            if (nextAngle >= 45) drive = distToNextWaypoint/60.0 + 0.3;
-            else drive = distToNextWaypoint/60.0 + 0.5; 
+            if (nextAngle >= 45) drive = distToNextWaypoint/60.0 + 0.55;
+            else drive = distToNextWaypoint/60.0 + 0.52; 
             break;
         case RAMP_UP:
             drive = distToPreviousWaypoint/(rampUpDist * 2) + 0.5;
@@ -138,8 +138,10 @@ public class ComplexDrivePath extends Command {
             
       }
      
-      Robot.driveTrain.allDrive(drive, turn);
+      Robot.driveTrain.allDrive((waypoints.get(waypointIndex).action == Action.REVERSE) ? -drive : drive, turn);
       
+      
+      System.out.println("Next Angle: " + nextAngle + "     Collided? " + Robot.driveTrain.collided);
       
       System.out.printf("X: %5.2f, Y: %5.2f, Dist: %5.2f, Angle: %5.2f, Angle Error: %5.2f, Drive: %5.2f, Turn: %5.2f \n", 
           Robot.driveTrain.getRobotPosition().getX(), Robot.driveTrain.getRobotPosition().getY(), dist, Robot.driveTrain.getYaw(), angleError, drive, turn);

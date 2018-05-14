@@ -61,5 +61,5 @@ public class RobotMap {
   public static final double AUTO_ACCEEPTABLE_TURN_ERROR = 1;
   
   
-  public static final double JERK_THRESHOLD = 0.5; //G
+  public static final double JERK_THRESHOLD = 1.4; //G
 }

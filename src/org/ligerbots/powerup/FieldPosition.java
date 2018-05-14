@@ -37,6 +37,14 @@ public class FieldPosition {
     this.elevatorHeight = elevatorHeight;
   }
 
+  public FieldPosition(double x,  double y, double elevatorHeight, Action action) {
+    this.x = x;
+    this.y = y;
+    this.action = action;
+    this.elevatorHeight = elevatorHeight;
+  }
+
+  
   public FieldPosition add(FieldPosition other) {
     return new FieldPosition(x + other.x, y + other.y);
   }

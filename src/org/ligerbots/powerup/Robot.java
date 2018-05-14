@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.ligerbots.powerup.commands.CollisionDetectCommand;
 import org.ligerbots.powerup.commands.DriveCommand;
 import org.ligerbots.powerup.commands.ElevatorCommand;
 import org.ligerbots.powerup.commands.LEDStripCommand;
@@ -60,6 +61,7 @@ public class Robot extends IterativeRobot {
   public static Pneumatics pneumatics;
   public static Climber climber;
   public static Ramps ramps;
+  public static CollisionDetectCommand collisionDetect;
   
   public static InputSnapshot currentSnapshot;
   
@@ -173,6 +175,8 @@ public class Robot extends IterativeRobot {
     
     elevatorCommand = new ElevatorCommand();
     
+    collisionDetect = new CollisionDetectCommand();
+    
 	Robot.driveTrain.zeroYaw();
 
     // chooser.addDefault("Default Auto", new ExampleCommand());
@@ -206,6 +210,7 @@ public class Robot extends IterativeRobot {
     //CameraServer.getInstance().startAutomaticCapture();
     
     gameData = "";		// zero it here in case of restart
+    
   }
 
   public static double time() {
@@ -246,6 +251,8 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     
     driveTrain.collided = false;
+    
+    collisionDetect.start();
 	  
     autoStart = Robot.time();
     

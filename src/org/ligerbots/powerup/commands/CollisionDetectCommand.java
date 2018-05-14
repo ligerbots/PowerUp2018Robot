@@ -40,6 +40,8 @@ public class CollisionDetectCommand extends Command {
       
       lastAccelX = currentAccelX;
       lastAccelY = currentAccelY;
+      
+     // System.out.println("JerkX: " + jerkX + "     JerkY: " + jerkY + "     Collided? " + Robot.driveTrain.collided);
     }
 
     // Make this return true when this Command no longer needs to run execute()
