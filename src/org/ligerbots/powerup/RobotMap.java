@@ -62,4 +62,7 @@ public class RobotMap {
   
   
   public static final double JERK_THRESHOLD = 1.4; //G
+  
+  public static final double DIST_BETWEEN_WHEELS = 0.6; //Adjust this. It is in meters
+  
 }

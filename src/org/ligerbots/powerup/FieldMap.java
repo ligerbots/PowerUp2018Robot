@@ -1,10 +1,12 @@
 package org.ligerbots.powerup;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Waypoint;
+import jaci.pathfinder.modifiers.TankModifier;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.ligerbots.powerup.RobotPosition;
-import org.ligerbots.powerup.RobotPosition.Action;
-import org.ligerbots.powerup.FieldPosition;
+
 
 /*
  * All positions are in inches
@@ -51,15 +53,26 @@ public class FieldMap {
     public static ArrayList<FieldPosition> wayPointsAlpha = new ArrayList<FieldPosition>();
     public static ArrayList<FieldPosition> wayPointsBeta = new ArrayList<FieldPosition>();
     public static ArrayList<FieldPosition> wayPointsGamma = new ArrayList<FieldPosition>();
-
+    
+    
+    public static Waypoint[] pathfinderWaypointsA;
+    
+    public static final double timeStep = 0.02; //0.02 time step (50Hz loop)
+    public static final double maxVelocity = 2.5; //2.5 m/s = approx 8 ft/s max velocity because switch is close
+    public static final double maxAccel = 3.0; //3 m/s/s max accel because I have no idea what it should actually be
+    public static final double maxJerk = 9.8; //9.8 m/s/s/s max jerk because I have no idea what is should actually be
+    
+    public static Trajectory.Config waypointsATrajConfig;
+    public static Trajectory waypointsATraj;
     
     public FieldMap () {
+      
         // start positions are in terms of the robot center
         startPositions[1] = new FieldPosition(-117.6, rL2);  // 1
         startPositions[2] = new FieldPosition(-81.0, rL2);   // 2
-        startPositions[3] = new FieldPosition(7.6, rL2);   // 3
-        startPositions[4] = new FieldPosition(81.0, rL2);  // 4
-        startPositions[5] = new FieldPosition(117.6, rL2);  // 5
+        startPositions[3] = new FieldPosition(7.6, rL2);     // 3
+        startPositions[4] = new FieldPosition(81.0, rL2);    // 4
+        startPositions[5] = new FieldPosition(117.6, rL2);   // 5
         
         // scoring positions are also robot center
         switchScoringSpot[0] = new FieldPosition(33.0, 100-rL2, FieldMap.switchScoringHeight);
@@ -69,6 +82,8 @@ public class FieldMap {
         scaleScoringSpot[0] = new FieldPosition(100.0, 230.0, FieldMap.scaleScoringHeight);
         scaleScoringSpot[1] = new FieldPosition(116.0, 310.0, FieldMap.scaleScoringHeight);
         scaleScoringSpot[2] = new FieldPosition(-30.0, 198.0, FieldMap.scaleScoringHeight);
+        
+        waypointsATrajConfig = new Trajectory.Config(Trajectory.FitMethod.HERMITE_CUBIC, Trajectory.Config.SAMPLES_LOW, timeStep, maxVelocity, maxAccel, maxJerk);
                 
         // TODO -- create waypoints corresponding to each scoring position
         //         that will ensure the robot doesn't crash into things
@@ -80,11 +95,20 @@ public class FieldMap {
         
         //For splines: slope  at beginning is approximately 1
         
-        wayPointsA.add(new FieldPosition(7.6, 200));
-      /*  wayPointsA.add(new FieldPosition(33.0, 50, 4.0));
+        
+        pathfinderWaypointsA = new Waypoint[] {
+            new WaypointWithElevator(33.0, 100.0-rL2, 0, FieldMap.switchScoringHeight),
+            new WaypointWithElevator(33.0, 70.0, 0, FieldMap.switchScoringHeight),
+            new WaypointWithElevator(33.0, 50.0, 0, 4.0),
+        };
+        
+        waypointsATraj = Pathfinder.generate(pathfinderWaypointsA, waypointsATrajConfig);
+        
+        
+        wayPointsA.add(new FieldPosition(33.0, 50, 4.0));
         wayPointsA.add(new FieldPosition(33.0, 70, switchScoringHeight));
         wayPointsA.add(switchScoringSpot[0]);
-        wayPointsA.add(new FieldPosition(33.0, 19.5, FieldMap.switchScoringHeight, FieldPosition.Action.REVERSE));*/
+        wayPointsA.add(new FieldPosition(33.0, 19.5, FieldMap.switchScoringHeight, FieldPosition.Action.REVERSE));
         
         wayPointsB.add(new FieldPosition(117.0, 40.0, 4.0));
         wayPointsB.add(new FieldPosition(117.0, 70.0));

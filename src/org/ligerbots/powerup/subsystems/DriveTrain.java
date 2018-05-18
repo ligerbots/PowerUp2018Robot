@@ -263,6 +263,10 @@ public class DriveTrain extends Subsystem {
 
     }
   }
+  
+  public void tankDrive (double left, double right) {
+    robotDrive.tankDrive(-left, -right);
+  }
 
   public void printEncoder() {
     SmartDashboard.putNumber("Left Encoder",
